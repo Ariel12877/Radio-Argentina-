@@ -53,6 +53,20 @@ const STATIONS = [
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/AM750AAC.aac"
   },
 
+  /* ===== Nuevas ===== */
+  {
+    id: "doradofm",
+    name: "Dorado FM",
+    freq: "FM 98.3",
+    url: "https://sslstream.online:7269/stream"
+  },
+  {
+    id: "radiosnet9072",
+    name: "RadiosNet 9072",
+    freq: "ONLINE",
+    url: "https://ssl.radiosnethosting.com:9072/;"
+  },
+
   /* ===== AM de Buenos Aires ===== */
   {
     id: "madre",
@@ -419,20 +433,6 @@ const STATIONS = [
     name: "El Desta Radio",
     freq: "ONLINE",
     url: "https://cdn2.instream.audio/:8000/stream"
-  },
-
-  /* ===== Agregadas ===== */
-  {
-    id: "radiosnet9072",
-    name: "RadiosNet 9072",
-    freq: "ONLINE",
-    url: "https://ssl.radiosnethosting.com:9072/;"
-  },
-  {
-    id: "doradofm",
-    name: "Dorado FM",
-    freq: "FM 98.3",
-    url: "https://sslstream.online:7269/stream"
   }
 ];
 

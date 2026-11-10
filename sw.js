@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v2";
+const CACHE = "radio-ar-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -30,13 +30,16 @@ self.addEventListener("fetch", (event) => {
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
-        return (
-          cached ||
-          fetch(event.request).then((response) => {
-            // opcional: no cachear todo dinámico
+        // Network first for HTML/JS/CSS so updates appear quickly
+        return fetch(event.request)
+          .then((response) => {
+            if (response && response.ok) {
+              const clone = response.clone();
+              caches.open(CACHE).then((cache) => cache.put(event.request, clone));
+            }
             return response;
-          }).catch(() => caches.match("./index.html"))
-        );
+          })
+          .catch(() => cached || caches.match("./index.html"));
       })
     );
   }
