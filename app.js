@@ -3,6 +3,12 @@
    en Chrome, Edge y Firefox, y también si la página está en https.
    Las marcadas con ⚠ están armadas por analogía y hay que probarlas. */
 const STATIONS = [
+  {
+    id: "radiotop",
+    name: "Radio Top",
+    freq: "ONLINE",
+    url: "https://cdn.instream.audio:9818/stream"
+  },
   /* ===== Chaco (agregadas) ===== */
   {
     id: "laradio1047",
@@ -27,6 +33,12 @@ const STATIONS = [
     name: "Nacional Resistencia",
     freq: "AM 620",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad26"
+  },
+  {
+    id: "fmgualamba",
+    name: "FM Gualamba",
+    freq: "FM 93.7",
+    url: "https://ssl.radiosnethosting.com/index.php?port=9072"
   },
   /* ===== Tus radios de siempre (sin tocar) ===== */
   {
