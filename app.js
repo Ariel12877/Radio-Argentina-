@@ -478,7 +478,6 @@ const stationNameEl = document.getElementById("stationName");
 const nowPlayingEl = document.getElementById("nowPlaying");
 const vu = document.getElementById("vu");
 const presetGrid = document.getElementById("presetGrid");
-const installBtn = document.getElementById("installBtn");
 const stationSearch = document.getElementById("stationSearch");
 
 let currentStation = null;
@@ -688,6 +687,7 @@ btnPlay.addEventListener("click", () => {
 
 volume.addEventListener("input", () => {
   player.volume = volume.value / 100;
+  volume.style.setProperty("--vol", volume.value + "%");
 });
 
 player.addEventListener("error", () => {
@@ -754,27 +754,137 @@ if (stationSearch) {
 
 /* volume inicial */
 player.volume = volume.value / 100;
+volume.style.setProperty("--vol", volume.value + "%");
 
-/* --- PWA install --- */
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.hidden = false;
-});
+/* --- Acceso directo: PC (archivo) y celular (instalar app) --- */
+const shortcutBtn = document.getElementById("shortcutBtn");
+const shortcutDialog = document.getElementById("shortcutDialog");
+const shortcutNote = document.getElementById("shortcutNote");
+const shortcutMsg = document.getElementById("shortcutMsg");
+const wayPc = document.getElementById("wayPc");
+const wayPhone = document.getElementById("wayPhone");
+const dlShortcut = document.getElementById("dlShortcut");
+const installPc = document.getElementById("installPc");
+const installPhone = document.getElementById("installPhone");
 
-installBtn.addEventListener("click", async () => {
+const ua = navigator.userAgent || "";
+const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isAndroid = /android/i.test(ua);
+const isMobile = isIOS || isAndroid;
+const isMac = !isIOS && /mac/i.test(navigator.platform || "");
+const isLinux = !isMobile && /linux|x11/i.test(ua);
+const pcOS = isMac ? "mac" : isLinux ? "linux" : "windows";
+const OS_LABEL = { windows: "Windows", mac: "Mac", linux: "Linux" };
+const isStandalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+
+const SHORTCUTS = {
+  windows: {
+    ext: "url",
+    mime: "application/internet-shortcut",
+    build: (u) => "[InternetShortcut]\r\nURL=" + u + "\r\nIconIndex=0\r\n"
+  },
+  mac: {
+    ext: "webloc",
+    mime: "application/xml",
+    build: (u) => '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n' +
+      '<plist version="1.0"><dict><key>URL</key><string>' + u.replace(/&/g, "&amp;") + "</string></dict></plist>\n"
+  },
+  linux: {
+    ext: "desktop",
+    mime: "application/x-desktop",
+    build: (u) => "[Desktop Entry]\nVersion=1.0\nType=Link\nName=Radio Argentina\nComment=Radios de Argentina en vivo\nURL=" + u + "\n"
+  }
+};
+
+function appUrl() {
+  const u = new URL("./", location.href);
+  u.hash = "";
+  u.search = "";
+  return u.href;
+}
+
+function showMsg(text) {
+  shortcutMsg.textContent = text || "";
+}
+
+function downloadShortcut(os) {
+  const def = SHORTCUTS[os];
+  const name = "Radio Argentina." + def.ext;
+  const blob = new Blob([def.build(appUrl())], { type: def.mime + ";charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  showMsg("Listo: se descargó «" + name + "». Arrastralo al escritorio.");
+}
+
+function refreshShortcutUi() {
+  wayPc.classList.toggle("is-here", !isMobile);
+  wayPhone.classList.toggle("is-here", isMobile);
+  wayPc.querySelector(".tag").hidden = isMobile;
+  wayPhone.querySelector(".tag").hidden = !isMobile;
+  installPc.hidden = isMobile || !deferredPrompt;
+  installPhone.hidden = !isMobile || !deferredPrompt;
+  dlShortcut.textContent = "Descargar para " + OS_LABEL[pcOS];
+  dlShortcut.dataset.os = pcOS;
+  shortcutDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => { b.hidden = b.dataset.os === pcOS; });
+  wayPhone.querySelector('[data-for="android"]').hidden = isIOS;
+  wayPhone.querySelector('[data-for="ios"]').hidden = isAndroid;
+  const insecure = location.protocol === "file:" || !window.isSecureContext;
+  shortcutNote.hidden = !insecure;
+  shortcutNote.textContent = insecure
+    ? "Estás abriendo la app desde un archivo local o una dirección sin https. El acceso directo de la PC funciona, pero para instalarla en el celular tiene que estar publicada en una dirección https."
+    : "";
+}
+
+async function installApp() {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === "accepted") {
-    installBtn.hidden = true;
-  }
   deferredPrompt = null;
+  showMsg(outcome === "accepted" ? "Listo, la app se está instalando." : "");
+  refreshShortcutUi();
+}
+
+function openShortcutDialog() {
+  showMsg("");
+  refreshShortcutUi();
+  if (shortcutDialog.showModal) shortcutDialog.showModal();
+  else shortcutDialog.setAttribute("open", "");
+}
+
+function closeShortcutDialog() {
+  if (shortcutDialog.close) shortcutDialog.close();
+  else shortcutDialog.removeAttribute("open");
+}
+
+shortcutBtn.hidden = isStandalone;
+shortcutBtn.addEventListener("click", openShortcutDialog);
+document.getElementById("shortcutClose").addEventListener("click", closeShortcutDialog);
+shortcutDialog.addEventListener("click", (e) => {
+  if (e.target === shortcutDialog) closeShortcutDialog();
+});
+dlShortcut.addEventListener("click", () => downloadShortcut(dlShortcut.dataset.os || pcOS));
+shortcutDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => {
+  b.addEventListener("click", () => downloadShortcut(b.dataset.os));
+});
+installPc.addEventListener("click", installApp);
+installPhone.addEventListener("click", installApp);
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  refreshShortcutUi();
 });
 
 window.addEventListener("appinstalled", () => {
-  installBtn.hidden = true;
   deferredPrompt = null;
+  shortcutBtn.hidden = true;
+  refreshShortcutUi();
 });
 
 /* Service Worker */
