@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#1a1a1a" />
+  <meta name="theme-color" content="#0f0f0f" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Radio AR" />
-  <meta name="description" content="Radios de Argentina en vivo. Interfaz simple tipo cassette de auto. Sin publicidad." />
+  <meta name="description" content="Radios de Argentina en vivo. Interfaz profesional tipo radio de auto. Sin publicidad." />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
@@ -18,7 +18,10 @@
   <div class="app">
     <!-- Cabecera tipo radio de auto -->
     <header class="radio-header">
-      <div class="brand">RADIO AR</div>
+      <div class="brand">
+        <span class="brand-icon">📡</span>
+        <span class="brand-text">RADIO AR</span>
+      </div>
       <div class="status" id="status">LISTO</div>
     </header>
 
@@ -34,10 +37,12 @@
 
     <!-- Controles principales -->
     <section class="controls">
-      <button class="btn-power" id="btnPower" title="Encender / Apagar" aria-label="Power">
-        <span class="power-icon">⏻</span>
+      <button class="btn-power" id="btnPower" title="Encender / Apagar" aria-label="Encender o apagar">
+        <svg class="power-svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
+        </svg>
       </button>
-      <button class="btn-play" id="btnPlay" title="Play / Pause" aria-label="Play">
+      <button class="btn-play" id="btnPlay" title="Play / Pause" aria-label="Reproducir o pausar">
         <span id="playIcon">▶</span>
       </button>
       <div class="volume-wrap">
@@ -46,9 +51,12 @@
       </div>
     </section>
 
-    <!-- Botonera de emisoras (estilo preset de radio de auto) -->
+    <!-- Botonera de emisoras -->
     <section class="presets">
-      <div class="presets-label">EMISORAS</div>
+      <div class="presets-header">
+        <div class="presets-label">EMISORAS</div>
+        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" autocomplete="off" />
+      </div>
       <div class="preset-grid" id="presetGrid">
         <!-- se llenan por JS -->
       </div>
@@ -61,7 +69,7 @@
     </footer>
   </div>
 
-  <audio id="player" preload="none"></audio>
+  <audio id="player" preload="none" crossorigin="anonymous"></audio>
   <script src="app.js"></script>
 </body>
 </html>
