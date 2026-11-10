@@ -419,6 +419,20 @@ const STATIONS = [
     name: "El Desta Radio",
     freq: "ONLINE",
     url: "https://cdn2.instream.audio/:8000/stream"
+  },
+
+  /* ===== Agregadas ===== */
+  {
+    id: "radiosnet9072",
+    name: "RadiosNet 9072",
+    freq: "ONLINE",
+    url: "https://ssl.radiosnethosting.com:9072/;"
+  },
+  {
+    id: "doradofm",
+    name: "Dorado FM",
+    freq: "FM 98.3",
+    url: "https://sslstream.online:7269/stream"
   }
 ];
 
@@ -434,12 +448,14 @@ const nowPlayingEl = document.getElementById("nowPlaying");
 const vu = document.getElementById("vu");
 const presetGrid = document.getElementById("presetGrid");
 const installBtn = document.getElementById("installBtn");
+const stationSearch = document.getElementById("stationSearch");
 
 let currentStation = null;
 let isPowerOn = false;
 let isPlaying = false;
 let vuInterval = null;
 let deferredPrompt = null;
+let metaPollTimer = null;
 
 /* --- UI helpers --- */
 function setStatus(text, type = "") {
@@ -452,6 +468,7 @@ function updateDisplay() {
     freqEl.textContent = "—";
     stationNameEl.textContent = "Seleccioná una emisora";
     nowPlayingEl.textContent = "";
+    nowPlayingEl.classList.remove("has-meta");
     return;
   }
   freqEl.textContent = currentStation.freq;
@@ -471,15 +488,73 @@ function startVu() {
       vu.style.width = "0%";
       return;
     }
-    const level = 30 + Math.random() * 55;
+    const level = 28 + Math.random() * 58;
     vu.style.width = level + "%";
-  }, 180);
+  }, 160);
 }
 
 function stopVu() {
   if (vuInterval) clearInterval(vuInterval);
   vuInterval = null;
   vu.style.width = "0%";
+}
+
+function setNowPlaying(text, isMeta = false) {
+  nowPlayingEl.textContent = text || "";
+  nowPlayingEl.classList.toggle("has-meta", !!isMeta && !!text);
+}
+
+/* Media Session + possible metadata */
+function updateMediaSession() {
+  if (!("mediaSession" in navigator) || !currentStation) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: currentStation.name,
+      artist: "Radio Argentina",
+      album: currentStation.freq,
+      artwork: [
+        { src: "icon-192.png", sizes: "192x192", type: "image/png" },
+        { src: "icon-512.png", sizes: "512x512", type: "image/png" }
+      ]
+    });
+    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+  } catch (_) {}
+}
+
+function tryReadIcyTitle() {
+  // Algunos streams exponen el título vía el elemento audio o MediaSession.
+  // En la mayoría de navegadores el ICY no llega al JS por CORS;
+  // mostramos al menos el estado y actualizamos Media Session.
+  if (!isPlaying || !currentStation) return;
+  try {
+    if (player.mozGetMetadata) {
+      const meta = player.mozGetMetadata();
+      if (meta && (meta.title || meta.artist)) {
+        const t = [meta.artist, meta.title].filter(Boolean).join(" — ");
+        if (t) {
+          setNowPlaying(t, true);
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: meta.title || currentStation.name,
+              artist: meta.artist || "Radio Argentina",
+              album: currentStation.freq
+            });
+          }
+          return;
+        }
+      }
+    }
+  } catch (_) {}
+}
+
+function startMetaPoll() {
+  stopMetaPoll();
+  metaPollTimer = setInterval(tryReadIcyTitle, 8000);
+}
+
+function stopMetaPoll() {
+  if (metaPollTimer) clearInterval(metaPollTimer);
+  metaPollTimer = null;
 }
 
 /* --- Player logic --- */
@@ -490,7 +565,6 @@ function selectStation(station) {
   }
 
   if (currentStation && currentStation.id === station.id && isPlaying) {
-    // misma emisora → toggle pause
     pause();
     return;
   }
@@ -505,6 +579,7 @@ function play() {
   if (!currentStation) return;
 
   setStatus("CONECTANDO…", "on");
+  setNowPlaying("Conectando…");
   player.src = currentStation.url;
   player.load();
 
@@ -516,15 +591,19 @@ function play() {
         playIcon.textContent = "❚❚";
         setStatus("EN VIVO", "on");
         startVu();
-        nowPlayingEl.textContent = "Reproduciendo…";
+        setNowPlaying("Reproduciendo…");
+        updateMediaSession();
+        startMetaPoll();
+        tryReadIcyTitle();
       })
       .catch((err) => {
         console.warn("Play error:", err);
         setStatus("ERROR", "error");
-        nowPlayingEl.textContent = "No se pudo reproducir";
+        setNowPlaying("No se pudo reproducir");
         isPlaying = false;
         playIcon.textContent = "▶";
         stopVu();
+        stopMetaPoll();
       });
   }
 }
@@ -535,7 +614,9 @@ function pause() {
   playIcon.textContent = "▶";
   setStatus("PAUSA", "on");
   stopVu();
-  nowPlayingEl.textContent = "Pausado";
+  setNowPlaying("Pausado");
+  stopMetaPoll();
+  updateMediaSession();
 }
 
 function stop() {
@@ -545,12 +626,12 @@ function stop() {
   isPlaying = false;
   playIcon.textContent = "▶";
   stopVu();
-  nowPlayingEl.textContent = "";
+  stopMetaPoll();
+  setNowPlaying("");
 }
 
 function powerToggle() {
   if (isPowerOn) {
-    // apagar
     isPowerOn = false;
     btnPower.classList.remove("active");
     stop();
@@ -580,10 +661,11 @@ volume.addEventListener("input", () => {
 
 player.addEventListener("error", () => {
   setStatus("SIN SEÑAL", "error");
-  nowPlayingEl.textContent = "Stream no disponible";
+  setNowPlaying("Stream no disponible");
   isPlaying = false;
   playIcon.textContent = "▶";
   stopVu();
+  stopMetaPoll();
 });
 
 player.addEventListener("waiting", () => {
@@ -593,24 +675,51 @@ player.addEventListener("waiting", () => {
 player.addEventListener("playing", () => {
   setStatus("EN VIVO", "on");
   startVu();
+  updateMediaSession();
 });
 
 player.addEventListener("ended", () => {
-  // streams en vivo no deberían terminar, pero por si acaso
   isPlaying = false;
   playIcon.textContent = "▶";
   stopVu();
+  stopMetaPoll();
 });
+
+/* Media Session actions */
+if ("mediaSession" in navigator) {
+  try {
+    navigator.mediaSession.setActionHandler("play", () => {
+      if (currentStation && isPowerOn) play();
+    });
+    navigator.mediaSession.setActionHandler("pause", () => pause());
+    navigator.mediaSession.setActionHandler("stop", () => {
+      if (isPowerOn) powerToggle();
+    });
+  } catch (_) {}
+}
 
 /* --- Build preset buttons --- */
 STATIONS.forEach((st) => {
   const btn = document.createElement("button");
   btn.className = "preset-btn";
   btn.dataset.id = st.id;
+  btn.dataset.name = st.name.toLowerCase();
+  btn.dataset.freq = (st.freq || "").toLowerCase();
   btn.innerHTML = `<span class="p-name">${st.name}</span><span class="p-freq">${st.freq}</span>`;
   btn.addEventListener("click", () => selectStation(st));
   presetGrid.appendChild(btn);
 });
+
+/* Search filter */
+if (stationSearch) {
+  stationSearch.addEventListener("input", () => {
+    const q = stationSearch.value.trim().toLowerCase();
+    document.querySelectorAll(".preset-btn").forEach((btn) => {
+      const match = !q || btn.dataset.name.includes(q) || btn.dataset.freq.includes(q);
+      btn.classList.toggle("hidden", !match);
+    });
+  });
+}
 
 /* volume inicial */
 player.volume = volume.value / 100;
