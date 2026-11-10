@@ -28,12 +28,6 @@ const STATIONS = [
     freq: "AM 620",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad26"
   },
-  {
-    id: "uncaus",
-    name: "Radio UNCAUS",
-    freq: "FM 101.9",
-    url: "https://ssl.radiosnethosting.com/index.php?port=9072"
-  },
   /* ===== Tus radios de siempre (sin tocar) ===== */
   {
     id: "nacional",
@@ -90,12 +84,6 @@ const STATIONS = [
     name: "Dorado FM",
     freq: "FM 98.3",
     url: "https://sslstream.online:7269/stream"
-  },
-  {
-    id: "radiosnet9072",
-    name: "RadiosNet 9072",
-    freq: "ONLINE",
-    url: "https://ssl.radiosnethosting.com:9072/;"
   },
 
   /* ===== AM de Buenos Aires ===== */
