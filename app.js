@@ -3,6 +3,37 @@
    en Chrome, Edge y Firefox, y también si la página está en https.
    Las marcadas con ⚠ están armadas por analogía y hay que probarlas. */
 const STATIONS = [
+  /* ===== Chaco (agregadas) ===== */
+  {
+    id: "laradio1047",
+    name: "La Radio 104.7",
+    freq: "FM 104.7",
+    url: "http://server.laradio.online:9262/stream"
+  },
+  {
+    id: "facundoquiroga",
+    name: "Facundo Quiroga",
+    freq: "FM 95.9",
+    url: "https://01.solumedia.com.ar:9038/stream"
+  },
+  {
+    id: "radiofan",
+    name: "Radio Fan",
+    freq: "FM 96.9",
+    url: "http://streaming5.locucionar.com:23184/stream"
+  },
+  {
+    id: "lra26",
+    name: "Nacional Resistencia",
+    freq: "AM 620",
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad26"
+  },
+  {
+    id: "uncaus",
+    name: "Radio UNCAUS",
+    freq: "FM 101.9",
+    url: "https://streamradio.uncaus.edu.ar/stream"
+  },
   /* ===== Tus radios de siempre (sin tocar) ===== */
   {
     id: "nacional",
