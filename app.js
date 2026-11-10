@@ -32,7 +32,7 @@ const STATIONS = [
     id: "uncaus",
     name: "Radio UNCAUS",
     freq: "FM 101.9",
-    url: "https://streamradio.uncaus.edu.ar/stream"
+    url: "https://ssl.radiosnethosting.com/index.php?port=9072"
   },
   /* ===== Tus radios de siempre (sin tocar) ===== */
   {
