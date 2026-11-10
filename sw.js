@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v8";
+const CACHE = "radio-ar-v10";
 const ASSETS = [
   "./",
   "./index.html",
@@ -10,9 +10,8 @@ const ASSETS = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
-  );
+  self.skipWaiting();
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
 });
 
 self.addEventListener("activate", (event) => {
@@ -25,22 +24,27 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
 
-  // Solo cachear el shell de la app. Los streams de audio van directos a la red.
-  if (url.origin === self.location.origin) {
+  // JS/CSS/HTML: always try network first (so updates appear)
+  const isShell = /\.(js|css|html)(\?|$)/i.test(url.pathname) || url.pathname.endsWith("/") || url.pathname.endsWith("/index.html");
+
+  if (isShell) {
     event.respondWith(
-      caches.match(event.request).then((cached) => {
-        // Network first for HTML/JS/CSS so updates appear quickly
-        return fetch(event.request)
-          .then((response) => {
-            if (response && response.ok) {
-              const clone = response.clone();
-              caches.open(CACHE).then((cache) => cache.put(event.request, clone));
-            }
-            return response;
-          })
-          .catch(() => cached || caches.match("./index.html"));
-      })
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((c) => c || caches.match("./index.html")))
     );
+    return;
   }
+
+  event.respondWith(
+    caches.match(event.request).then((cached) => cached || fetch(event.request))
+  );
 });
