@@ -26,7 +26,7 @@ const STATIONS = [
     id: "radiofan",
     name: "Radio Fan",
     freq: "FM 96.9",
-    url: "http://streaming5.locucionar.com:23184/stream"
+    url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
   },
 {
     id: "Radio Mocoví AM 800",
