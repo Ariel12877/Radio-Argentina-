@@ -6,7 +6,7 @@ const STATIONS = [
   {
     id: "radiotop",
     name: "Radio Top",
-    freq: "ONLINE",
+    freq: "FM 105.9",
     url: "https://live-ar1.cdnrad.com/hls/radio-2075/live.m3u8"
   },
   /* ===== Chaco (agregadas) ===== */
