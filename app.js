@@ -23,10 +23,11 @@ const STATIONS = [
     url: "https://01.solumedia.com.ar:9038/stream"
   },
   {
-    id: " Fm Libertad Machagai",
-    name: "Fm Libertad Machagai",
+    id: "fmlibertadmachagai",
+    name: "FM Libertad Machagai",
     freq: "FM 99.5",
-    url: "https://streaming01.shockmedia.com.ar:8428/"
+    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
+    url: "http://streaming01.shockmedia.com.ar:8428/"
   },
     {
     id: "radiofan",
