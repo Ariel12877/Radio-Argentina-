@@ -132,7 +132,7 @@ const STATIONS = [
     id: "Pasionfm",
     name: "Pasion Fm",
     freq: "FM 98.7",
-    url: "https://live-ar1.cdnrad.com/hls/fmpasion/live.m3u8"
+    url: "https://srv1.streamingradio.ar/cp/widgets/player/single/art.php"
   },
   {
     id: "Las Lomitas",
