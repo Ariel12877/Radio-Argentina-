@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v13";
+const CACHE = "radio-ar-v14";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const ASSETS = [
   "./icon-192.png",
   "./icon-512.png",
   "./logo.webp",
+  "./wood-texture.jpg",
   "./fonts/barlow-condensed-latin-500-normal.woff2",
   "./fonts/barlow-condensed-latin-600-normal.woff2",
   "./fonts/barlow-condensed-latin-700-normal.woff2",
