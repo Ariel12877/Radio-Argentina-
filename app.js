@@ -14,7 +14,7 @@ const STATIONS = [
     id: "laradio1047",
     name: "La Radio 104.7",
     freq: "FM 104.7",
-    url: "https://server.laradio.online/proxy/laradio1047?mp=/stream"
+    url: "http://server.laradio.online:9262/stream"
   },
   {
     id: "facundoquiroga",
@@ -26,7 +26,7 @@ const STATIONS = [
     id: "radiofan",
     name: "Radio Fan",
     freq: "FM 96.9",
-    url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
+    url: "http://streaming5.locucionar.com:23184/stream"
   },
   {
     id: "lra26",
@@ -461,9 +461,9 @@ const STATIONS = [
   },
   {
     id: "eldesta",
-    name: "La Radio de los Lentos",
+    name: "El Desta Radio",
     freq: "ONLINE",
-    url: "https://01.solumedia.com.ar:7828/autodj"
+    url: "https://cdn2.instream.audio/:8000/stream"
   }
 ];
 

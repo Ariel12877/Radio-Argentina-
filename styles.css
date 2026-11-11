@@ -90,11 +90,11 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   display: block;
   width: 38px;
   height: 38px;
-  border-radius: 22%;
+  border-radius: 50%;
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.55);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.7), 0 3px 10px rgba(0,0,0,0.55);
 }
 .brand-text { font-weight: 700; font-size: 1.35rem; letter-spacing: 0.02em; }
 
@@ -121,16 +121,111 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 .status.error { color: var(--red); }
 .status.error::before { background: var(--red); box-shadow: 0 0 8px var(--red); }
 
-.dial { display: none; }
+/* Dial: ventanita con escala FM y AM. La aguja busca la frecuencia de la emisora.
+   En el celular es compacto; en la PC se agranda (más abajo). */
+.dial { display: block; margin: 8px 14px 0; }
+
+.dial-glass {
+  position: relative;
+  padding: 6px 8px 8px;
+  border-radius: 10px;
+  color: #2b1a08;
+  background: linear-gradient(180deg, #f8cb6e 0%, #eca640 55%, #e29a30 100%);
+  box-shadow:
+    inset 0 0 0 3px #2a1a0c,
+    inset 0 8px 14px rgba(255,255,255,0.22),
+    inset 0 -10px 18px rgba(130,70,0,0.32),
+    0 0 26px rgba(242,169,59,0.2);
+  transition: filter 0.5s ease, box-shadow 0.5s ease;
+}
+.dial-glass.off {
+  filter: brightness(0.42) saturate(0.55);
+  box-shadow: inset 0 0 0 3px #2a1a0c, inset 0 -10px 18px rgba(0,0,0,0.4);
+}
+
+.dial-band {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  align-items: center;
+  padding: 3px 0;
+  transition: opacity 0.35s ease;
+}
+.dial-band + .dial-band { border-top: 1px solid rgba(43,26,8,0.35); }
+.dial-band.dim { opacity: 0.5; }
+
+.dial-tag {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.dial-tag small {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.dial-scale { position: relative; height: 32px; margin: 0 10px 0 12px; }
+.dial-scale .tick {
+  position: absolute;
+  top: 0;
+  width: 1px; height: 6px;
+  background: #2b1a08;
+  opacity: 0.75;
+}
+.dial-scale .tick.major { height: 11px; opacity: 1; }
+.dial-scale .tick.st { width: 1px; height: 17px; background: #6b2010; opacity: 1; }
+.dial-scale .lbl {
+  position: absolute;
+  top: 19px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  line-height: 1;
+}
+.dial-scale .needle {
+  position: absolute;
+  top: -3px; bottom: -3px;
+  left: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: #c1281c;
+  box-shadow: 0 0 6px rgba(193,40,28,0.7);
+  opacity: 0;
+  transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+}
+.dial-scale .needle.on { opacity: 1; }
+
+/* "Solo online": en el celular ya lo dice el display, así que acá no se muestra */
+.dial-online {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 8px 6px 0;
+  border-top: 1px solid rgba(43,26,8,0.35);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+.dial-online::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #2b1a08; }
+.dial-online.on { opacity: 1; }
+.dial-online.on::before { background: #c1281c; box-shadow: 0 0 6px rgba(193,40,28,0.8); }
+
 
 /* Display */
 .display {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-height: 140px;
-  margin: 6px 14px 0;
-  padding: 14px 16px;
+  min-height: 0;
+  margin: 8px 14px 0;
+  padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid #2c1d10;
   background: var(--lcd-bg);
@@ -139,7 +234,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 
 .freq {
   font-family: var(--mono);
-  font-size: 2.7rem;
+  font-size: 2.45rem;
   line-height: 1.05;
   letter-spacing: 0.03em;
   color: var(--amber-hi);
@@ -149,7 +244,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 .station-name {
   min-height: 1.2em;
   font-weight: 600;
-  font-size: 1.55rem;
+  font-size: 1.45rem;
   line-height: 1.15;
 }
 
@@ -371,8 +466,16 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   .btn-power:not(.active):hover { color: var(--ivory); }
 }
 
+/* ===== Pantallas angostas: el pie queda en una sola línea ===== */
+@media (max-width: 430px) {
+  .footer-note { display: none; }
+  .footer { justify-content: center; }
+  .footer:has(.shortcut-btn[hidden]) { display: none; }
+}
+
 /* ===== Celular chico y bajo: se compacta para que entren más emisoras ===== */
 @media (max-width: 899px) and (max-height: 700px) and (orientation: portrait) {
+  .dial { display: none; }
   .display { min-height: 0; padding: 10px 14px; }
   .freq { font-size: 2.2rem; }
   .station-name { font-size: 1.35rem; }
@@ -397,6 +500,7 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
       "footer   presets";
     border-inline: 0;
   }
+  .dial { display: none; }
   .radio-header { grid-area: header; padding-top: 8px; padding-bottom: 4px; }
   .brand-logo { width: 32px; height: 32px; }
   .display { grid-area: display; min-height: 0; padding: 10px 14px; }
@@ -459,84 +563,19 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 1px 0 #1a0f08, 0 0 0 1px #6b4c1c;
   }
 
-  /* El dial */
-  .dial { grid-area: dial; display: block; }
-
-  .dial-glass {
-    position: relative;
-    padding: 10px 10px 12px;
-    border-radius: 10px;
-    color: #2b1a08;
-    background: linear-gradient(180deg, #f8cb6e 0%, #eca640 55%, #e29a30 100%);
-    box-shadow:
-      inset 0 0 0 3px #2a1a0c,
-      inset 0 10px 18px rgba(255,255,255,0.22),
-      inset 0 -12px 22px rgba(130,70,0,0.32),
-      0 0 34px rgba(242,169,59,0.22);
-    transition: filter 0.5s ease, box-shadow 0.5s ease;
-  }
-  .dial-glass.off {
-    filter: brightness(0.42) saturate(0.55);
-    box-shadow: inset 0 0 0 3px #2a1a0c, inset 0 -12px 22px rgba(0,0,0,0.4);
-  }
-
-  .dial-band {
-    display: grid;
-    grid-template-columns: 30px 1fr;
-    align-items: center;
-    padding: 6px 0;
-    transition: opacity 0.35s ease;
-  }
-  .dial-band + .dial-band { border-top: 1px solid rgba(43,26,8,0.35); }
-  .dial-band.dim { opacity: 0.5; }
-  .dial-tag { padding-left: 6px; font-weight: 700; font-size: 1.05rem; }
-
-  .dial-scale { position: relative; height: 46px; margin: 0 16px; }
-  .dial-scale .tick {
-    position: absolute;
-    top: 0;
-    width: 1px; height: 9px;
-    background: #2b1a08;
-    opacity: 0.75;
-  }
-  .dial-scale .tick.major { height: 15px; opacity: 1; }
-  .dial-scale .tick.st { width: 2px; height: 24px; margin-left: -1px; background: #7a2410; opacity: 1; }
-  .dial-scale .lbl {
-    position: absolute;
-    top: 27px;
-    transform: translateX(-50%);
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    line-height: 1;
-  }
-  .dial-scale .needle {
-    position: absolute;
-    top: -5px; bottom: -5px;
-    left: 0;
-    width: 2px;
-    margin-left: -1px;
-    background: #c1281c;
-    box-shadow: 0 0 6px rgba(193,40,28,0.7);
-    opacity: 0;
-    transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
-  }
-  .dial-scale .needle.on { opacity: 1; }
-
-  .dial-online {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 2px;
-    padding: 8px 6px 0;
-    border-top: 1px solid rgba(43,26,8,0.35);
-    font-size: 0.95rem;
-    font-weight: 600;
-    opacity: 0.4;
-    transition: opacity 0.3s ease;
-  }
-  .dial-online::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #2b1a08; }
-  .dial-online.on { opacity: 1; }
-  .dial-online.on::before { background: #c1281c; box-shadow: 0 0 6px rgba(193,40,28,0.8); }
+  /* El dial en la PC: más grande */
+  .dial { grid-area: dial; margin: 0; }
+  .dial-glass { padding: 10px 10px 12px; }
+  .dial-band { padding: 6px 0; }
+  .dial-tag { padding-left: 6px; font-size: 1.05rem; }
+  .dial-tag small { font-size: 0.66rem; }
+  .dial-scale { height: 46px; margin: 0 16px; }
+  .dial-scale .tick { height: 9px; }
+  .dial-scale .tick.major { height: 15px; }
+  .dial-scale .tick.st { width: 2px; height: 24px; margin-left: -1px; }
+  .dial-scale .lbl { top: 27px; font-size: 0.78rem; }
+  .dial-scale .needle { top: -5px; bottom: -5px; }
+  .dial-online { display: flex; }
 
   /* Display y controles */
   .display { grid-area: display; margin: 0; min-height: 168px; padding: 16px 18px; }

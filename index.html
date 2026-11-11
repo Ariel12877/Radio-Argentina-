@@ -12,8 +12,7 @@
   <meta name="apple-mobile-web-app-title" content="Radio AR" />
   <meta name="description" content="Radios de Argentina en vivo, con dial y botonera. Sin publicidad." />
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
@@ -35,11 +34,11 @@
     <section class="dial" aria-hidden="true">
       <div class="dial-glass off" id="dialGlass">
         <div class="dial-band" data-band="fm">
-          <span class="dial-tag">FM</span>
+          <span class="dial-tag">FM<small>MHz</small></span>
           <div class="dial-scale" id="scaleFm"><i class="needle" id="needleFm"></i></div>
         </div>
         <div class="dial-band" data-band="am">
-          <span class="dial-tag">AM</span>
+          <span class="dial-tag">AM<small>kHz</small></span>
           <div class="dial-scale" id="scaleAm"><i class="needle" id="needleAm"></i></div>
         </div>
         <div class="dial-online" id="dialOnline">Solo online</div>
@@ -125,6 +124,6 @@
   </dialog>
 
   <audio id="player" preload="none"></audio>
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
 </body>
 </html>
