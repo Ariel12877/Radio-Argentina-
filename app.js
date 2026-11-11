@@ -97,6 +97,24 @@ const STATIONS = [
     freq: "FM 98.3",
     url: "https://sslstream.online:7269/stream"
   },
+   {
+    id: "Radio Chamame",
+    name: "Radio Chamame",
+    freq: "Online",
+    url: "https://stream.zenolive.com/84y7b87p4gruv"
+  },
+  {
+    id: "Pasionfm",
+    name: "Pasion Fm",
+    freq: "FM 98.7",
+    url: "https://live-ar1.cdnrad.com/hls/fmpasion/live.m3u8"
+  },
+  {
+    id: "Las Lomitas",
+    name: "Nacional Las Lomitas Formosa",
+    freq: "AM 1270",
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad20"
+  },
     {
     id: "Sentir FM",
     name: "Sentir FM",
