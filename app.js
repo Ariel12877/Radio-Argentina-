@@ -97,6 +97,18 @@ const STATIONS = [
     freq: "FM 98.3",
     url: "https://sslstream.online:7269/stream"
   },
+    {
+    id: "Sentir FM",
+    name: "Sentir FM",
+    freq: "FM 98.3",
+    url: "https://stream.zeno.fm/uwqe3chde78uv"
+  },
+   {
+    id: "Cadena Heat",
+    name: "Heat FM",
+    freq: "FM 91.9",
+    url: "https://24403.live.streamtheworld.com/CADENAHEAT_SC"
+  },
 
   /* ===== AM de Buenos Aires ===== */
   {
