@@ -14,7 +14,7 @@ const STATIONS = [
     id: "laradio1047",
     name: "La Radio 104.7",
     freq: "FM 104.7",
-    url: "https://server.laradio.online/proxy/laradio1047?mp=/stream"
+    url: "http://server.laradio.online:9262/stream"
   },
   {
     id: "facundoquiroga",
@@ -26,7 +26,7 @@ const STATIONS = [
     id: "radiofan",
     name: "Radio Fan",
     freq: "FM 96.9",
-    url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
+    url: "http://streaming5.locucionar.com:23184/stream"
   },
   {
     id: "lra26",
@@ -226,7 +226,7 @@ const STATIONS = [
     id: "delta",
     name: "Delta",
     freq: "FM 90.3",
-    url: "https://cdn.instream.audio:9069/stream"
+    url: "https://cdn.instream.audio/:9069/stream"
   },
   {
     id: "vorterix",
@@ -451,7 +451,7 @@ const STATIONS = [
     id: "ledfm",
     name: "Led FM",
     freq: "ONLINE",
-    url: "https://cdn.instream.audio:9068/stream"
+    url: "https://cdn.instream.audio/:9068/stream"
   },
   {
     id: "relatores",
@@ -461,17 +461,10 @@ const STATIONS = [
   },
   {
     id: "eldesta",
-    name: "La Radio de los Lentos",
+    name: "El Desta Radio",
     freq: "ONLINE",
-    // ⚠ HLS (.m3u8): el <audio> nativo no lo reproduce bien; conviene buscar stream MP3/AAC directo
-    url: "https://stream-gtlc.telecentro.net.ar/hls/latinatvhls/main.m3u8"
-  },
-  {
-    id: "latina",
-    name: "Latina",
-    freq: "FM 101.1",
-    url: "https://01.solumedia.com.ar:7828/autodj"
-  },
+    url: "https://cdn2.instream.audio/:8000/stream"
+  }
 ];
 
 const player = document.getElementById("player");
