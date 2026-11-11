@@ -697,7 +697,7 @@ function tryReadIcyTitle() {
     if (player.mozGetMetadata) {
       const meta = player.mozGetMetadata();
       if (meta && (meta.title || meta.artist)) {
-        const t = [meta.artist, meta.title].filter(Boolean).join(" â€” ");
+        const t = [meta.artist, meta.title].filter(Boolean).join(" HOLA ");
         if (t) {
           setNowPlaying(t, true);
           if ("mediaSession" in navigator) {
