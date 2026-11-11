@@ -11,7 +11,7 @@ const STATIONS = [
   },
   /* ===== Chaco (agregadas) ===== */
   {
-    id: "fmlibertad",
+    id: "FM libertad Machagai",
     name: "FM Libertad Machagai",
     freq: "FM 99.5",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
