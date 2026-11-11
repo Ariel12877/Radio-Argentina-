@@ -454,23 +454,18 @@ const STATIONS = [
     url: "https://cdn.instream.audio/:9068/stream"
   },
   {
-    id: "relatores",
-    name: "Relatores",
-    freq: "ONLINE",
-    url: "https://radio.relatores.com.ar/relatores.mp3"
+    id: "Latina",
+    name: "Latina",
+    freq: "FM 101,
+    url: "https://01.solumedia.com.ar:7828/autodj"
   },
   {
     id: "eldesta",
     name: "La Radio de los Lentos,
-    freq: "ONLINE",
+    freq: "online",
     url: "https://stream-gtlc.telecentro.net.ar/hls/latinatvhls/main.m3u8"
   },
-  {
-    id: "Latina",
-    name: "Latina ,
-    freq: "FM 101.1",
-    url: "https://01.solumedia.com.ar:7828/autodj"
-  },
+  
 ];
 
 const player = document.getElementById("player");
