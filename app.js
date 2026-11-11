@@ -372,7 +372,7 @@ const STATIONS = [
     id: "pasion",
     name: "Radio Pasion",
     freq: "FM 102.7",
-    url: "https://cdn.instream.audio/stream/9790"
+    url: "https://live-ar1.cdnrad.com/hls/radio-1969/live.m3u8"
   },
   {
     id: "berlin",
