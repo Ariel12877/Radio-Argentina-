@@ -14,7 +14,7 @@ const STATIONS = [
     id: "laradio1047",
     name: "La Radio 104.7",
     freq: "FM 104.7",
-    url: "http://server.laradio.online:9262/stream"
+    url: "https://server.laradio.online/proxy/laradio1047?mp=/stream"
   },
   {
     id: "facundoquiroga",
@@ -454,10 +454,10 @@ const STATIONS = [
     url: "https://cdn.instream.audio/:9068/stream"
   },
   {
-    id: "relatores",
-    name: "Relatores",
+    id: "Radio 10",
+    name: "Radio 10",
     freq: "ONLINE",
-    url: "https://radio.relatores.com.ar/relatores.mp3"
+    url: "https://stream.zeno.fm/4r530f2a9f0uv"
   },
   {
     id: "eldesta",
