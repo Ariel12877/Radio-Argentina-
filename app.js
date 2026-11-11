@@ -28,6 +28,24 @@ const STATIONS = [
     freq: "FM 96.9",
     url: "http://streaming5.locucionar.com:23184/stream"
   },
+{
+    id: "Radio Mocoví AM 800",
+    name: "Radio Mocoví AM 800",
+    freq: "AM 800",
+    url: "https://live-ar1.cdnrad.com/hls/radio-1930/live.m3u8"
+  },
+  {
+    id: "Futuro",
+    name: "Radio Futuro",
+    freq: "FM 99.9",
+    url: "https://edge03.radiohdvivo.com/futuro989"
+  },
+  {
+    id: "Radio Con Vos",
+    name: "Radio Con Vos",
+    freq: "FM 89.9",
+    url: "https://server1.stweb.tv/rcvos/live/playlist.m3u8"
+  },
   {
     id: "lra26",
     name: "Nacional Resistencia",
