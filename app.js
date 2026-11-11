@@ -461,9 +461,9 @@ const STATIONS = [
   },
   {
     id: "eldesta",
-    name: "El Desta Radio",
+    name: "Latina",
     freq: "ONLINE",
-    url: "https://cdn2.instream.audio/:8000/stream"
+    url: "https://stream-gtlc.telecentro.net.ar/hls/latinatvhls/main.m3u8"
   }
 ];
 
