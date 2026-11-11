@@ -205,7 +205,7 @@ const STATIONS = [
   },
   {
     id: "genesis",
-    name: "GÃ©nesis",
+    name: "Genesis",
     freq: "AM 970",
     url: "https://01.solumedia.com.ar:8216/"
   },
@@ -229,7 +229,7 @@ const STATIONS = [
   },
   {
     id: "guemes",
-    name: "GÃ¼emes",
+    name: "Güemes",
     freq: "AM 1050",
     url: "https://server.radiostreaming.com.ar/8564/stream"
   },
@@ -309,7 +309,7 @@ const STATIONS = [
   },
   {
     id: "nacionalclasica",
-    name: "Nacional ClÃ¡sica",
+    name: "Nacional Clasica",
     freq: "FM 96.7",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad37"
   },
@@ -327,7 +327,7 @@ const STATIONS = [
   },
   {
     id: "nacionalfolklorica",
-    name: "Nacional FolklÃ³rica",
+    name: "Nacional Folklorica",
     freq: "FM 98.7",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad38"
   },
@@ -358,7 +358,7 @@ const STATIONS = [
   },
   {
     id: "lnmusica",
-    name: "LN+ MÃºsica",
+    name: "LN+ Musica",
     freq: "FM 104.9",
     url: "https://stream.radio.co/s2ed3bec0a/listen"
   },
@@ -370,13 +370,13 @@ const STATIONS = [
   },
   {
     id: "pasion",
-    name: "Radio PasiÃ³n",
+    name: "Radio Pasion",
     freq: "FM 102.7",
     url: "https://cdn.instream.audio/stream/9790"
   },
   {
     id: "berlin",
-    name: "Radio BerlÃ­n",
+    name: "Radio Berlin",
     freq: "FM 107.9",
     url: "https://unlimited5-us.dps.live/berlin/aac/icecast.audio"
   },
@@ -396,25 +396,25 @@ const STATIONS = [
   },
   {
     id: "fmcordoba",
-    name: "FM CÃ³rdoba",
+    name: "FM Cordoba",
     freq: "FM 91.9",
     url: "https://liveradio.mediainbox.net/fmcordoba.mp3"
   },
   {
     id: "suquia",
-    name: "Radio SuquÃ­a",
+    name: "Radio Suqui­a",
     freq: "FM 96.5",
     url: "https://streaming01.shockmedia.com.ar:10945/"
   },
   {
     id: "mia",
-    name: "Radio MÃ­a",
+    name: "Radio Mi­a",
     freq: "FM 104.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FM1041_56AAC.aac"
   },
   {
     id: "unicordoba",
-    name: "Radio Universidad CÃ³rdoba",
+    name: "Radio Universidad Cordoba",
     freq: "AM 580",
     url: "https://radios.solumedia.com:10976/stream"
   },
@@ -436,7 +436,7 @@ const STATIONS = [
   /* ===== Mendoza ===== */
   {
     id: "estaciondelsol",
-    name: "EstaciÃ³n del Sol",
+    name: "Estacion del Sol",
     freq: "FM 96.7",
     url: "https://estaciondelsolonline.com.ar:8000/radio.aac"
   },
@@ -450,7 +450,7 @@ const STATIONS = [
   },
   {
     id: "lu2",
-    name: "LU2 BahÃ­a Blanca",
+    name: "LU2 Bahia Blanca",
     freq: "AM 840",
     url: "https://streaming6.locucionar.com:24228/stream?ver=22915"
   },
@@ -464,13 +464,13 @@ const STATIONS = [
   },
   {
     id: "rionegroradio",
-    name: "RÃ­o Negro Radio",
+    name: "Ri­o Negro Radio",
     freq: "FM 90.9",
     url: "https://server6.hostradios.com/8440/stream"
   },
   {
     id: "laredneuquen",
-    name: "La Red NeuquÃ©n",
+    name: "La Red Neuquen",
     freq: "FM 93.7",
     url: "https://server.laradio.online/proxy/julian_liyo?mp=/stream"
   },
