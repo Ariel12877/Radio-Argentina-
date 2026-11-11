@@ -2,71 +2,94 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
-  <meta name="theme-color" content="#0f0f0f" />
+  <meta name="theme-color" content="#150e0a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Radio AR" />
-  <meta name="description" content="Radios de Argentina en vivo. Interfaz profesional tipo radio de auto. Sin publicidad." />
+  <meta name="description" content="Radios de Argentina en vivo, con dial y botonera. Sin publicidad." />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
   <title>Radio Argentina · Cassette</title>
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=12" />
 </head>
 <body>
   <div class="app">
-    <!-- Cabecera tipo radio de auto -->
+
     <header class="radio-header">
       <div class="brand">
-        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8.2" fill="none" stroke="#f0a830" stroke-width="1.6"/><circle cx="12" cy="13" r="3.4" fill="#f0a830"/><path d="M12 1.6v2.6M5 4.4l1.3 2.2M19 4.4l-1.3 2.2" stroke="#f0a830" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-        <span class="brand-text">RADIO AR</span>
+        <img class="brand-logo" src="logo.webp" width="54" height="54" alt="Logo de Ariel Walter" decoding="async" />
+        <span class="brand-text">Radio Argentina</span>
       </div>
-      <div class="status" id="status">LISTO</div>
+      <div class="status" id="status" role="status" aria-live="polite">LISTO</div>
     </header>
 
-    <!-- Display principal -->
+    <!-- Dial: solo se ve en pantallas grandes -->
+    <section class="dial" aria-hidden="true">
+      <div class="dial-glass off" id="dialGlass">
+        <div class="dial-band" data-band="fm">
+          <span class="dial-tag">FM</span>
+          <div class="dial-scale" id="scaleFm"><i class="needle" id="needleFm"></i></div>
+        </div>
+        <div class="dial-band" data-band="am">
+          <span class="dial-tag">AM</span>
+          <div class="dial-scale" id="scaleAm"><i class="needle" id="needleAm"></i></div>
+        </div>
+        <div class="dial-online" id="dialOnline">Solo online</div>
+      </div>
+    </section>
+
     <section class="display">
       <div class="freq" id="freq">—</div>
-      <div class="station-name" id="stationName">Seleccioná una emisora</div>
+      <div class="station-name" id="stationName">Elegí una emisora</div>
       <div class="now-playing" id="nowPlaying"></div>
-      <div class="vu-meter">
+      <div class="vu-meter" aria-hidden="true">
         <div class="vu-bar" id="vu"></div>
       </div>
     </section>
 
-    <!-- Controles principales -->
     <section class="controls">
-      <button class="btn-power" id="btnPower" title="Encender / Apagar" aria-label="Encender o apagar">
-        <svg class="power-svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+      <button class="btn-power" id="btnPower" title="Encender / apagar" aria-label="Encender o apagar">
+        <svg class="power-svg" viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
         </svg>
       </button>
-      <button class="btn-play" id="btnPlay" title="Play / Pause" aria-label="Reproducir o pausar">
-        <span id="playIcon">▶</span>
+      <button class="btn-play" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
+        <span id="playIcon" class="play-icon">
+          <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>
+          <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
+        </span>
       </button>
       <div class="volume-wrap">
-        <label for="volume">VOL</label>
+        <label for="volume">Volumen</label>
         <input type="range" id="volume" min="0" max="100" value="80" />
       </div>
     </section>
 
-    <!-- Botonera de emisoras -->
     <section class="presets">
       <div class="presets-header">
-        <div class="presets-label">EMISORAS</div>
-        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" autocomplete="off" />
+        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" aria-label="Buscar emisora" autocomplete="off" />
+        <span class="station-count" id="stationCount" aria-live="polite"></span>
       </div>
       <div class="preset-grid" id="presetGrid">
         <!-- se llenan por JS -->
       </div>
+      <p class="empty" id="emptyMsg" hidden>No hay emisoras con ese nombre. Probá con otra palabra o con la frecuencia, por ejemplo 95.9.</p>
     </section>
 
-    <!-- Pie -->
     <footer class="footer">
-      <p>Sin publicidad · Solo streams públicos</p>
+      <p class="footer-note">Sin publicidad. Solo streams públicos.</p>
+      <p class="kbd-hints">
+        <span><kbd>Espacio</kbd>play o pausa</span>
+        <span><kbd>←</kbd><kbd>→</kbd>cambiar de emisora</span>
+        <span><kbd>/</kbd>buscar</span>
+      </p>
       <button class="shortcut-btn" id="shortcutBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Acceso directo</button>
     </footer>
   </div>
@@ -101,6 +124,6 @@
   </dialog>
 
   <audio id="player" preload="none"></audio>
-  <script src="app.js?v=11"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>

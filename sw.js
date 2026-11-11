@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v11";
+const CACHE = "radio-ar-v12";
 const ASSETS = [
   "./",
   "./index.html",
@@ -6,7 +6,12 @@ const ASSETS = [
   "./app.js",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./logo.webp",
+  "./fonts/barlow-condensed-latin-500-normal.woff2",
+  "./fonts/barlow-condensed-latin-600-normal.woff2",
+  "./fonts/barlow-condensed-latin-700-normal.woff2",
+  "./fonts/share-tech-mono-latin-400-normal.woff2"
 ];
 
 self.addEventListener("install", (event) => {
