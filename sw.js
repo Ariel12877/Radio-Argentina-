@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v12";
+const CACHE = "radio-ar-v13";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,6 +7,9 @@ const ASSETS = [
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
+  "./icon-maskable-512.png",
+  "./apple-touch-icon.png",
+  "./favicon-64.png",
   "./logo.webp",
   "./fonts/barlow-condensed-latin-500-normal.woff2",
   "./fonts/barlow-condensed-latin-600-normal.woff2",

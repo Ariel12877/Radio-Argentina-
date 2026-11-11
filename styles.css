@@ -90,11 +90,11 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   display: block;
   width: 38px;
   height: 38px;
-  border-radius: 50%;
+  border-radius: 22%;
   pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.7), 0 3px 10px rgba(0,0,0,0.55);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.55);
 }
 .brand-text { font-weight: 700; font-size: 1.35rem; letter-spacing: 0.02em; }
 
