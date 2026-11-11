@@ -461,9 +461,9 @@ const STATIONS = [
   },
   {
     id: "eldesta",
-    name: "El Desta Radio",
+    name: "La Radio de los Lentos",
     freq: "ONLINE",
-    url: "https://cdn2.instream.audio/:8000/stream"
+    url: "https://01.solumedia.com.ar:7828/autodj"
   }
 ];
 
