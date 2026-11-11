@@ -518,7 +518,7 @@ const STATIONS = [
     id: "eldesta",
     name: "Latina",
     freq: "ONLINE",
-    url: "https://stream-gtlc.telecentro.net.ar/hls/latinatvhls/main.m3u8"
+    url: "https://stream-gtlc.telecentro.net.ar/hls/radiolatinahls/0/playlist.m3u8?uid=c7bed7e99f163acd05048ec419a6800c"
   }
 ];
 
