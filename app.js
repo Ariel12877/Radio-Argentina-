@@ -559,7 +559,7 @@ function setPlayIcon(playing) {
 function updateDisplay() {
   if (!currentStation) {
     freqEl.textContent = "â€”";
-    stationNameEl.textContent = "ElegÃ­ una emisora";
+    stationNameEl.textContent = "Prende y elegi­ una emisora"; 
     nowPlayingEl.textContent = "";
     nowPlayingEl.classList.remove("has-meta");
   } else {
@@ -745,8 +745,8 @@ function selectStation(station) {
 function play() {
   if (!currentStation) return;
 
-  setStatus("CONECTANDO¦", "wait");
-  setNowPlaying("Conectando¦");
+  setStatus("CONECTANDO", "wait");
+  setNowPlaying("Conectando");
   player.src = currentStation.url;
   player.load();
 
