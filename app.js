@@ -558,7 +558,7 @@ function setPlayIcon(playing) {
 
 function updateDisplay() {
   if (!currentStation) {
-    freqEl.textContent = "â€”";
+    freqEl.textContent = "HOLA";
     stationNameEl.textContent = "Prende y elegi­ una emisora"; 
     nowPlayingEl.textContent = "";
     nowPlayingEl.classList.remove("has-meta");
