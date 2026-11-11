@@ -1,4 +1,4 @@
-/* Radios argentinas â€” streams pÃºblicos (lista ampliada, noviembre 2026)
+/* Radios argentinas ” streams pÃºblicos (lista ampliada, noviembre 2026)
    Solo streams https directos (sin .m3u8 / HLS), para que funcionen con <audio>
    en Chrome, Edge y Firefox, y tambiÃ©n si la pÃ¡gina estÃ¡ en https.
    Las marcadas con âš  estÃ¡n armadas por analogÃ­a y hay que probarlas. */
@@ -12,7 +12,7 @@ const STATIONS = [
   /* ===== Chaco (agregadas) ===== */
   {
     id: "fmlibertad",
-    name: "FM Libertad",
+    name: "FM Libertad Machagai",
     freq: "FM 99.5",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "http://streaming01.shockmedia.com.ar/8428/stream"
