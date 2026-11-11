@@ -14,7 +14,7 @@ const STATIONS = [
     id: "laradio1047",
     name: "La Radio 104.7",
     freq: "FM 104.7",
-    url: "http://server.laradio.online:9262/stream"
+    url: "https://server.laradio.online:9262/stream"
   },
   {
     id: "facundoquiroga",
