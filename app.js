@@ -11,8 +11,8 @@ const STATIONS = [
   },
   /* ===== Chaco (agregadas) ===== */
   {
-    id: "fmlibertadmachagai",
-    name: "FM Libertad Machagai",
+    id: "fmlibertad",
+    name: "FM Libertad",
     freq: "FM 99.5",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "https://streaming01.shockmedia.com.ar/8428/stream"
@@ -36,8 +36,8 @@ const STATIONS = [
     url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
   },
 {
-    id: "Radio MocovÃ­ AM 800",
-    name: "Radio MocovÃ­ AM 800",
+    id: "Radio Mocovl AM 800",
+    name: "Radio Mocovl AM 800",
     freq: "AM 800",
     url: "https://live-ar1.cdnrad.com/hls/radio-1930/live.m3u8"
   },
