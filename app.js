@@ -1,20 +1,27 @@
-/* Radios argentinas — streams públicos (lista ampliada, noviembre 2026)
+/* Radios argentinas ” streams pÃºblicos (lista ampliada, noviembre 2026)
    Solo streams https directos (sin .m3u8 / HLS), para que funcionen con <audio>
-   en Chrome, Edge y Firefox, y también si la página está en https.
-   Las marcadas con ⚠ están armadas por analogía y hay que probarlas. */
+   en Chrome, Edge y Firefox, y tambiÃ©n si la pÃ¡gina estÃ¡ en https.
+   Las marcadas con âš  estÃ¡n armadas por analogÃ­a y hay que probarlas. */
 const STATIONS = [
   {
     id: "radiotop",
     name: "Radio Top",
-    freq: "ONLINE",
-    url: "https://cdn.instream.audio:9818/stream"
+    freq: "FM 105.9",
+    url: "https://live-ar1.cdnrad.com/hls/radio-2075/live.m3u8"
   },
   /* ===== Chaco (agregadas) ===== */
+  {
+    id: "FM libertad Machagai",
+    name: "FM Libertad Machagai",
+    freq: "FM 99.5",
+    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
+    url: "http://streaming01.shockmedia.com.ar/8428/stream"
+  },
   {
     id: "laradio1047",
     name: "La Radio 104.7",
     freq: "FM 104.7",
-    url: "http://server.laradio.online:9262/stream"
+    url: "https://server.laradio.online/proxy/laradio1047?mp=/stream"
   },
   {
     id: "facundoquiroga",
@@ -26,7 +33,25 @@ const STATIONS = [
     id: "radiofan",
     name: "Radio Fan",
     freq: "FM 96.9",
-    url: "http://streaming5.locucionar.com:23184/stream"
+    url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
+  },
+{
+    id: "Radio Mocovl AM 800",
+    name: "Radio Mocovl AM 800",
+    freq: "AM 800",
+    url: "https://live-ar1.cdnrad.com/hls/radio-1930/live.m3u8"
+  },
+  {
+    id: "Futuro",
+    name: "Radio Futuro",
+    freq: "FM 99.9",
+    url: "https://edge03.radiohdvivo.com/futuro989"
+  },
+  {
+    id: "Radio Con Vos",
+    name: "Radio Con Vos",
+    freq: "FM 89.9",
+    url: "https://server1.stweb.tv/rcvos/live/playlist.m3u8"
   },
   {
     id: "lra26",
@@ -97,13 +122,43 @@ const STATIONS = [
     freq: "FM 98.3",
     url: "https://sslstream.online:7269/stream"
   },
+   {
+    id: "Radio Chamame",
+    name: "Radio Chamame",
+    freq: "Online",
+    url: "https://stream.zenolive.com/84y7b87p4gruv"
+  },
+  {
+    id: "Pasionfm",
+    name: "Pasion Fm",
+    freq: "FM 98.7",
+    url: "https://live-ar1.cdnrad.com/hls/fmpasion/live.m3u8"
+  },
+  {
+    id: "Las Lomitas",
+    name: "Nacional Las Lomitas Formosa",
+    freq: "AM 1270",
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad20"
+  },
+    {
+    id: "Sentir FM",
+    name: "Sentir FM",
+    freq: "FM 98.3",
+    url: "https://stream.zeno.fm/uwqe3chde78uv"
+  },
+   {
+    id: "Cadena Heat",
+    name: "Heat FM",
+    freq: "FM 91.9",
+    url: "https://24403.live.streamtheworld.com/CADENAHEAT_SC"
+  },
 
   /* ===== AM de Buenos Aires ===== */
   {
     id: "madre",
     name: "Radio Madre",
     freq: "AM 530",
-    url: "https://cdn.instream.audio:9288/stream" // ⚠ la lista original estaba en http; la pasé a https
+    url: "https://cdn.instream.audio:9288/stream" // âš  la lista original estaba en http; la pasÃ© a https
   },
   {
     id: "radioargentina",
@@ -132,7 +187,7 @@ const STATIONS = [
   },
   {
     id: "zonica",
-    name: "Radio Zónica",
+    name: "Radio ZÃ³nica",
     freq: "AM 820",
     url: "https://streamlky.alsolnet.com/radiozonica"
   },
@@ -150,7 +205,7 @@ const STATIONS = [
   },
   {
     id: "genesis",
-    name: "Génesis",
+    name: "GÃ©nesis",
     freq: "AM 970",
     url: "https://01.solumedia.com.ar:8216/"
   },
@@ -174,7 +229,7 @@ const STATIONS = [
   },
   {
     id: "guemes",
-    name: "Güemes",
+    name: "GÃ¼emes",
     freq: "AM 1050",
     url: "https://server.radiostreaming.com.ar/8564/stream"
   },
@@ -238,13 +293,13 @@ const STATIONS = [
     id: "nacionalrock",
     name: "Nacional Rock",
     freq: "FM 93.7",
-    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39" // ⚠ mismo patrón que tu Nacional AM 870
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39" // âš  mismo patrÃ³n que tu Nacional AM 870
   },
   {
     id: "disney",
     name: "Radio Disney",
     freq: "FM 94.3",
-    url: "https://edge-np.cdn.mdstrm.com/5a9ee26311c043ae48e40bcd.mp3" // ⚠ link viejo, puede estar caído
+    url: "https://edge-np.cdn.mdstrm.com/5a9ee26311c043ae48e40bcd.mp3" // âš  link viejo, puede estar caÃ­do
   },
   {
     id: "concepto",
@@ -254,7 +309,7 @@ const STATIONS = [
   },
   {
     id: "nacionalclasica",
-    name: "Nacional Clásica",
+    name: "Nacional ClÃ¡sica",
     freq: "FM 96.7",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad37"
   },
@@ -272,7 +327,7 @@ const STATIONS = [
   },
   {
     id: "nacionalfolklorica",
-    name: "Nacional Folklórica",
+    name: "Nacional FolklÃ³rica",
     freq: "FM 98.7",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad38"
   },
@@ -293,7 +348,7 @@ const STATIONS = [
     name: "D Sports",
     freq: "FM 103.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/DSPORTSRADIOAAC_SC"
-    // en días de partido a veces la bloquean por derechos
+    // en dÃ­as de partido a veces la bloquean por derechos
   },
   {
     id: "sonido",
@@ -303,7 +358,7 @@ const STATIONS = [
   },
   {
     id: "lnmusica",
-    name: "LN+ Música",
+    name: "LN+ MÃºsica",
     freq: "FM 104.9",
     url: "https://stream.radio.co/s2ed3bec0a/listen"
   },
@@ -315,18 +370,18 @@ const STATIONS = [
   },
   {
     id: "pasion",
-    name: "Radio Pasión",
+    name: "Radio PasiÃ³n",
     freq: "FM 102.7",
     url: "https://cdn.instream.audio/stream/9790"
   },
   {
     id: "berlin",
-    name: "Radio Berlín",
+    name: "Radio BerlÃ­n",
     freq: "FM 107.9",
     url: "https://unlimited5-us.dps.live/berlin/aac/icecast.audio"
   },
 
-  /* ===== Córdoba ===== */
+  /* ===== CÃ³rdoba ===== */
   {
     id: "cadena3am",
     name: "Cadena 3",
@@ -341,25 +396,25 @@ const STATIONS = [
   },
   {
     id: "fmcordoba",
-    name: "FM Córdoba",
+    name: "FM CÃ³rdoba",
     freq: "FM 91.9",
     url: "https://liveradio.mediainbox.net/fmcordoba.mp3"
   },
   {
     id: "suquia",
-    name: "Radio Suquía",
+    name: "Radio SuquÃ­a",
     freq: "FM 96.5",
     url: "https://streaming01.shockmedia.com.ar:10945/"
   },
   {
     id: "mia",
-    name: "Radio Mía",
+    name: "Radio MÃ­a",
     freq: "FM 104.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FM1041_56AAC.aac"
   },
   {
     id: "unicordoba",
-    name: "Radio Universidad Córdoba",
+    name: "Radio Universidad CÃ³rdoba",
     freq: "AM 580",
     url: "https://radios.solumedia.com:10976/stream"
   },
@@ -381,7 +436,7 @@ const STATIONS = [
   /* ===== Mendoza ===== */
   {
     id: "estaciondelsol",
-    name: "Estación del Sol",
+    name: "EstaciÃ³n del Sol",
     freq: "FM 96.7",
     url: "https://estaciondelsolonline.com.ar:8000/radio.aac"
   },
@@ -395,7 +450,7 @@ const STATIONS = [
   },
   {
     id: "lu2",
-    name: "LU2 Bahía Blanca",
+    name: "LU2 BahÃ­a Blanca",
     freq: "AM 840",
     url: "https://streaming6.locucionar.com:24228/stream?ver=22915"
   },
@@ -409,13 +464,13 @@ const STATIONS = [
   },
   {
     id: "rionegroradio",
-    name: "Río Negro Radio",
+    name: "RÃ­o Negro Radio",
     freq: "FM 90.9",
     url: "https://server6.hostradios.com/8440/stream"
   },
   {
     id: "laredneuquen",
-    name: "La Red Neuquén",
+    name: "La Red NeuquÃ©n",
     freq: "FM 93.7",
     url: "https://server.laradio.online/proxy/julian_liyo?mp=/stream"
   },
@@ -437,7 +492,7 @@ const STATIONS = [
     id: "radiolight",
     name: "Radio Light",
     freq: "FM 88.9",
-    url: "https://streamall.alsolnet.com/radiolightfm" // ⚠ el link original estaba en http; lo pasé a https
+    url: "https://streamall.alsolnet.com/radiolightfm" // âš  el link original estaba en http; lo pasÃ© a https
   },
 
   /* ===== Solo online ===== */
@@ -454,16 +509,16 @@ const STATIONS = [
     url: "https://cdn.instream.audio/:9068/stream"
   },
   {
-    id: "relatores",
-    name: "Relatores",
+    id: "Radio 10",
+    name: "Radio 10",
     freq: "ONLINE",
-    url: "https://radio.relatores.com.ar/relatores.mp3"
+    url: "https://stream.zeno.fm/4r530f2a9f0uv"
   },
   {
     id: "eldesta",
-    name: "El Desta Radio",
+    name: "Latina",
     freq: "ONLINE",
-    url: "https://cdn2.instream.audio/:8000/stream"
+    url: "https://stream-gtlc.telecentro.net.ar/hls/latinatvhls/main.m3u8"
   }
 ];
 
@@ -503,8 +558,8 @@ function setPlayIcon(playing) {
 
 function updateDisplay() {
   if (!currentStation) {
-    freqEl.textContent = "—";
-    stationNameEl.textContent = "Elegí una emisora";
+    freqEl.textContent = "HOLA";
+    stationNameEl.textContent = "Prende y elegi­ una emisora"; 
     nowPlayingEl.textContent = "";
     nowPlayingEl.classList.remove("has-meta");
   } else {
@@ -582,19 +637,19 @@ function buildDial() {
     scales[band].appendChild(el);
   };
 
-  // FM: una marca cada 0,5 MHz, número cada 4
+  // FM: una marca cada 0,5 MHz, nÃºmero cada 4
   for (let v = 88; v <= 108; v += 0.5) {
     const major = v % 4 === 0;
     add("fm", major ? "tick major" : "tick", dialPct("fm", v));
     if (major) add("fm", "lbl", dialPct("fm", v), String(v));
   }
-  // AM: una marca cada 50 kHz, número cada 200
+  // AM: una marca cada 50 kHz, nÃºmero cada 200
   for (let v = 550; v <= 1700; v += 50) {
     const major = v % 200 === 0;
     add("am", major ? "tick major" : "tick", dialPct("am", v));
     if (major) add("am", "lbl", dialPct("am", v), String(v));
   }
-  // Una marca más alta por cada emisora que tenés cargada
+  // Una marca mÃ¡s alta por cada emisora que tenÃ©s cargada
   STATIONS.forEach((st) => {
     const f = parseFreq(st.freq);
     if (f) add(f.band, "tick st", dialPct(f.band, f.value));
@@ -634,15 +689,15 @@ function updateMediaSession() {
 }
 
 function tryReadIcyTitle() {
-  // Algunos streams exponen el título vía el elemento audio o MediaSession.
-  // En la mayoría de navegadores el ICY no llega al JS por CORS;
+  // Algunos streams exponen el tÃ­tulo vÃ­a el elemento audio o MediaSession.
+  // En la mayorÃ­a de navegadores el ICY no llega al JS por CORS;
   // mostramos al menos el estado y actualizamos Media Session.
   if (!isPlaying || !currentStation) return;
   try {
     if (player.mozGetMetadata) {
       const meta = player.mozGetMetadata();
       if (meta && (meta.title || meta.artist)) {
-        const t = [meta.artist, meta.title].filter(Boolean).join(" — ");
+        const t = [meta.artist, meta.title].filter(Boolean).join(" HOLA ");
         if (t) {
           setNowPlaying(t, true);
           if ("mediaSession" in navigator) {
@@ -690,8 +745,8 @@ function selectStation(station) {
 function play() {
   if (!currentStation) return;
 
-  setStatus("CONECTANDO…", "wait");
-  setNowPlaying("Conectando…");
+  setStatus("CONECTANDO", "wait");
+  setNowPlaying("Conectando");
   player.src = currentStation.url;
   player.load();
 
@@ -703,7 +758,7 @@ function play() {
         setPlayIcon(true);
         setStatus("EN VIVO", "on");
         startVu();
-        setNowPlaying("Reproduciendo…");
+        setNowPlaying("Reproduciendo");
         updateMediaSession();
         startMetaPoll();
         tryReadIcyTitle();
@@ -810,7 +865,7 @@ player.addEventListener("error", () => {
 });
 
 player.addEventListener("waiting", () => {
-  if (isPlaying) setStatus("BUFFER…", "wait");
+  if (isPlaying) setStatus("BUFFER", "wait");
 });
 
 player.addEventListener("playing", () => {
@@ -852,7 +907,7 @@ STATIONS.forEach((st) => {
   presetGrid.appendChild(btn);
 });
 
-/* Contador y mensaje cuando la búsqueda no encuentra nada */
+/* Contador y mensaje cuando la bÃºsqueda no encuentra nada */
 function updateCount() {
   const total = STATIONS.length;
   const shown = document.querySelectorAll(".preset-btn:not(.hidden)").length;
@@ -979,7 +1034,7 @@ function downloadShortcut(os) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  showMsg("Listo: se descargó «" + name + "». Arrastralo al escritorio.");
+  showMsg("Listo: se descargÃ³ Â«" + name + "Â». Arrastralo al escritorio.");
 }
 
 function refreshShortcutUi() {
@@ -997,7 +1052,7 @@ function refreshShortcutUi() {
   const insecure = location.protocol === "file:" || !window.isSecureContext;
   shortcutNote.hidden = !insecure;
   shortcutNote.textContent = insecure
-    ? "Estás abriendo la app desde un archivo local o una dirección sin https. El acceso directo de la PC funciona, pero para instalarla en el celular tiene que estar publicada en una dirección https."
+    ? "EstÃ¡s abriendo la app desde un archivo local o una direcciÃ³n sin https. El acceso directo de la PC funciona, pero para instalarla en el celular tiene que estar publicada en una direcciÃ³n https."
     : "";
 }
 
@@ -1006,7 +1061,7 @@ async function installApp() {
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
   deferredPrompt = null;
-  showMsg(outcome === "accepted" ? "Listo, la app se está instalando." : "");
+  showMsg(outcome === "accepted" ? "Listo, la app se estÃ¡ instalando." : "");
   refreshShortcutUi();
 }
 
