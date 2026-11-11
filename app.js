@@ -26,7 +26,7 @@ const STATIONS = [
     id: " Fm Libertad Machagai",
     name: "Fm Libertad Machagai",
     freq: "FM 99.5",
-    url: "http://streaming01.shockmedia.com.ar:8428/"
+    url: "https://streaming01.shockmedia.com.ar:8428/"
   },
     {
     id: "radiofan",
