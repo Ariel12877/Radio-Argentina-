@@ -745,8 +745,8 @@ function selectStation(station) {
 function play() {
   if (!currentStation) return;
 
-  setStatus("CONECTANDOâ€¦", "wait");
-  setNowPlaying("Conectandoâ€¦");
+  setStatus("CONECTANDO¦", "wait");
+  setNowPlaying("Conectando¦");
   player.src = currentStation.url;
   player.load();
 
@@ -758,7 +758,7 @@ function play() {
         setPlayIcon(true);
         setStatus("EN VIVO", "on");
         startVu();
-        setNowPlaying("Reproduciendoâ€¦");
+        setNowPlaying("Reproduciendo");
         updateMediaSession();
         startMetaPoll();
         tryReadIcyTitle();
