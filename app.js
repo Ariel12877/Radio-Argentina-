@@ -856,7 +856,7 @@ volume.addEventListener("input", () => {
 player.addEventListener("error", () => {
   // al apagar quitamos el src: ese "error" no cuenta
   if (!player.getAttribute("src")) return;
-  setStatus("SIN SEÃ‘AL", "error");
+  setStatus("SIN SEÑAL", "error");
   setNowPlaying("Stream no disponible");
   isPlaying = false;
   setPlayIcon(false);
@@ -865,7 +865,7 @@ player.addEventListener("error", () => {
 });
 
 player.addEventListener("waiting", () => {
-  if (isPlaying) setStatus("BUFFERâ€¦", "wait");
+  if (isPlaying) setStatus("BUFFER", "wait");
 });
 
 player.addEventListener("playing", () => {
