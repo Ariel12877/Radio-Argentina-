@@ -299,7 +299,7 @@ const STATIONS = [
     id: "disney",
     name: "Radio Disney",
     freq: "FM 94.3",
-    url: "https://edge-np.cdn.mdstrm.com/5a9ee26311c043ae48e40bcd.mp3" // âš  link viejo, puede estar caÃ­do
+    url: "https://27353.live.streamtheworld.com/DISNEY_ARG_BA_ADP/HLS/playlist.m3u8?dist=web-radiodisney" // âš  link viejo, puede estar caÃ­do
   },
   {
     id: "concepto",
