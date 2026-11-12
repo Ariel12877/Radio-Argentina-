@@ -30,6 +30,18 @@ const STATIONS = [
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "http://streaming01.shockmedia.com.ar/8428/stream"
   },
+   {
+    id: "VIP FM",
+    name: "Vip Radio Machagai",
+    freq: "FM 104.9",
+    url: "https://s2.netradiofm.com:5416/stream/?type=http&nocache=1"
+  },
+  {
+    id: "Master FM",
+    name: "Master FM Machagai",
+    freq: "102.5",
+    url: "https://ssl2.veemesoft.com.ar/a5ded807684d25c964b2"
+  },
   {
     id: "laradio1047",
     name: "La Radio 104.7",
