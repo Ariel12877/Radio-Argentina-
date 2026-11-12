@@ -772,7 +772,7 @@ function play() {
       .catch((err) => {
         console.warn("Play error:", err);
         setStatus("ERROR", "error");
-        setNowPlaying("No se pudo reproducir");
+        setNowPlaying("No ANDA che enseguida la arreglamos");
         isPlaying = false;
         setPlayIcon(false);
         stopVu();
