@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
-  <meta name="theme-color" content="#150e0a" />
+  <meta name="theme-color" content="#0a1628" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -17,7 +17,7 @@
   <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
   <title>Radio Argentina · Cassette</title>
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body>
   <div class="app">
@@ -45,6 +45,16 @@
       </div>
     </section>
 
+    <!-- Artwork grande solo móvil -->
+    <section class="mobile-art" id="mobileArt" aria-hidden="true">
+      <div class="art-card">
+        <div class="waveform" id="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
     <section class="display">
       <div class="freq" id="freq">—</div>
       <div class="station-name" id="stationName">Elegí una emisora</div>
@@ -54,11 +64,21 @@
       </div>
     </section>
 
+    <!-- Barra de progreso visual (móvil) -->
+    <div class="mobile-progress" id="mobileProgress" aria-hidden="true">
+      <span class="prog-time" id="progStart">00:00</span>
+      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" aria-label="Progreso" />
+      <span class="prog-time" id="progEnd">LIVE</span>
+    </div>
+
     <section class="controls">
       <button class="btn-power" id="btnPower" title="Encender / apagar" aria-label="Encender o apagar">
         <svg class="power-svg" viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
         </svg>
+      </button>
+      <button class="btn-prev" id="btnPrev" title="Anterior" aria-label="Emisora anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
       </button>
       <button class="btn-play" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
         <span id="playIcon" class="play-icon">
@@ -66,11 +86,28 @@
           <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
         </span>
       </button>
+      <button class="btn-next" id="btnNext" title="Siguiente" aria-label="Emisora siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 18h2V6h-2zm-11-6 8.5-6v12z"/></svg>
+      </button>
+      <button class="btn-fav" id="btnFav" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
       <div class="volume-wrap">
         <label for="volume">Volumen</label>
         <input type="range" id="volume" min="0" max="100" value="80" />
       </div>
     </section>
+
+    <!-- Fecha y hora (móvil) -->
+    <div class="mobile-now" id="mobileNow">
+      <div class="mn-info">
+        <div class="mn-name" id="mnDate">Cargando fecha…</div>
+        <div class="mn-meta" id="mnTime">--:--:--</div>
+      </div>
+      <button class="btn-fav-mini" id="btnFavMini" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+    </div>
 
     <section class="presets">
       <div class="presets-header">
@@ -124,6 +161,6 @@
   </dialog>
 
   <audio id="player" preload="none"></audio>
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=18"></script>
 </body>
 </html>
