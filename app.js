@@ -564,7 +564,7 @@ function setPlayIcon(playing) {
 
 function updateDisplay() {
   if (!currentStation) {
-    freqEl.textContent = "HOLA";
+    freqEl.textContent = "HOLA ☺️";
     stationNameEl.textContent = "Prende y elegi­ una emisora"; 
     nowPlayingEl.textContent = "";
     nowPlayingEl.classList.remove("has-meta");
@@ -772,7 +772,7 @@ function play() {
       .catch((err) => {
         console.warn("Play error:", err);
         setStatus("ERROR", "error");
-        setNowPlaying("No ANDA che enseguida la arreglamos");
+        setNowPlaying("No anda che 😕 enseguida la arreglamos");
         isPlaying = false;
         setPlayIcon(false);
         stopVu();
