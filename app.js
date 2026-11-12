@@ -53,6 +53,12 @@ const STATIONS = [
     freq: "Online",
     url: "https://devnec.com:8001/radio62"
   },
+   {
+   id: "Polca Paraguaya",
+    name: "Polca Paraguaya",
+    freq: "Online",
+    url: "https://stream.zeno.fm/tvsx850x1f8uv"
+  },
   {
     id: "Fortaleza FM 98.1",
     name: "Fortaleza FM 98.1",
@@ -175,6 +181,12 @@ const STATIONS = [
     name: "Pasion Fm",
     freq: "FM 98.7",
     url: "https://live-ar1.cdnrad.com/hls/radio-2009/live.m3u8"
+  },
+   {
+    id: "Esto es KchaK",
+    name: "Esto es KchaK",
+    freq: "Online",
+    url: "https://stream.zeno.fm/kd0p50swchruv"
   },
   {
     id: "Las Lomitas",
