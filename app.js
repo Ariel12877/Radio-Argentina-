@@ -585,7 +585,7 @@ const STATIONS = [
     name: "FM sentir II",
     freq: "FM 104.3",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
-    url: "https://fm-sentir-proxy-production.up.railway.app/sentir"
+    url: "https://fm-sentir-audio-proxy-production.up.railway.app/sentir"
   },
   {
     id: "eldesta",
