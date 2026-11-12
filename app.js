@@ -17,6 +17,13 @@ const STATIONS = [
   },
   /* ===== Chaco (agregadas) ===== */
   {
+    id: "El mañanero",
+    name: "El mañanero V.Beta",
+    freq: "FM 97.5",
+    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
+    url: "https://streaming.radiosenlinea.com.ar/9464/stream"
+  },
+   {
     id: "FM libertad Machagai",
     name: "FM Libertad Machagai",
     freq: "FM 99.5",
