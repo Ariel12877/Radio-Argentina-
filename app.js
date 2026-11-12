@@ -362,10 +362,10 @@ const STATIONS = [
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/INFOBAEAAC.aac"
   },
   {
-    id: "now",
-    name: "NOW",
-    freq: "FM 97.9",
-    url: "https://cdn.instream.audio:9604/stream"
+    id: "La mega",
+    name: "La Mega",
+    freq: "FM 98.3",
+    url: "https://mega.stweb.tv/mega983/live/playlist.m3u8"
   },
   {
     id: "nacionalfolklorica",
@@ -542,13 +542,13 @@ const STATIONS = [
     id: "futurock",
     name: "Futurock",
     freq: "ONLINE",
-    url: "https://nowplaying.mdstrm.com/5b7dcf666253b80766f27858/576b06096457cff453000015/live/icecast.audio"
+    url: "https://mdstrm.com/audio/5d9d019112cbbb45d6a50960/live.m3u8"
   },
   {
-    id: "ledfm",
-    name: "Led FM",
+    id: "FOLKLORE RADIO",
+    name: "DEL PUEBLO MIO FOLKLORE RADIO",
     freq: "ONLINE",
-    url: "https://cdn.instream.audio/:9068/stream"
+    url: "https://centova.heplayer.com/proxy/dpmfolklore/stream"
   },
   {
     id: "Radio 10",
@@ -556,11 +556,17 @@ const STATIONS = [
     freq: "ONLINE",
     url: "https://stream.zeno.fm/4r530f2a9f0uv"
   },
+   {
+    id: "Radio Latina 101.1",
+    name: "Radio Latina 101.1,
+    freq: "ONLINE",
+    url: "https://stream-gtlc.telecentro.net.ar/hls/radiolatinahls/0/playlist.m3u8?uid=c787e307dd6c302dc3e51a7d2b5df6f4"
+  },
   {
     id: "eldesta",
-    name: "Latina",
+    name: "El Destape Radio,
     freq: "ONLINE",
-    url: "https://stream-gtlc.telecentro.net.ar/hls/radiolatinahls/0/playlist.m3u8?uid=c7bed7e99f163acd05048ec419a6800c"
+    url: "https://live-ar1.cdnrad.com/hls/radio-2123/live.m3u8"
   }
 ];
 
