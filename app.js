@@ -132,7 +132,7 @@ const STATIONS = [
     id: "Pasionfm",
     name: "Pasion Fm",
     freq: "FM 98.7",
-    url: "https://srv1.streamingradio.ar/cp/widgets/player/single/art.php"
+    url: "https://live-ar1.cdnrad.com/hls/radio-2009/live.m3u8"
   },
   {
     id: "Las Lomitas",
@@ -187,7 +187,7 @@ const STATIONS = [
   },
   {
     id: "zonica",
-    name: "Radio ZÃ³nica",
+    name: "Radio Zonica",
     freq: "AM 820",
     url: "https://streamlky.alsolnet.com/radiozonica"
   },
