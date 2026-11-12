@@ -580,6 +580,13 @@ const STATIONS = [
     freq: "ONLINE",
     url: "https://stream-gtlc.telecentro.net.ar/hls/radiolatinahls/0/playlist.m3u8?uid=c787e307dd6c302dc3e51a7d2b5df6f4"
   },
+   {
+    id: "FM Sentir",
+    name: "FM sentir II",
+    freq: "FM 104.3",
+    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
+    url: "http://server9.veemesoft.com.ar:11802/;/;"
+  },
   {
     id: "eldesta",
     name: "El Destape Radio",
