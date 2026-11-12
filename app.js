@@ -188,6 +188,12 @@ const STATIONS = [
     freq: "Online",
     url: "https://stream.zeno.fm/kd0p50swchruv"
   },
+   {
+    id: "Radio Welo el 5to Bronco",
+    name: "Radio Welo el 5to Bronco",
+    freq: "Online",
+    url: "https://server01.heplayer.com/8052/;"
+  },
   {
     id: "Las Lomitas",
     name: "Nacional Las Lomitas Formosa",
