@@ -41,6 +41,24 @@ const STATIONS = [
     freq: "FM 96.9",
     url: "https://streaming5.locucionar.com/proxy/radiofan969?mp=/stream"
   },
+  {
+   id: "WALTER FM",
+    name: "Radio WALTER 80/90",
+    freq: "Online",
+    url: "https://stream.zeno.fm/qoxmfycvaftvv"
+  },
+  {
+    id: "Ñande Reko Radio",
+    name: "Ñande Reko Radio",
+    freq: "Online",
+    url: "https://devnec.com:8001/radio62"
+  },
+  {
+    id: "Fortaleza FM 98.1",
+    name: "Fortaleza FM 98.1",
+    freq: "FM 98.1",
+    url: "https://streaming01.shockmedia.com.ar:10252/stream"
+  }, 
 {
     id: "Radio Mocovl AM 800",
     name: "Radio Mocovl AM 800",
@@ -77,6 +95,24 @@ const STATIONS = [
     name: "Nacional",
     freq: "AM 870",
     url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad1"
+  },
+   {
+    id: "Lentos de Todos Los Tiempos",
+    name: "Lentos de Todos Los Tiempos",
+    freq: "Online",
+    url: "https://s3.conectarmedia.com:8016/stream"
+  },
+  {
+    id: "FM Milenium ",
+    name: "FM Milenium ",
+    freq: "106.7",
+    url: "https://sonicpanel.hostradios.com/8002/stream"
+  },
+  {
+    id: "Vale 97.5",
+    name: "Vale 97.5",
+    freq: "FM 95.5",
+    url: "https://vale.stweb.tv/vale/live/playlist.m3u8"
   },
   {
     id: "mitre",
