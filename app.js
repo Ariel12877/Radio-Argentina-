@@ -212,7 +212,7 @@ const STATIONS = [
     id: "continental",
     name: "Continental",
     freq: "AM 590",
-    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/CONTINENTAL_SC"
+    url: "https://edge03.radiohdvivo.com/continental"
     // alternativa si falla: https://edge01.radiohdvivo.com/continental
   },
   {
