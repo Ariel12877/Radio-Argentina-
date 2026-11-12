@@ -558,13 +558,13 @@ const STATIONS = [
   },
    {
     id: "Radio Latina 101.1",
-    name: "Radio Latina 101.1,
+    name: "Radio Latina 101.1",
     freq: "ONLINE",
     url: "https://stream-gtlc.telecentro.net.ar/hls/radiolatinahls/0/playlist.m3u8?uid=c787e307dd6c302dc3e51a7d2b5df6f4"
   },
   {
     id: "eldesta",
-    name: "El Destape Radio,
+    name: "El Destape Radio",
     freq: "ONLINE",
     url: "https://live-ar1.cdnrad.com/hls/radio-2123/live.m3u8"
   }
