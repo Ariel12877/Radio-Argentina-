@@ -9,6 +9,12 @@ const STATIONS = [
     freq: "FM 105.9",
     url: "https://live-ar1.cdnrad.com/hls/radio-2075/live.m3u8"
   },
+   {
+    id: "Pobre Johnny",
+    name: "Radio Pobre Johnny",
+    freq: "FM 88.9",
+    url: "https://stream4.suenas.net/pobrejohnny"
+  },
   /* ===== Chaco (agregadas) ===== */
   {
     id: "FM libertad Machagai",
