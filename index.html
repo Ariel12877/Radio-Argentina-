@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta name="theme-color" content="#0a1628" />
@@ -14,221 +14,128 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-    <script>
-    // PC (pantalla ancha): se usa la versión de escritorio, que es pc.html
-    // Para ver la versión celular en una PC: agregar ?vista=movil a la dirección
-    (function () {
-      var mq = window.matchMedia("(min-width: 900px)");
-      function go() {
-        if (mq.matches && !/[?&]vista=movil/.test(location.search)) location.replace("pc.html" + location.hash);
-      }
-      go();
-      if (mq.addEventListener) mq.addEventListener("change", go);
-    })();
-  </script>
-  <title>Radio Argentina</title>
-  <link rel="stylesheet" href="styles.css?v=24" />
+  <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <title>Radio Argentina · Cassette</title>
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body>
-  <div class="app" id="app">
+  <div class="app">
 
-    <!-- HEADER -->
     <header class="radio-header">
       <div class="brand">
-        <div class="brand-logo-wrap">
-          <img class="brand-logo" src="logo.webp" width="48" height="48" alt="Logo Ariel" decoding="async" />
-        </div>
+        <img class="brand-logo" src="logo.webp" width="54" height="54" alt="Logo de Ariel Walter" decoding="async" />
         <span class="brand-text">Radio Argentina</span>
       </div>
-      <button class="install-chip" id="shortcutBtn" type="button" title="Instalar / acceso directo"><span class="dl-ico">⬇</span> Instalar</button>
-      <div class="live-badge" id="liveBadge">
-        <span class="live-dot"></span>
-        <span class="live-text">EN VIVO</span>
-        <span class="signal-icon">📶</span>
-      </div>
+      <div class="status" id="status" role="status" aria-live="polite">LISTO</div>
     </header>
 
-    <!-- DIAL DORADO -->
-    <section class="dial-section">
-      <div class="dial-frame">
-        <div class="dial-glass" id="dialGlass">
-          <div class="dial-band fm-band">
-            <span class="dial-tag">FM<small>MHz</small></span>
-            <div class="dial-scale" id="scaleFm">
-              <span class="tick" data-f="88">88</span>
-              <span class="tick" data-f="92">92</span>
-              <span class="tick" data-f="96">96</span>
-              <span class="tick" data-f="100">100</span>
-              <span class="tick" data-f="104">104</span>
-              <span class="tick" data-f="108">108</span>
-              <i class="needle" id="needleFm"></i>
-            </div>
-          </div>
-          <div class="dial-band am-band">
-            <span class="dial-tag">AM<small>kHz</small></span>
-            <div class="dial-scale" id="scaleAm">
-              <span class="tick" data-f="530">530</span>
-              <span class="tick" data-f="700">700</span>
-              <span class="tick" data-f="900">900</span>
-              <span class="tick" data-f="1100">1100</span>
-              <span class="tick" data-f="1300">1300</span>
-              <span class="tick" data-f="1600">1600</span>
-              <i class="needle" id="needleAm"></i>
-            </div>
-          </div>
+    <!-- Dial: solo se ve en pantallas grandes -->
+    <section class="dial" aria-hidden="true">
+      <div class="dial-glass off" id="dialGlass">
+        <div class="dial-band" data-band="fm">
+          <span class="dial-tag">FM<small>MHz</small></span>
+          <div class="dial-scale" id="scaleFm"><i class="needle" id="needleFm"></i></div>
+        </div>
+        <div class="dial-band" data-band="am">
+          <span class="dial-tag">AM<small>kHz</small></span>
+          <div class="dial-scale" id="scaleAm"><i class="needle" id="needleAm"></i></div>
+        </div>
+        <div class="dial-online" id="dialOnline">Solo online</div>
+      </div>
+    </section>
+
+    <!-- Artwork grande solo móvil -->
+    <section class="mobile-art" id="mobileArt" aria-hidden="true">
+      <div class="art-card">
+        <div class="waveform" id="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
         </div>
       </div>
     </section>
 
-    <!-- NOW PLAYING + VISUALIZER -->
-    <section class="now-playing-section">
-      <div class="station-info">
-        <h1 class="station-name" id="stationName">Elegí una emisora</h1>
-        <div class="station-freq" id="freq">—</div>
-      </div>
-      <div class="visualizer" id="visualizer">
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    <section class="display">
+      <div class="freq" id="freq">—</div>
+      <div class="station-name" id="stationName">Elegí una emisora</div>
+      <div class="now-playing" id="nowPlaying"></div>
+      <div class="vu-meter" aria-hidden="true">
+        <div class="vu-bar" id="vu"></div>
       </div>
     </section>
 
-    <!-- CONTROLS -->
-    <section class="controls-section">
-      <button class="ctrl-btn fav-btn" id="btnFav" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
-        <span class="star-icon">★</span>
-        <span class="fav-label">Favorita</span>
-      </button>
-
-      <div class="transport">
-        <button class="ctrl-btn prev-btn" id="btnPrev" title="Anterior" aria-label="Emisora anterior">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-        </button>
-        <button class="ctrl-btn play-btn" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
-          <svg class="ico-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>
-          <svg class="ico-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
-        </button>
-        <button class="ctrl-btn next-btn" id="btnNext" title="Siguiente" aria-label="Emisora siguiente">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M16 18h2V6h-2zm-11-6 8.5-6v12z"/></svg>
-        </button>
-      </div>
-
-      <button class="ctrl-btn eq-btn" id="btnEq" title="Ecualizador" aria-label="Abrir ecualizador">
-        <span class="eq-icon">▐▌▐</span>
-        <span class="eq-label">Ecualizador</span>
-      </button>
-    </section>
-
-    <!-- STATUS BAR -->
-    <div class="status-bar">
-      <div class="conn-status">
-        <span class="wifi-icon">📡</span>
-        <span id="connText">Desconectado</span>
-        <span class="bitrate" id="bitrate">—</span>
-      </div>
-      <div class="timer-wrap">
-        <span class="clock-icon">⏱</span>
-        <span id="liveTimer">00:00:00</span>
-      </div>
+    <!-- Barra de progreso visual (móvil) -->
+    <div class="mobile-progress" id="mobileProgress" aria-hidden="true">
+      <span class="prog-time" id="progStart">00:00</span>
+      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" aria-label="Progreso" />
+      <span class="prog-time" id="progEnd">LIVE</span>
     </div>
 
-    <!-- SEARCH + FILTERS -->
-    <div class="search-filters">
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora..." aria-label="Buscar emisora" autocomplete="off" />
-      </div>
-      <div class="filter-btns">
-        <button class="filter-btn active" data-filter="all" id="filterAll">Todas</button>
-        <button class="filter-btn" data-filter="fav" id="filterFav">
-          <span>★</span> Fav.
-        </button>
-        <button class="filter-btn" data-filter="chaco" id="filterChaco">
-          <span>📍</span> Chaco
-        </button>
-      </div>
-    </div>
-
-    <!-- STATION LIST -->
-    <section class="station-list" id="stationList">
-      <!-- filled by JS -->
-    </section>
-
-    <!-- BOTTOM NAV -->
-    <nav class="bottom-nav">
-      <button class="nav-btn" data-panel="opciones" id="navOpciones">
-        <span class="nav-icon">⚙</span>
-        <span class="nav-label">Opciones</span>
-      </button>
-      <button class="nav-btn" data-panel="temporizador" id="navTemporizador">
-        <span class="nav-icon">⏱</span>
-        <span class="nav-label">Temporizador</span>
-      </button>
-      <button class="nav-btn active" data-panel="ecualizador" id="navEq">
-        <span class="nav-icon">📊</span>
-        <span class="nav-label">Ecualizador</span>
-      </button>
-      <button class="nav-btn" data-panel="misradios" id="navMisRadios">
-        <span class="nav-icon">♥</span>
-        <span class="nav-label">Mis Radios</span>
-      </button>
-      <button class="nav-btn" data-panel="acerca" id="navAcerca">
-        <span class="nav-icon">ℹ</span>
-        <span class="nav-label">Acerca de</span>
-      </button>
-    </nav>
-
-    <!-- EQUALIZER PANEL (overlay) -->
-    <div class="eq-panel" id="eqPanel" hidden>
-      <div class="eq-header">
-        <h2>Ecualizador</h2>
-        <button class="eq-close" id="eqClose" aria-label="Cerrar">✕</button>
-      </div>
-      <div class="eq-presets">
-        <button class="eq-preset active" data-preset="flat">Plano</button>
-        <button class="eq-preset" data-preset="bass">Bajos</button>
-        <button class="eq-preset" data-preset="treble">Agudos</button>
-        <button class="eq-preset" data-preset="voice">Voz</button>
-        <button class="eq-preset" data-preset="rock">Rock</button>
-      </div>
-      <div class="eq-curve-wrap" aria-hidden="true">
-        <svg class="eq-curve" id="eqCurve" viewBox="0 0 300 84" preserveAspectRatio="none">
-          <line class="eq-zero" x1="0" y1="42" x2="300" y2="42"></line>
-          <path class="eq-fill" id="eqCurveFill" d=""></path>
-          <path class="eq-line" id="eqCurveLine" d=""></path>
+    <section class="controls">
+      <button class="btn-power" id="btnPower" title="Encender / apagar" aria-label="Encender o apagar">
+        <svg class="power-svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
         </svg>
+      </button>
+      <button class="btn-prev" id="btnPrev" title="Anterior" aria-label="Emisora anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+      </button>
+      <button class="btn-play" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
+        <span id="playIcon" class="play-icon">
+          <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>
+          <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
+        </span>
+      </button>
+      <button class="btn-next" id="btnNext" title="Siguiente" aria-label="Emisora siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 18h2V6h-2zm-11-6 8.5-6v12z"/></svg>
+      </button>
+      <button class="btn-fav" id="btnFav" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+      <div class="volume-wrap">
+        <label for="volume">Volumen</label>
+        <input type="range" id="volume" min="0" max="100" value="80" />
       </div>
-      <p class="eq-note" id="eqNote" hidden>Esta emisora no permite ecualizar el sonido. Probá con otra, el resto sí funciona.</p>
-      <div class="eq-sliders" id="eqSliders">
-        <!-- filled by JS: 60, 150, 400, 1000, 2400, 6000, 15000 Hz -->
+    </section>
+
+    <!-- Fecha y hora (móvil) -->
+    <div class="mobile-now" id="mobileNow">
+      <div class="mn-info">
+        <div class="mn-name" id="mnDate">Cargando fecha…</div>
+        <div class="mn-meta" id="mnTime">--:--:--</div>
       </div>
-      <div class="eq-actions">
-        <button class="eq-reset" id="eqReset">Restablecer</button>
-      </div>
+      <button class="btn-fav-mini" id="btnFavMini" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
     </div>
 
-    <!-- OPTIONS / OTHER PANELS (simple overlays) -->
-    <div class="side-panel" id="sidePanel" hidden>
-      <div class="side-header">
-        <h2 id="sideTitle">Opciones</h2>
-        <button class="side-close" id="sideClose" aria-label="Cerrar">✕</button>
+    <section class="presets">
+      <div class="presets-header">
+        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" aria-label="Buscar emisora" autocomplete="off" />
+        <span class="station-count" id="stationCount" aria-live="polite"></span>
       </div>
-      <div class="side-body" id="sideBody"></div>
-    </div>
+      <div class="preset-grid" id="presetGrid">
+        <!-- se llenan por JS -->
+      </div>
+      <p class="empty" id="emptyMsg" hidden>No hay emisoras con ese nombre. Probá con otra palabra o con la frecuencia, por ejemplo 95.9.</p>
+    </section>
 
+    <footer class="footer">
+      <p class="footer-note">Sin publicidad. Solo Buena musica.</p>
+      <p class="kbd-hints">
+        <span><kbd>Espacio</kbd>play o pausa</span>
+        <span><kbd>←</kbd><kbd>→</kbd>cambiar de emisora</span>
+        <span><kbd>/</kbd>buscar</span>
+      </p>
+      <button class="shortcut-btn" id="shortcutBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Acceso directo</button>
+    </footer>
   </div>
-
-  <audio id="player" preload="none" crossorigin="anonymous"></audio>
-  <script src="app.js?v=24"></script>
 
   <dialog class="sheet" id="shortcutDialog" aria-labelledby="shortcutTitle">
     <div class="sheet-head">
       <div>
-        <h2 id="shortcutTitle">Acceso directo / Instalar</h2>
-        <p>Abrí Radio Argentina con un toque, sin buscar la página.</p>
+        <h2 id="shortcutTitle">Acceso directo</h2>
+        <p>Abrí Radio AR con un toque, sin buscar la página.</p>
       </div>
       <button class="sheet-close" id="shortcutClose" type="button" aria-label="Cerrar">✕</button>
     </div>
@@ -253,5 +160,7 @@
     <p class="sheet-msg" id="shortcutMsg" role="status" aria-live="polite"></p>
   </dialog>
 
+  <audio id="player" preload="none"></audio>
+  <script src="app.js?v=18"></script>
 </body>
 </html>
