@@ -404,12 +404,6 @@ const STATIONS = [
     freq: "FM 98.3",
     url: "https://mega.stweb.tv/mega983/live/playlist.m3u8"
   },
-   {
-    id: "Sentimientos latinos"",
-    name: "Sentimientos latinos"",
-    freq: "online",
-    url: "https://streaming.radiosenlinea.com.ar/8174/;"
-  },
   {
     id: "nacionalfolklorica",
     name: "Nacional Folklorica",
@@ -433,7 +427,7 @@ const STATIONS = [
     name: "D Sports",
     freq: "FM 103.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/DSPORTSRADIOAAC_SC"
-    // en dias de partido a veces la bloquean por derechos
+    // en dÃ­as de partido a veces la bloquean por derechos
   },
   {
     id: "sonido",
@@ -466,7 +460,7 @@ const STATIONS = [
     url: "https://unlimited5-us.dps.live/berlin/aac/icecast.audio"
   },
 
-  /* ===== Cordoba ===== */
+  /* ===== CÃ³rdoba ===== */
   {
     id: "cadena3am",
     name: "Cadena 3",
@@ -610,7 +604,7 @@ const STATIONS = [
     name: "FM sentir II",
     freq: "FM 104.3",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
-    url: "https://ssl.veemesoft.com.ar/d03cdf788d245e8e4a35"
+    url: "https://fm-sentir-audio-proxy-production.up.railway.app/sentir"
   },
   {
     id: "eldesta",
@@ -620,800 +614,578 @@ const STATIONS = [
   }
 ];
 
-
-/* ---- Orden de la lista: primero las de Chaco / Machagai, después por categoría ---- */
-const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machagai",
-                 "VIP FM", "Master FM", "laradio1047", "facundoquiroga"];
-const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes"];
-const CAT_LABEL = { chaco: "Chaco y Machagai", musica: "Música", noticias: "Noticias", folklore: "Folklore", deportes: "Deportes" };
-const CAT_BY_ID = {
-  noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
-             "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
-             "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
-             "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
-  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "nacionalfolklorica"],
-  deportes:  ["dsports", "fmlaredonda"]
-};
-(function sortStations() {
-  const catOf = {};
-  Object.keys(CAT_BY_ID).forEach(cat => CAT_BY_ID[cat].forEach(id => { catOf[id] = cat; }));
-  STATIONS.forEach(st => {
-    const top = TOP_IDS.indexOf(st.id);
-    st.cat = top >= 0 ? "chaco" : (catOf[st.id] || "musica");   // lo que no está en una lista queda en Música
-    st._top = top;
-  });
-  STATIONS.sort((a, b) => {
-    if (a.cat !== b.cat) return CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat);
-    return a.cat === "chaco" ? a._top - b._top : 0;             // el resto mantiene su orden original
-  });
-})();
-
-/* ============================================================
-   Radio Argentina — Nueva UI móvil + Ecualizador integrado
-   ============================================================ */
-
-const playerEQ = document.getElementById("player");   // con CORS: pasa por el ecualizador
-const playerDirect = new Audio();                      // sin CORS: suena directo (sin ecualizador)
-playerDirect.preload = "none";
-let player = playerEQ;                                 // el que está sonando ahora
+const player = document.getElementById("player");
+const btnPower = document.getElementById("btnPower");
 const btnPlay = document.getElementById("btnPlay");
 const btnPrev = document.getElementById("btnPrev");
 const btnNext = document.getElementById("btnNext");
 const btnFav = document.getElementById("btnFav");
-const btnEq = document.getElementById("btnEq");
-const stationNameEl = document.getElementById("stationName");
+const btnFavMini = document.getElementById("btnFavMini");
+const volume = document.getElementById("volume");
+const statusEl = document.getElementById("status");
 const freqEl = document.getElementById("freq");
-const stationList = document.getElementById("stationList");
+const stationNameEl = document.getElementById("stationName");
+const nowPlayingEl = document.getElementById("nowPlaying");
+const vu = document.getElementById("vu");
+const presetGrid = document.getElementById("presetGrid");
 const stationSearch = document.getElementById("stationSearch");
-const visualizer = document.getElementById("visualizer");
-const connText = document.getElementById("connText");
-const bitrateEl = document.getElementById("bitrate");
-const liveTimerEl = document.getElementById("liveTimer");
-const needleFm = document.getElementById("needleFm");
-const needleAm = document.getElementById("needleAm");
-const eqPanel = document.getElementById("eqPanel");
-const eqClose = document.getElementById("eqClose");
-const eqSliders = document.getElementById("eqSliders");
-const eqReset = document.getElementById("eqReset");
-const sidePanel = document.getElementById("sidePanel");
-const sideTitle = document.getElementById("sideTitle");
-const sideBody = document.getElementById("sideBody");
-const sideClose = document.getElementById("sideClose");
+const stationCount = document.getElementById("stationCount");
+const emptyMsg = document.getElementById("emptyMsg");
+const dialGlass = document.getElementById("dialGlass");
+const dialOnline = document.getElementById("dialOnline");
+const waveform = document.getElementById("waveform");
+const progressBar = document.getElementById("progressBar");
 
 let currentStation = null;
+let isPowerOn = false;
 let isPlaying = false;
+let vuInterval = null;
+let deferredPrompt = null;
+let metaPollTimer = null;
 let favorites = new Set(JSON.parse(localStorage.getItem("radio-favs") || "[]"));
+let liveTimer = null;
 let liveSeconds = 0;
-let liveTimerInterval = null;
-let currentFilter = "all";
-let sleepTimer = null;
 
-/* ---- Web Audio EQ ---- */
-const EQ_BANDS = [
-  { freq: 60,    label: "60" },
-  { freq: 150,   label: "150" },
-  { freq: 400,   label: "400" },
-  { freq: 1000,  label: "1k" },
-  { freq: 2400,  label: "2.4k" },
-  { freq: 6000,  label: "6k" },
-  { freq: 15000, label: "15k" }
-];
+const WEEKDAYS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+const MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
-const EQ_PRESETS = {
-  flat:   [0, 0, 0, 0, 0, 0, 0],
-  bass:   [8, 6, 3, 0, -1, -2, -3],
-  treble: [-3, -2, -1, 0, 3, 6, 8],
-  voice:  [-2, -1, 2, 5, 4, 1, -1],
-  rock:   [5, 3, -1, 1, 3, 4, 5]
-};
-
-let audioCtx = null;
-let sourceNode = null;
-let filters = [];
-let analyser = null;
-let eqGains = [0, 0, 0, 0, 0, 0, 0];
-let eqPreset = "flat";
-let eqAvailable = true;
-let animId = null;
-
-/* El ecualizador recuerda cómo lo dejaste */
-try {
-  const savedEq = JSON.parse(localStorage.getItem("radio-eq") || "null");
-  if (savedEq && Array.isArray(savedEq.gains) && savedEq.gains.length === EQ_BANDS.length) {
-    eqGains = savedEq.gains.map(g => Math.max(-12, Math.min(12, Number(g) || 0)));
-    eqPreset = typeof savedEq.preset === "string" ? savedEq.preset : "";
+function updateClock() {
+  const dateEl = document.getElementById("mnDate");
+  const timeEl = document.getElementById("mnTime");
+  if (!dateEl && !timeEl) return;
+  const now = new Date();
+  if (dateEl) {
+    const d = now.getDate();
+    const w = WEEKDAYS[now.getDay()];
+    const m = MONTHS[now.getMonth()];
+    const y = now.getFullYear();
+    dateEl.textContent = w.charAt(0).toUpperCase() + w.slice(1) + " " + d + " de " + m + " de " + y;
   }
-} catch (e) { /* si falla, queda plano */ }
-
-function saveEq() {
-  try { localStorage.setItem("radio-eq", JSON.stringify({ gains: eqGains, preset: eqPreset })); } catch (e) {}
+  if (timeEl) {
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    timeEl.textContent = hh + ":" + mm + ":" + ss;
+  }
 }
-
-function initAudioGraph() {
-  if (audioCtx) return;
-  const Ctx = window.AudioContext || window.webkitAudioContext;
-  if (!Ctx) return;
-  audioCtx = new Ctx();
-  sourceNode = audioCtx.createMediaElementSource(playerEQ);
-
-  filters = EQ_BANDS.map((b, i) => {
-    const f = audioCtx.createBiquadFilter();
-    f.type = i === 0 ? "lowshelf" : (i === EQ_BANDS.length - 1 ? "highshelf" : "peaking");
-    f.frequency.value = b.freq;
-    f.Q.value = 1.2;
-    f.gain.value = eqGains[i];
-    return f;
+// Arrancar el reloj cuando el DOM esté listo
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    updateClock();
+    setInterval(updateClock, 1000);
   });
-
-  analyser = audioCtx.createAnalyser();
-  analyser.fftSize = 256;
-  analyser.smoothingTimeConstant = 0.8;
-
-  let prev = sourceNode;
-  filters.forEach(f => {
-    prev.connect(f);
-    prev = f;
-  });
-  prev.connect(analyser);
-  analyser.connect(audioCtx.destination);
+} else {
+  updateClock();
+  setInterval(updateClock, 1000);
 }
 
-function applyEqGains() {
-  if (!filters.length) return;
-  filters.forEach((f, i) => { f.gain.value = eqGains[i]; });
+/* --- UI helpers --- */
+function setStatus(text, type = "") {
+  statusEl.textContent = text;
+  statusEl.className = "status" + (type ? " " + type : "");
 }
 
-const fmtGain = (g) => (g > 0 ? "+" : "") + g;
-
-function markPreset() {
-  document.querySelectorAll(".eq-preset").forEach(p => {
-    p.classList.toggle("active", p.dataset.preset === eqPreset);
-  });
+function setPlayIcon(playing) {
+  btnPlay.classList.toggle("is-playing", playing);
+  btnPlay.setAttribute("aria-label", playing ? "Pausar" : "Reproducir");
+  if (waveform) waveform.classList.toggle("is-playing", playing);
 }
 
-/* Curva de respuesta: se dibuja con los filtros reales, así se ve lo que está haciendo el ecualizador */
-const CURVE_FREQS = (() => {
-  const n = 64, a = new Float32Array(n);
-  for (let i = 0; i < n; i++) a[i] = 20 * Math.pow(1000, i / (n - 1)); // 20 Hz a 20 kHz
-  return a;
-})();
-
-function updateEqCurve() {
-  const line = document.getElementById("eqCurveLine");
-  const fill = document.getElementById("eqCurveFill");
-  if (!line || !fill) return;
-  const n = CURVE_FREQS.length;
-  const total = new Float32Array(n);
-  if (filters.length) {
-    const mag = new Float32Array(n), ph = new Float32Array(n);
-    filters.forEach(f => {
-      f.getFrequencyResponse(CURVE_FREQS, mag, ph);
-      for (let i = 0; i < n; i++) total[i] += 20 * Math.log10(mag[i] || 1e-6);
-    });
-  }
-  const W = 300, H = 84, mid = H / 2, range = 16;
-  let d = "";
-  for (let i = 0; i < n; i++) {
-    const x = (i / (n - 1)) * W;
-    const y = Math.max(3, Math.min(H - 3, mid - (total[i] / range) * mid));
-    d += (i ? " L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-  }
-  line.setAttribute("d", d);
-  fill.setAttribute("d", d + " L" + W + " " + mid + " L0 " + mid + " Z");
-}
-
-function buildEqUI() {
-  eqSliders.innerHTML = "";
-  EQ_BANDS.forEach((b, i) => {
-    const div = document.createElement("div");
-    div.className = "eq-band";
-    div.innerHTML = `
-      <span class="gain-val" id="gainVal${i}">${fmtGain(eqGains[i])}</span>
-      <input type="range" min="-12" max="12" step="0.5" value="${eqGains[i]}" data-idx="${i}" aria-label="Banda ${b.label} Hz" />
-      <label>${b.label}</label>
-    `;
-    const input = div.querySelector("input");
-    input.addEventListener("input", () => {
-      eqGains[i] = parseFloat(input.value);
-      document.getElementById("gainVal" + i).textContent = fmtGain(eqGains[i]);
-      applyEqGains();
-      eqPreset = "";
-      markPreset();
-      saveEq();
-      updateEqCurve();
-    });
-    eqSliders.appendChild(div);
-  });
-  markPreset();
-}
-
-function setEqPreset(name) {
-  const vals = EQ_PRESETS[name] || EQ_PRESETS.flat;
-  eqPreset = EQ_PRESETS[name] ? name : "flat";
-  eqGains = vals.slice();
-  applyEqGains();
-  document.querySelectorAll(".eq-band input").forEach((inp, i) => {
-    inp.value = vals[i];
-    document.getElementById("gainVal" + i).textContent = fmtGain(vals[i]);
-  });
-  markPreset();
-  saveEq();
-  updateEqCurve();
-}
-
-/* Algunas emisoras no mandan permiso CORS: esas suenan, pero no se pueden ecualizar */
-function setEqAvailable(on) {
-  eqAvailable = on;
-  const note = document.getElementById("eqNote");
-  if (note) note.hidden = on;
-  eqPanel.classList.toggle("eq-off", !on);
-}
-
-function openEq() {
-  initAudioGraph();
-  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-  eqPanel.hidden = false;
-  updateEqCurve();
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-  const nav = document.getElementById("navEq");
-  if (nav) nav.classList.add("active");
-}
-
-function closeEq() {
-  eqPanel.hidden = true;
-}
-
-/* ---- Visualizer ---- */
-const VIS_BANDS = 12;
-function startVisualizer() {
-  cancelAnimationFrame(animId);
-  visualizer.classList.add("playing");
-  const real = player === playerEQ && !!analyser;
-  visualizer.classList.toggle("real", real);
-  if (!real) return; // sin acceso al audio, queda la animación simulada
-
-  const bars = visualizer.querySelectorAll(".bar");
-  const data = new Uint8Array(analyser.frequencyBinCount);
-  const binHz = audioCtx.sampleRate / analyser.fftSize;
-  const fMin = 70, fMax = 9000;
-  const ranges = [];
-  for (let k = 0; k < VIS_BANDS; k++) {
-    const a = fMin * Math.pow(fMax / fMin, k / VIS_BANDS);
-    const b = fMin * Math.pow(fMax / fMin, (k + 1) / VIS_BANDS);
-    const lo = Math.max(0, Math.floor(a / binHz));
-    ranges.push([lo, Math.max(lo + 1, Math.ceil(b / binHz))]);
-  }
-
-  function frame() {
-    if (!isPlaying || player !== playerEQ) return;
-    analyser.getByteFrequencyData(data);
-    const H = visualizer.clientHeight || 48;
-    const vals = ranges.map(([lo, hi], k) => {
-      let m = 0;
-      for (let b = lo; b < hi; b++) if (data[b] > m) m = data[b];
-      const v = Math.pow(m / 255, 1.25) * (1 + k * 0.09);
-      return Math.min(1, v);
-    });
-    const half = bars.length / 2;
-    bars.forEach((bar, i) => {
-      // espejo: graves en los bordes, agudos hacia el centro
-      const edge = i < half ? i : bars.length - 1 - i;
-      const k = Math.min(VIS_BANDS - 1, Math.floor((edge / half) * VIS_BANDS));
-      bar.style.height = Math.max(4, vals[k] * H) + "px";
-    });
-    animId = requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-function stopVisualizer() {
-  cancelAnimationFrame(animId);
-  visualizer.classList.remove("playing", "real");
-  visualizer.querySelectorAll(".bar").forEach(b => { b.style.height = "8px"; });
-}
-
-/* ---- Dial needle ---- */
-/* Las marcas del dial no están a la misma distancia, por eso la aguja se ubica entre marcas */
-const DIAL_MAP = {
-  fm: { v: [88, 92, 96, 100, 104, 108],       p: [4, 22, 40, 58, 76, 94] },
-  am: { v: [530, 700, 900, 1100, 1300, 1600], p: [4, 22, 40, 58, 76, 94] }
-};
-
-function dialPct(f, band) {
-  const { v, p } = DIAL_MAP[band];
-  if (f <= v[0]) return p[0];
-  if (f >= v[v.length - 1]) return p[p.length - 1];
-  for (let i = 1; i < v.length; i++) {
-    if (f <= v[i]) return p[i - 1] + ((f - v[i - 1]) / (v[i] - v[i - 1])) * (p[i] - p[i - 1]);
-  }
-  return 50;
-}
-
-function setNeedle(el, leftPct, mobilePct, on) {
-  if (!el) return;
-  el.style.left = leftPct + "%";                       // PC: igual que antes
-  el.style.setProperty("--pm", mobilePct + "%");       // celular: posición entre marcas
-  el.classList.toggle("on", on);
-}
-
-function updateDial(station) {
-  if (!station) {
-    setNeedle(needleFm, 50, 50, true);
-    setNeedle(needleAm, 50, 50, false);
-    return;
-  }
-  const f = station.freq || "";
-  const num = parseFloat(String(f).replace(/[^\d.]/g, "")) || 0;
-  const hasNum = num > 0;
-  if (String(f).toUpperCase().includes("AM") || (num > 200 && num < 2000)) {
-    const pct = Math.min(100, Math.max(0, ((num - 530) / (1600 - 530)) * 100));
-    setNeedle(needleAm, pct, dialPct(num, "am"), hasNum);
-    setNeedle(needleFm, 50, 50, false);
-  } else {
-    const pct = Math.min(100, Math.max(0, ((num - 88) / (108 - 88)) * 100));
-    setNeedle(needleFm, pct, dialPct(num, "fm"), hasNum);
-    setNeedle(needleAm, 50, 50, false);
-  }
-}
-
-/* ---- Player controls ---- */
-const directOnly = new Set((() => {
-  try { return JSON.parse(localStorage.getItem("radio-direct") || "[]"); } catch (e) { return []; }
-})());
-let playToken = 0;
-let starting = false;
-
-function setPlayingUI(playing) {
-  isPlaying = playing;
-  btnPlay.classList.toggle("playing", playing);
-  if (playing) {
-    connText.textContent = "Conectado";
-    bitrateEl.textContent = "• 128 kbps";
-    if (!liveTimerInterval) startLiveTimer();
-    startVisualizer();
-  } else {
-    connText.textContent = currentStation ? "Pausado" : "Desconectado";
-    bitrateEl.textContent = "—";
-    stopLiveTimer();
-    stopVisualizer();
-  }
-  highlightActive();
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
 }
 
 function startLiveTimer() {
   stopLiveTimer();
   liveSeconds = 0;
-  liveTimerEl.textContent = "00:00:00";
-  liveTimerInterval = setInterval(() => {
-    liveSeconds++;
-    const h = String(Math.floor(liveSeconds / 3600)).padStart(2, "0");
-    const m = String(Math.floor((liveSeconds % 3600) / 60)).padStart(2, "0");
-    const s = String(liveSeconds % 60).padStart(2, "0");
-    liveTimerEl.textContent = h + ":" + m + ":" + s;
+  if (progressBar) {
+    progressBar.style.setProperty("--prog", "0%");
+    progressBar.value = 0;
+  }
+  const startEl = document.getElementById("progStart");
+  if (startEl) startEl.textContent = "00:00";
+  liveTimer = setInterval(() => {
+    liveSeconds += 1;
+    const startEl2 = document.getElementById("progStart");
+    if (startEl2) startEl2.textContent = formatTime(liveSeconds);
+    // Visual progress that slowly fills over ~3 min then resets look
+    if (progressBar) {
+      const pct = Math.min(95, (liveSeconds % 180) / 180 * 100);
+      progressBar.value = pct;
+      progressBar.style.setProperty("--prog", pct + "%");
+    }
   }, 1000);
 }
 
 function stopLiveTimer() {
-  clearInterval(liveTimerInterval);
-  liveTimerInterval = null;
+  if (liveTimer) clearInterval(liveTimer);
+  liveTimer = null;
 }
 
-function releaseEl(el) {
-  try { el.pause(); } catch (e) {}
-  el.removeAttribute("src");
-  el.load();
+function updateFavButtons() {
+  const on = currentStation && favorites.has(currentStation.id);
+  [btnFav, btnFavMini].forEach((b) => {
+    if (!b) return;
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
 }
 
-async function startOn(el, st, withEq) {
-  const other = el === playerEQ ? playerDirect : playerEQ;
-  player = el;                 // primero marco cuál es el activo, así los eventos del otro se ignoran
-  releaseEl(other);
-  if (withEq) {
-    initAudioGraph();
-    if (audioCtx && audioCtx.state === "suspended") await audioCtx.resume();
-  }
-  el.src = st.url;
-  el.load();
-  await el.play();
-}
-
-async function playStation(st) {
-  if (!st) return;
-  const token = ++playToken;
-  currentStation = st;
-  stationNameEl.textContent = st.name;
-  freqEl.innerHTML = dual(st.freq || "Online", freqMobileHtml(st.freq));
-  updateDial(st);
-  updateFavUI();
-  stopLiveTimer();
-  highlightActive();
-  connText.textContent = "Conectando…";
-  bitrateEl.textContent = "—";
-  starting = true;
-
-  try {
-    if (!directOnly.has(st.id)) {
-      try {
-        await startOn(playerEQ, st, true);
-        if (token !== playToken) return;
-        setEqAvailable(true);
-        setPlayingUI(true);
-        return;
-      } catch (err) {
-        if (token !== playToken || (err && err.name === "AbortError")) return;
-        console.warn("Sin CORS o error, pruebo directo:", st.name, err);
-      }
-    }
-    // Respaldo: la emisora no deja pasar el audio por el ecualizador, pero igual suena
-    await startOn(playerDirect, st, false);
-    if (token !== playToken) return;
-    if (!directOnly.has(st.id)) {
-      directOnly.add(st.id);
-      try { localStorage.setItem("radio-direct", JSON.stringify(Array.from(directOnly))); } catch (e) {}
-    }
-    setEqAvailable(false);
-    setPlayingUI(true);
-  } catch (err) {
-    if (token !== playToken || (err && err.name === "AbortError")) return;
-    console.warn("Play error:", err);
-    connText.textContent = "Error de stream";
-    bitrateEl.textContent = "—";
-    setPlayingUI(false);
-    connText.textContent = "Error de stream";
-  } finally {
-    if (token === playToken) starting = false;
-  }
-}
-
-function togglePlay() {
-  if (!currentStation) {
-    const first = getVisibleStations()[0];
-    if (first) playStation(first);
-    return;
-  }
-  if (isPlaying) {
-    player.pause();
-    setPlayingUI(false);
-  } else {
-    player.play().then(() => setPlayingUI(true)).catch(() => setPlayingUI(false));
-  }
-}
-
-function stepStation(dir) {
-  const list = getVisibleStations();
-  if (!list.length) return;
-  let idx = list.findIndex(s => s.id === (currentStation && currentStation.id));
-  if (idx < 0) idx = 0;
-  else idx = (idx + dir + list.length) % list.length;
-  playStation(list[idx]);
-}
-
-/* ---- Favorites ---- */
-function toggleFav() {
+function toggleFavorite() {
   if (!currentStation) return;
   if (favorites.has(currentStation.id)) favorites.delete(currentStation.id);
   else favorites.add(currentStation.id);
-  localStorage.setItem("radio-favs", JSON.stringify(Array.from(favorites)));
-  updateFavUI();
-  if (currentFilter === "fav") renderList();
+  localStorage.setItem("radio-favs", JSON.stringify([...favorites]));
+  updateFavButtons();
 }
 
-function updateFavUI() {
-  const on = currentStation && favorites.has(currentStation.id);
-  btnFav.setAttribute("aria-pressed", on ? "true" : "false");
+function updateDisplay() {
+  if (!currentStation) {
+    freqEl.textContent = "Hola 👋🏻";
+    stationNameEl.textContent = "Elegí 📻 y disfrutar de la 🎶";
+    nowPlayingEl.textContent = "";
+    nowPlayingEl.classList.remove("has-meta");
+  } else {
+    freqEl.textContent = currentStation.freq;
+    stationNameEl.textContent = currentStation.name;
+  }
+  updateDial();
+  updateFavButtons();
 }
 
-/* ---- Filters & list ---- */
-function getVisibleStations() {
-  let list = STATIONS.slice();
-  if (currentFilter === "fav") {
-    list = list.filter(s => favorites.has(s.id));
-  } else if (currentFilter === "chaco") {
-    list = list.filter(s => {
-      const n = (s.name + " " + (s.freq || "")).toLowerCase();
-      return n.includes("machagai") || n.includes("chaco") || n.includes("resistencia") ||
-             ["El mañanero", "FM libertad Machagai", "VIP FM", "Master FM", "radiotop", "Pobre Johnny"].includes(s.id) ||
-             s.name.toLowerCase().includes("machagai");
+function highlightPreset(id) {
+  document.querySelectorAll(".preset-btn").forEach((btn) => {
+    const on = btn.dataset.id === id;
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+function scrollToActive() {
+  const el = presetGrid.querySelector(".preset-btn.active");
+  if (el) el.scrollIntoView({ block: "nearest" });
+}
+
+function startVu() {
+  stopVu();
+  vuInterval = setInterval(() => {
+    if (!isPlaying) {
+      vu.style.width = "0%";
+      return;
+    }
+    const level = 28 + Math.random() * 58;
+    vu.style.width = level + "%";
+  }, 160);
+}
+
+function stopVu() {
+  if (vuInterval) clearInterval(vuInterval);
+  vuInterval = null;
+  vu.style.width = "0%";
+}
+
+function setNowPlaying(text, isMeta = false) {
+  nowPlayingEl.textContent = text || "";
+  nowPlayingEl.classList.toggle("has-meta", !!isMeta && !!text);
+}
+
+/* --- Dial (se ve solo en pantallas grandes) --- */
+const DIAL = {
+  fm: { min: 88, max: 108 },
+  am: { min: 530, max: 1710 }
+};
+
+function parseFreq(freq) {
+  const m = /^(AM|FM)\s*([\d.]+)/i.exec(freq || "");
+  if (!m) return null;
+  return { band: m[1].toLowerCase(), value: parseFloat(m[2]) };
+}
+
+function dialPct(band, value) {
+  const { min, max } = DIAL[band];
+  return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+}
+
+function buildDial() {
+  const scales = {
+    fm: document.getElementById("scaleFm"),
+    am: document.getElementById("scaleAm")
+  };
+  if (!scales.fm || !scales.am) return;
+
+  const add = (band, cls, pct, text) => {
+    const el = document.createElement(text ? "span" : "i");
+    el.className = cls;
+    el.style.left = pct + "%";
+    if (text) el.textContent = text;
+    scales[band].appendChild(el);
+  };
+
+  // FM: una marca cada 0,5 MHz, nÃºmero cada 4
+  for (let v = 88; v <= 108; v += 0.5) {
+    const major = v % 4 === 0;
+    add("fm", major ? "tick major" : "tick", dialPct("fm", v));
+    if (major) add("fm", "lbl", dialPct("fm", v), String(v));
+  }
+  // AM: una marca cada 50 kHz, nÃºmero cada 200
+  for (let v = 550; v <= 1700; v += 50) {
+    const major = v % 200 === 0;
+    add("am", major ? "tick major" : "tick", dialPct("am", v));
+    if (major) add("am", "lbl", dialPct("am", v), String(v));
+  }
+  // Una marca mÃ¡s alta por cada emisora que tenÃ©s cargada
+  STATIONS.forEach((st) => {
+    const f = parseFreq(st.freq);
+    if (f) add(f.band, "tick st", dialPct(f.band, f.value));
+  });
+}
+
+function updateDial() {
+  if (!dialGlass) return;
+  const info = currentStation ? parseFreq(currentStation.freq) : null;
+  dialGlass.classList.toggle("off", !currentStation);
+  ["fm", "am"].forEach((band) => {
+    const needle = document.getElementById("needle" + (band === "fm" ? "Fm" : "Am"));
+    const row = dialGlass.querySelector('[data-band="' + band + '"]');
+    const active = !!info && info.band === band;
+    if (active) needle.style.left = dialPct(band, info.value) + "%";
+    needle.classList.toggle("on", active);
+    row.classList.toggle("dim", !!currentStation && !active);
+  });
+  dialOnline.classList.toggle("on", !!currentStation && !info);
+}
+
+/* Media Session + possible metadata */
+function updateMediaSession() {
+  if (!("mediaSession" in navigator) || !currentStation) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: currentStation.name,
+      artist: "Radio Argentina",
+      album: currentStation.freq,
+      artwork: [
+        { src: "icon-192.png", sizes: "192x192", type: "image/png" },
+        { src: "icon-512.png", sizes: "512x512", type: "image/png" }
+      ]
     });
-  }
-  const q = (stationSearch.value || "").trim().toLowerCase();
-  if (q) {
-    list = list.filter(s =>
-      s.name.toLowerCase().includes(q) ||
-      (s.freq || "").toLowerCase().includes(q) ||
-      (s.id || "").toLowerCase().includes(q)
-    );
-  }
-  return list;
+    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+  } catch (_) {}
 }
 
-function getStationLogo(st) {
-  const id = (st.id || "").toLowerCase();
-  const name = (st.name || "").toLowerCase();
-  if (id.includes("radiotop") || name.includes("radio top")) {
-    return { cls: "logo-radiotop", html: "Radio<br><span>Top</span>" };
+function tryReadIcyTitle() {
+  // Algunos streams exponen el tÃ­tulo vÃ­a el elemento audio o MediaSession.
+  // En la mayorÃ­a de navegadores el ICY no llega al JS por CORS;
+  // mostramos al menos el estado y actualizamos Media Session.
+  if (!isPlaying || !currentStation) return;
+  try {
+    if (player.mozGetMetadata) {
+      const meta = player.mozGetMetadata();
+      if (meta && (meta.title || meta.artist)) {
+        const t = [meta.artist, meta.title].filter(Boolean).join(" HOLA ");
+        if (t) {
+          setNowPlaying(t, true);
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title: meta.title || currentStation.name,
+              artist: meta.artist || "Radio Argentina",
+              album: currentStation.freq
+            });
+          }
+          return;
+        }
+      }
+    }
+  } catch (_) {}
+}
+
+function startMetaPoll() {
+  stopMetaPoll();
+  metaPollTimer = setInterval(tryReadIcyTitle, 8000);
+}
+
+function stopMetaPoll() {
+  if (metaPollTimer) clearInterval(metaPollTimer);
+  metaPollTimer = null;
+}
+
+/* --- Player logic --- */
+function selectStation(station) {
+  if (!isPowerOn) {
+    isPowerOn = true;
+    btnPower.classList.add("active");
   }
-  if (id.includes("pobre") || name.includes("pobre johnny")) {
-    return { cls: "logo-pobre", html: "Pobre<br>Johnny" };
-  }
-  if (id.includes("mañanero") || id.includes("mananero") || name.includes("mañanero")) {
-    return { cls: "logo-mananero", html: "📊" };
-  }
-  if (id.includes("libertad") || name.includes("libertad")) {
-    return { cls: "logo-libertad", html: "FM<br>Libertad" };
-  }
-  if (id.includes("vip") || name.includes("vip radio")) {
-    return { cls: "logo-vip", html: "Vip<br>Radio" };
-  }
-  const initials = st.name.split(" ").slice(0, 2).map(w => (w[0] || "")).join("").toUpperCase().slice(0, 3);
-  return { cls: "logo-default", html: initials };
-}
 
-function getStationLoc(st) {
-  const n = (st.name || "").toLowerCase();
-  if (n.includes("machagai")) return "Machagai";
-  if (n.includes("resistencia")) return "Resistencia";
-  if (n.includes("chaco")) return "Chaco";
-  return "Argentina";
-}
-
-/* ---- Versión celular de los textos (en la PC se sigue viendo exactamente lo de antes) ---- */
-function dual(pcHtml, mobHtml) {
-  return '<span class="v-pc">' + pcHtml + '</span><span class="v-mob">' + mobHtml + '</span>';
-}
-
-/* "FM 105.9" -> "105.9 MHz" · "AM 750" -> "750 kHz" · "Online" -> "Online" */
-function freqMobileHtml(f) {
-  const raw = String(f || "").trim();
-  const num = parseFloat(raw.replace(/[^\d.]/g, ""));
-  if (!num) return "Online";
-  const isAm = /am/i.test(raw) || (num >= 500 && num <= 1700);
-  return isAm ? Math.round(num) + " <small>kHz</small>" : num.toFixed(1) + " <small>MHz</small>";
-}
-
-const LOC_BY_ID = { radiotop: "Resistencia", "El mañanero": "Machagai" };
-const LOC_WORDS = [
-  ["machagai", "Machagai"], ["resistencia", "Resistencia"], ["chaco", "Chaco"],
-  ["formosa", "Formosa"], ["trelew", "Trelew"], ["neuquen", "Neuquén"],
-  ["cipolletti", "Cipolletti"], ["mar del plata", "Mar del Plata"],
-  ["bahia blanca", "Bahía Blanca"], ["rosario", "Rosario"], ["cordoba", "Córdoba"]
-];
-
-function getStationLocMobile(st) {
-  if (LOC_BY_ID[st.id]) return LOC_BY_ID[st.id];
-  const n = (st.name || "").toLowerCase();
-  for (const [word, label] of LOC_WORDS) if (n.includes(word)) return label;
-  return "Argentina";
-}
-
-/* Cada emisora sin logo propio tiene su color, siempre el mismo */
-const LOGO_HUES = [212, 196, 262, 336, 14, 152, 176, 232];
-function stationHue(st) {
-  let h = 0;
-  const key = String(st.id || st.name);
-  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-  return LOGO_HUES[h % LOGO_HUES.length];
-}
-
-function renderList() {
-  const list = getVisibleStations();
-  stationList.innerHTML = "";
-  if (!list.length) {
-    stationList.innerHTML = '<p class="empty-msg">No se encontraron emisoras.</p>';
+  if (currentStation && currentStation.id === station.id && isPlaying) {
+    pause();
     return;
   }
-  const grouped = currentFilter === "all" && !(stationSearch.value || "").trim();
-  let lastCat = null;
-  list.forEach(st => {
-    if (grouped && st.cat !== lastCat) {
-      lastCat = st.cat;
-      const sep = document.createElement("div");
-      sep.className = "list-sep";
-      sep.textContent = CAT_LABEL[st.cat] || "";
-      stationList.appendChild(sep);
-    }
-    const item = document.createElement("div");
-    const isActive = currentStation && currentStation.id === st.id;
-    item.className = "station-item" + (isActive ? " active" : "") + (isActive && isPlaying ? " is-playing" : "");
-    item.dataset.id = st.id;
 
-    const logo = getStationLogo(st);
-    const loc = getStationLoc(st);
-    const playIcon = isActive && isPlaying ? "⏸" : "▶";
-
-    item.innerHTML = `
-      <div class="station-logo ${logo.cls}" style="--h:${stationHue(st)}">${logo.html}</div>
-      <div class="station-meta">
-        <div class="s-name">${st.name}</div>
-        <div class="s-loc">${dual(loc, getStationLocMobile(st))}</div>
-      </div>
-      <div class="station-freq-right">${dual(st.freq || "Online", freqMobileHtml(st.freq))}</div>
-      <div class="station-play">${playIcon}</div>
-    `;
-    item.addEventListener("click", () => {
-      if (currentStation && currentStation.id === st.id) togglePlay();
-      else playStation(st);
-    });
-    stationList.appendChild(item);
-  });
+  currentStation = station;
+  highlightPreset(station.id);
+  updateDisplay();
+  play();
 }
 
-function highlightActive() {
-  document.querySelectorAll(".station-item").forEach(el => {
-    const active = currentStation && el.dataset.id === currentStation.id;
-    el.classList.toggle("active", active);
-    el.classList.toggle("is-playing", !!(active && isPlaying));
-    const playBtn = el.querySelector(".station-play");
-    if (playBtn) playBtn.textContent = active && isPlaying ? "⏸" : "▶";
-  });
+function play() {
+  if (!currentStation) return;
+
+  setStatus("CONECTANDO", "wait");
+  setNowPlaying("Conectando");
+  player.src = currentStation.url;
+  player.load();
+
+  const playPromise = player.play();
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        isPlaying = true;
+        setPlayIcon(true);
+        setStatus("EN VIVO", "on");
+        startVu();
+        startLiveTimer();
+        setNowPlaying("Reproduciendo");
+        updateMediaSession();
+        startMetaPoll();
+        tryReadIcyTitle();
+      })
+      .catch((err) => {
+        console.warn("Play error:", err);
+        setStatus("ERROR", "error");
+        setNowPlaying("No Funca che 😕 estamos en eso");
+        isPlaying = false;
+        setPlayIcon(false);
+        stopVu();
+        stopLiveTimer();
+        stopMetaPoll();
+      });
+  }
 }
 
-/* ---- Side panels ---- */
-function openSide(title, html) {
-  sideTitle.textContent = title;
-  sideBody.innerHTML = html;
-  sidePanel.hidden = false;
+function pause() {
+  player.pause();
+  isPlaying = false;
+  setPlayIcon(false);
+  setStatus("PAUSA", "wait");
+  stopVu();
+  stopLiveTimer();
+  setNowPlaying("Pausado");
+  stopMetaPoll();
+  updateMediaSession();
 }
 
-function closeSide() {
-  sidePanel.hidden = true;
+function stop() {
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
+  isPlaying = false;
+  setPlayIcon(false);
+  stopVu();
+  stopLiveTimer();
+  stopMetaPoll();
+  setNowPlaying("");
 }
 
-function showOpciones() {
-  openSide("Opciones", `
-    <h3>Instalar / Acceso directo</h3>
-    <p>Agregá Radio Argentina a la pantalla de inicio del celular o al escritorio de la PC.</p>
-    <button class="timer-btn" id="btnOpenInstall" style="margin-top:8px;width:100%;background:linear-gradient(135deg,#1e90ff,#0a6ad4);border:none;color:#fff">⬇ Instalar / Acceso directo</button>
-    <h3>Volumen del sistema</h3>
-    <p>Usa los botones de volumen de tu teléfono o PC para ajustar el volumen general.</p>
-    <h3>Calidad</h3>
-    <p>La mayoría de los streams se reproducen en la mejor calidad disponible (128–192 kbps).</p>
-    <h3>Datos móviles</h3>
-    <p>El streaming consume aproximadamente 60–90 MB por hora.</p>
-  `);
-  const btn = document.getElementById("btnOpenInstall");
-  if (btn) btn.addEventListener("click", () => {
-    closeSide();
-    if (window.openShortcutDialog) window.openShortcutDialog();
-  });
-}
-
-function showTemporizador() {
-  openSide("Temporizador", `
-    <p>Apaga la radio automáticamente después del tiempo elegido.</p>
-    <div class="timer-options">
-      <button class="timer-btn" data-min="15">15 min</button>
-      <button class="timer-btn" data-min="30">30 min</button>
-      <button class="timer-btn" data-min="45">45 min</button>
-      <button class="timer-btn" data-min="60">60 min</button>
-      <button class="timer-btn" data-min="0">Cancelar</button>
-    </div>
-    <p id="timerStatus" style="margin-top:16px;color:var(--cyan)"></p>
-  `);
-  sideBody.querySelectorAll(".timer-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      clearTimeout(sleepTimer);
-      const min = parseInt(btn.dataset.min, 10);
-      const status = document.getElementById("timerStatus");
-      if (min === 0) {
-        status.textContent = "Temporizador cancelado.";
-        return;
-      }
-      status.textContent = "Se apagará en " + min + " minutos.";
-      sleepTimer = setTimeout(() => {
-        player.pause();
-        setPlayingUI(false);
-        status.textContent = "Radio apagada por temporizador.";
-      }, min * 60 * 1000);
-    });
-  });
-}
-
-function showMisRadios() {
-  const favs = STATIONS.filter(s => favorites.has(s.id));
-  let html = "<p>Tus emisoras favoritas (" + favs.length + ").</p>";
-  if (!favs.length) {
-    html += '<p style="margin-top:12px">Marcá con ★ las emisoras que más escuchás.</p>';
+function powerToggle() {
+  if (isPowerOn) {
+    isPowerOn = false;
+    btnPower.classList.remove("active");
+    stop();
+    currentStation = null;
+    highlightPreset(null);
+    updateDisplay();
+    setStatus("APAGADO");
   } else {
-    html += '<div style="margin-top:12px">';
-    favs.forEach(s => {
-      html += '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.08)"><strong style="color:#fff">' + s.name + '</strong> · ' + (s.freq || "Online") + '</div>';
+    isPowerOn = true;
+    btnPower.classList.add("active");
+    setStatus("LISTO", "on");
+  }
+}
+
+/* Pasar a la emisora anterior o siguiente (entre las que se ven en la lista) */
+function stepStation(dir) {
+  const list = Array.from(document.querySelectorAll(".preset-btn:not(.hidden)"))
+    .map((b) => STATIONS.find((s) => s.id === b.dataset.id))
+    .filter(Boolean);
+  if (!list.length) return;
+
+  let i = currentStation ? list.findIndex((s) => s.id === currentStation.id) : -1;
+  if (i === -1) i = dir > 0 ? 0 : list.length - 1;
+  else i = (i + dir + list.length) % list.length;
+
+  if (!isPowerOn) {
+    isPowerOn = true;
+    btnPower.classList.add("active");
+  }
+  currentStation = list[i];
+  highlightPreset(currentStation.id);
+  updateDisplay();
+  play();
+  scrollToActive();
+}
+
+/* --- Events --- */
+btnPower.addEventListener("click", powerToggle);
+
+btnPlay.addEventListener("click", () => {
+  // En móvil: si no hay emisora, encender y elegir la primera
+  if (!currentStation) {
+    const first = STATIONS[0];
+    if (first) selectStation(first);
+    return;
+  }
+  if (!isPowerOn) {
+    isPowerOn = true;
+    btnPower.classList.add("active");
+  }
+  if (isPlaying) pause();
+  else play();
+});
+
+if (btnPrev) btnPrev.addEventListener("click", () => stepStation(-1));
+if (btnNext) btnNext.addEventListener("click", () => stepStation(1));
+if (btnFav) btnFav.addEventListener("click", toggleFavorite);
+if (btnFavMini) btnFavMini.addEventListener("click", toggleFavorite);
+
+function paintVolume() {
+  volume.style.setProperty("--vol", volume.value + "%");
+}
+
+volume.addEventListener("input", () => {
+  player.volume = volume.value / 100;
+  paintVolume();
+});
+
+player.addEventListener("error", () => {
+  // al apagar quitamos el src: ese "error" no cuenta
+  if (!player.getAttribute("src")) return;
+  setStatus("SIN SEÑAL", "error");
+  setNowPlaying("Stream no disponible");
+  isPlaying = false;
+  setPlayIcon(false);
+  stopVu();
+  stopMetaPoll();
+});
+
+player.addEventListener("waiting", () => {
+  if (isPlaying) setStatus("BUFFER", "wait");
+});
+
+player.addEventListener("playing", () => {
+  setStatus("EN VIVO", "on");
+  startVu();
+  updateMediaSession();
+});
+
+player.addEventListener("ended", () => {
+  isPlaying = false;
+  setPlayIcon(false);
+  stopVu();
+  stopMetaPoll();
+});
+
+/* Media Session actions */
+if ("mediaSession" in navigator) {
+  try {
+    navigator.mediaSession.setActionHandler("play", () => {
+      if (currentStation && isPowerOn) play();
     });
-    html += '</div>';
-  }
-  openSide("Mis Radios", html);
+    navigator.mediaSession.setActionHandler("pause", () => pause());
+    navigator.mediaSession.setActionHandler("stop", () => {
+      if (isPowerOn) powerToggle();
+    });
+    navigator.mediaSession.setActionHandler("previoustrack", () => stepStation(-1));
+    navigator.mediaSession.setActionHandler("nexttrack", () => stepStation(1));
+  } catch (_) {}
 }
 
-function showAcerca() {
-  openSide("Acerca de", `
-    <h3>Radio Argentina</h3>
-    <p>Reproductor de radios argentinas en vivo. Sin publicidad.</p>
-    <p>Diseño inspirado en una interfaz clásica de radio con dial y ecualizador integrado.</p>
-    <p style="margin-top:16px;font-size:0.85rem;opacity:0.7">v2.0 · 2026</p>
-  `);
+/* Progress bar is visual only for live streams */
+if (progressBar) {
+  progressBar.addEventListener("input", (e) => e.preventDefault());
+  progressBar.addEventListener("mousedown", (e) => e.preventDefault());
+  progressBar.addEventListener("touchstart", (e) => e.preventDefault(), { passive: false });
 }
 
-/* ---- Event listeners ---- */
-btnPlay.addEventListener("click", togglePlay);
-btnPrev.addEventListener("click", () => stepStation(-1));
-btnNext.addEventListener("click", () => stepStation(1));
-btnFav.addEventListener("click", toggleFav);
-btnEq.addEventListener("click", openEq);
-eqClose.addEventListener("click", closeEq);
-eqReset.addEventListener("click", () => setEqPreset("flat"));
-
-document.querySelectorAll(".eq-preset").forEach(btn => {
-  btn.addEventListener("click", () => setEqPreset(btn.dataset.preset));
+/* --- Build preset buttons --- */
+STATIONS.forEach((st) => {
+  const btn = document.createElement("button");
+  btn.className = "preset-btn";
+  btn.dataset.id = st.id;
+  btn.dataset.name = st.name.toLowerCase();
+  btn.dataset.freq = (st.freq || "").toLowerCase();
+  btn.setAttribute("aria-pressed", "false");
+  btn.innerHTML = `<span class="p-name">${st.name}</span><span class="p-freq">${st.freq}</span>`;
+  btn.addEventListener("click", () => selectStation(st));
+  presetGrid.appendChild(btn);
 });
 
-stationSearch.addEventListener("input", () => renderList());
+/* Contador y mensaje cuando la bÃºsqueda no encuentra nada */
+function updateCount() {
+  const total = STATIONS.length;
+  const shown = document.querySelectorAll(".preset-btn:not(.hidden)").length;
+  stationCount.textContent = shown === total ? total + " emisoras" : shown + " de " + total;
+  emptyMsg.hidden = shown !== 0;
+}
 
-document.querySelectorAll(".filter-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentFilter = btn.dataset.filter;
-    renderList();
+/* Search filter */
+if (stationSearch) {
+  stationSearch.addEventListener("input", () => {
+    const q = stationSearch.value.trim().toLowerCase();
+    document.querySelectorAll(".preset-btn").forEach((btn) => {
+      const match = !q || btn.dataset.name.includes(q) || btn.dataset.freq.includes(q);
+      btn.classList.toggle("hidden", !match);
+    });
+    updateCount();
   });
-});
+}
 
-document.querySelectorAll(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const panel = btn.dataset.panel;
-    if (panel === "ecualizador") {
-      openEq();
-    } else {
-      closeEq();
-      if (panel === "opciones") showOpciones();
-      else if (panel === "temporizador") showTemporizador();
-      else if (panel === "misradios") showMisRadios();
-      else if (panel === "acerca") showAcerca();
+/* Atajos de teclado (pensados para la PC) */
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (document.querySelector("dialog[open]")) return;
+  const tag = e.target && e.target.tagName;
+  const typing = tag === "INPUT" || tag === "TEXTAREA";
+
+  if (e.key === "Escape" && e.target === stationSearch) {
+    stationSearch.value = "";
+    stationSearch.dispatchEvent(new Event("input"));
+    stationSearch.blur();
+    return;
+  }
+  if (typing) return;
+
+  if (e.key === "/") {
+    e.preventDefault();
+    stationSearch.focus();
+  } else if (e.code === "Space" && e.target === document.body) {
+    e.preventDefault();
+    if (isPowerOn && currentStation) {
+      if (isPlaying) pause();
+      else play();
     }
-  });
-});
-
-sideClose.addEventListener("click", closeSide);
-
-[playerEQ, playerDirect].forEach(el => {
-  el.addEventListener("playing", () => { if (el === player) setPlayingUI(true); });
-  el.addEventListener("pause", () => { if (el === player && !starting) setPlayingUI(false); });
-  el.addEventListener("error", () => {
-    // mientras se está conectando, playStation decide si prueba el respaldo
-    if (el !== player || starting) return;
-    setPlayingUI(false);
-    connText.textContent = "Error de conexión";
-    bitrateEl.textContent = "—";
-  });
-});
-
-/* Keyboard */
-document.addEventListener("keydown", e => {
-  if (e.target.tagName === "INPUT") return;
-  if (e.code === "Space") { e.preventDefault(); togglePlay(); }
-  if (e.key === "ArrowRight") stepStation(1);
-  if (e.key === "ArrowLeft") stepStation(-1);
-});
-
-/* Init */
-if (window.matchMedia("(max-width: 899px)").matches) {
-  // en el celular el visualizador es más ancho: más barritas a los costados del botón de play
-  for (let i = visualizer.children.length; i < 40; i++) {
-    const b = document.createElement("div");
-    b.className = "bar";
-    visualizer.appendChild(b);
+  } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+    if (e.target === document.body) {
+      e.preventDefault();
+      stepStation(1);
+    }
+  } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+    if (e.target === document.body) {
+      e.preventDefault();
+      stepStation(-1);
+    }
   }
+});
+
+/* estado inicial */
+buildDial();
+updateDial();
+updateCount();
+if (volume) {
+  player.volume = volume.value / 100;
+  paintVolume();
 }
-buildEqUI();
-renderList();
-updateDial(null);
-console.log("Radio Argentina ready, stations:", STATIONS.length);
 
-
-/* ============================================================
-   Acceso directo / Instalar (PC + celular)
-   ============================================================ */
+/* --- Acceso directo: PC (archivo) y celular (instalar app) --- */
 const shortcutBtn = document.getElementById("shortcutBtn");
 const shortcutDialog = document.getElementById("shortcutDialog");
 const shortcutNote = document.getElementById("shortcutNote");
@@ -1424,15 +1196,14 @@ const dlShortcut = document.getElementById("dlShortcut");
 const installPc = document.getElementById("installPc");
 const installPhone = document.getElementById("installPhone");
 
-let deferredPrompt = null;
-
 const ua = navigator.userAgent || "";
 const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const isAndroid = /android/i.test(ua);
-const isMobileUA = isIOS || isAndroid;
+const isMobile = isIOS || isAndroid;
 const isMac = !isIOS && /mac/i.test(navigator.platform || "");
-const isLinux = !isMobileUA && /linux|x11/i.test(ua);
+const isLinux = !isMobile && /linux|x11/i.test(ua);
 const pcOS = isMac ? "mac" : isLinux ? "linux" : "windows";
+const OS_LABEL = { windows: "Windows", mac: "Mac", linux: "Linux" };
 const isStandalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 
 const SHORTCUTS = {
@@ -1462,13 +1233,12 @@ function appUrl() {
   return u.href;
 }
 
-function showShortcutMsg(text) {
-  if (shortcutMsg) shortcutMsg.textContent = text || "";
+function showMsg(text) {
+  shortcutMsg.textContent = text || "";
 }
 
 function downloadShortcut(os) {
   const def = SHORTCUTS[os];
-  if (!def) return;
   const name = "Radio Argentina." + def.ext;
   const blob = new Blob([def.build(appUrl())], { type: def.mime + ";charset=utf-8" });
   const a = document.createElement("a");
@@ -1478,30 +1248,26 @@ function downloadShortcut(os) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  showShortcutMsg("Archivo descargado. Buscalo en Descargas y arrastralo al escritorio.");
+  showMsg("Listo: se descargÃ³ Â«" + name + "Â». Arrastralo al escritorio.");
 }
 
 function refreshShortcutUi() {
-  if (!shortcutDialog) return;
-  // show/hide install buttons when beforeinstallprompt available
-  const canInstall = !!deferredPrompt;
-  if (installPc) installPc.hidden = !canInstall || isMobileUA;
-  if (installPhone) installPhone.hidden = !canInstall || !isMobileUA;
-
-  // highlight current platform
-  if (wayPc && wayPhone) {
-    wayPc.querySelector(".tag") && (wayPc.querySelector(".tag").hidden = isMobileUA);
-    wayPhone.querySelector(".tag") && (wayPhone.querySelector(".tag").hidden = !isMobileUA);
-  }
-  if (dlShortcut) dlShortcut.dataset.os = pcOS;
-
+  wayPc.classList.toggle("is-here", !isMobile);
+  wayPhone.classList.toggle("is-here", isMobile);
+  wayPc.querySelector(".tag").hidden = isMobile;
+  wayPhone.querySelector(".tag").hidden = !isMobile;
+  installPc.hidden = isMobile || !deferredPrompt;
+  installPhone.hidden = !isMobile || !deferredPrompt;
+  dlShortcut.textContent = "Descargar para " + OS_LABEL[pcOS];
+  dlShortcut.dataset.os = pcOS;
+  shortcutDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => { b.hidden = b.dataset.os === pcOS; });
+  wayPhone.querySelector('[data-for="android"]').hidden = isIOS;
+  wayPhone.querySelector('[data-for="ios"]').hidden = isAndroid;
   const insecure = location.protocol === "file:" || !window.isSecureContext;
-  if (shortcutNote) {
-    shortcutNote.hidden = !insecure;
-    shortcutNote.textContent = insecure
-      ? "Estás abriendo la app desde un archivo local o sin https. El acceso directo de la PC funciona, pero para instalarla en el celular tiene que estar publicada en una dirección https."
-      : "";
-  }
+  shortcutNote.hidden = !insecure;
+  shortcutNote.textContent = insecure
+    ? "EstÃ¡s abriendo la app desde un archivo local o una direcciÃ³n sin https. El acceso directo de la PC funciona, pero para instalarla en el celular tiene que estar publicada en una direcciÃ³n https."
+    : "";
 }
 
 async function installApp() {
@@ -1509,12 +1275,12 @@ async function installApp() {
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
   deferredPrompt = null;
-  showShortcutMsg(outcome === "accepted" ? "Listo, la app se está instalando." : "");
+  showMsg(outcome === "accepted" ? "Listo, la app se estÃ¡ instalando." : "");
   refreshShortcutUi();
 }
 
 function openShortcutDialog() {
-  showShortcutMsg("");
+  showMsg("");
   refreshShortcutUi();
   if (shortcutDialog.showModal) shortcutDialog.showModal();
   else shortcutDialog.setAttribute("open", "");
@@ -1525,43 +1291,28 @@ function closeShortcutDialog() {
   else shortcutDialog.removeAttribute("open");
 }
 
-if (shortcutBtn) {
-  shortcutBtn.hidden = isStandalone;
-  shortcutBtn.addEventListener("click", () => {
-    // Celular con instalación disponible: se abre directo el cuadro nativo. Si no, se muestran los pasos.
-    if (isMobileUA && deferredPrompt) installApp();
-    else openShortcutDialog();
-  });
-}
-if (document.getElementById("shortcutClose")) {
-  document.getElementById("shortcutClose").addEventListener("click", closeShortcutDialog);
-}
-if (shortcutDialog) {
-  shortcutDialog.addEventListener("click", (e) => {
-    if (e.target === shortcutDialog) closeShortcutDialog();
-  });
-}
-if (dlShortcut) {
-  dlShortcut.addEventListener("click", () => downloadShortcut(dlShortcut.dataset.os || pcOS));
-}
-if (shortcutDialog) {
-  shortcutDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => {
-    b.addEventListener("click", () => downloadShortcut(b.dataset.os));
-  });
-}
-if (installPc) installPc.addEventListener("click", installApp);
-if (installPhone) installPhone.addEventListener("click", installApp);
+shortcutBtn.hidden = isStandalone;
+shortcutBtn.addEventListener("click", openShortcutDialog);
+document.getElementById("shortcutClose").addEventListener("click", closeShortcutDialog);
+shortcutDialog.addEventListener("click", (e) => {
+  if (e.target === shortcutDialog) closeShortcutDialog();
+});
+dlShortcut.addEventListener("click", () => downloadShortcut(dlShortcut.dataset.os || pcOS));
+shortcutDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => {
+  b.addEventListener("click", () => downloadShortcut(b.dataset.os));
+});
+installPc.addEventListener("click", installApp);
+installPhone.addEventListener("click", installApp);
 
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
   refreshShortcutUi();
-  if (shortcutBtn) shortcutBtn.hidden = false;
 });
 
 window.addEventListener("appinstalled", () => {
   deferredPrompt = null;
-  if (shortcutBtn) shortcutBtn.hidden = true;
+  shortcutBtn.hidden = true;
   refreshShortcutUi();
 });
 
@@ -1572,5 +1323,16 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-/* Also expose openShortcutDialog for Opciones panel */
-window.openShortcutDialog = openShortcutDialog;
+/* Wake Lock opcional (mantener pantalla en mobile mientras suena) */
+let wakeLock = null;
+async function requestWakeLock() {
+  if ("wakeLock" in navigator && isPlaying) {
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+    } catch (_) {}
+  }
+}
+player.addEventListener("playing", requestWakeLock);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && isPlaying) requestWakeLock();
+});
