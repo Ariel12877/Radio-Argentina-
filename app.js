@@ -610,7 +610,6 @@ const STATIONS = [
     id: "FM Sentir",
     name: "FM Sentir latinos.",
     freq: "Online",
-    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "https://streaming.radiosenlinea.com.ar/8174/;"
   },
   {
