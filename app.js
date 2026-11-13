@@ -742,8 +742,8 @@ function toggleFavorite() {
 
 function updateDisplay() {
   if (!currentStation) {
-    freqEl.textContent = "—";
-    stationNameEl.textContent = "Elegí una emisora";
+    freqEl.textContent = "Hola 👋🏻";
+    stationNameEl.textContent = "Elegí 📻 y disfrutar de la 🎶";
     nowPlayingEl.textContent = "";
     nowPlayingEl.classList.remove("has-meta");
   } else {
@@ -952,7 +952,7 @@ function play() {
       .catch((err) => {
         console.warn("Play error:", err);
         setStatus("ERROR", "error");
-        setNowPlaying("No se pudo reproducir");
+        setNowPlaying("No Funca che 😕 estmos en eso");
         isPlaying = false;
         setPlayIcon(false);
         stopVu();
