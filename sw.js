@@ -1,4 +1,4 @@
-const CACHE = "radio-ar-v30";
+const CACHE = "radio-ar-v31";
 const ASSETS = [
   "./",
   "./index.html",
