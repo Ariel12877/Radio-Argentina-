@@ -542,10 +542,10 @@ const STATIONS = [
     url: "https://sonic.host-live.com/8064/stream"
   },
   {
-    id: "rionegroradio",
-    name: "Ri­o Negro Radio",
-    freq: "FM 90.9",
-    url: "https://server6.hostradios.com/8440/stream"
+    id: "fmlaredonda",
+    name: "Fm la redonda Solo Futbol",
+    freq: "FM 100.3",
+    url: "https://01.solumedia.com.ar:8290/stream"
   },
   {
     id: "laredneuquen",
@@ -576,10 +576,10 @@ const STATIONS = [
 
   /* ===== Solo online ===== */
   {
-    id: "futurock",
-    name: "Futurock",
-    freq: "ONLINE",
-    url: "https://mdstrm.com/audio/5d9d019112cbbb45d6a50960/live.m3u8"
+    id: "purorocknaciona",
+    name: "Puro rock naciona",
+    freq: "103.5",
+    url: "https://srv591.grupomultimedios.com.ar:9902/radio/8110/radio.mp3?t=1794530808506"
   },
   {
     id: "FOLKLORE RADIO",
@@ -952,7 +952,7 @@ function play() {
       .catch((err) => {
         console.warn("Play error:", err);
         setStatus("ERROR", "error");
-        setNowPlaying("No Funca che 😕 estmos en eso");
+        setNowPlaying("No Funca che 😕 estamos en eso");
         isPlaying = false;
         setPlayIcon(false);
         stopVu();
