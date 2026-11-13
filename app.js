@@ -606,6 +606,13 @@ const STATIONS = [
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "https://fm-sentir-audio-proxy-production.up.railway.app/sentir"
   },
+   {
+    id: "FM Sentir",
+    name: "FM Sentir latinos.",
+    freq: "Online",
+    // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
+    url: "https://streaming.radiosenlinea.com.ar/8174/;"
+  },
   {
     id: "eldesta",
     name: "El Destape Radio",
