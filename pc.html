@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta name="theme-color" content="#0a1628" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Radio AR" />
+  <meta name="description" content="Radios de Argentina en vivo, con dial y botonera. Sin publicidad." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <script>
+    // Ventana angosta (celular): se usa la versión móvil, que es index.html
+    (function () {
+      var mq = window.matchMedia("(min-width: 900px)");
+      function go() { if (!mq.matches) location.replace("./" + location.hash); }
+      go();
+      if (mq.addEventListener) mq.addEventListener("change", go);
+    })();
+  </script>
+  <title>Radio Argentina · Cassette</title>
+  <link rel="stylesheet" href="pc.css?v=19" />
+</head>
+<body>
+  <div class="app">
+
+    <header class="radio-header">
+      <div class="brand">
+        <img class="brand-logo" src="logo.webp" width="54" height="54" alt="Logo de Ariel Walter" decoding="async" />
+        <span class="brand-text">Radio Argentina</span>
+      </div>
+      <div class="status" id="status" role="status" aria-live="polite">LISTO</div>
+    </header>
+
+    <!-- Dial: solo se ve en pantallas grandes -->
+    <section class="dial" aria-hidden="true">
+      <div class="dial-glass off" id="dialGlass">
+        <div class="dial-band" data-band="fm">
+          <span class="dial-tag">FM<small>MHz</small></span>
+          <div class="dial-scale" id="scaleFm"><i class="needle" id="needleFm"></i></div>
+        </div>
+        <div class="dial-band" data-band="am">
+          <span class="dial-tag">AM<small>kHz</small></span>
+          <div class="dial-scale" id="scaleAm"><i class="needle" id="needleAm"></i></div>
+        </div>
+        <div class="dial-online" id="dialOnline">Solo online</div>
+      </div>
+    </section>
+
+    <!-- Artwork grande solo móvil -->
+    <section class="mobile-art" id="mobileArt" aria-hidden="true">
+      <div class="art-card">
+        <div class="waveform" id="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="display">
+      <div class="freq" id="freq">—</div>
+      <div class="station-name" id="stationName">Elegí una emisora</div>
+      <div class="now-playing" id="nowPlaying"></div>
+      <div class="vu-meter" aria-hidden="true">
+        <div class="vu-bar" id="vu"></div>
+      </div>
+    </section>
+
+    <!-- Barra de progreso visual (móvil) -->
+    <div class="mobile-progress" id="mobileProgress" aria-hidden="true">
+      <span class="prog-time" id="progStart">00:00</span>
+      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" aria-label="Progreso" />
+      <span class="prog-time" id="progEnd">LIVE</span>
+    </div>
+
+    <section class="controls">
+      <button class="btn-power" id="btnPower" title="Encender / apagar" aria-label="Encender o apagar">
+        <svg class="power-svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
+        </svg>
+      </button>
+      <button class="btn-prev" id="btnPrev" title="Anterior" aria-label="Emisora anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+      </button>
+      <button class="btn-play" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
+        <span id="playIcon" class="play-icon">
+          <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>
+          <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
+        </span>
+      </button>
+      <button class="btn-next" id="btnNext" title="Siguiente" aria-label="Emisora siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 18h2V6h-2zm-11-6 8.5-6v12z"/></svg>
+      </button>
+      <button class="btn-fav" id="btnFav" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+      <div class="volume-wrap">
+        <label for="volume">Volumen</label>
+        <input type="range" id="volume" min="0" max="100" value="80" />
+      </div>
+    </section>
+
+    <!-- Fecha y hora (móvil) -->
+    <div class="mobile-now" id="mobileNow">
+      <div class="mn-info">
+        <div class="mn-name" id="mnDate">Cargando fecha…</div>
+        <div class="mn-meta" id="mnTime">--:--:--</div>
+      </div>
+      <button class="btn-fav-mini" id="btnFavMini" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+    </div>
+
+    <section class="presets">
+      <div class="presets-header">
+        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" aria-label="Buscar emisora" autocomplete="off" />
+        <span class="station-count" id="stationCount" aria-live="polite"></span>
+      </div>
+      <div class="preset-grid" id="presetGrid">
+        <!-- se llenan por JS -->
+      </div>
+      <p class="empty" id="emptyMsg" hidden>No hay emisoras con ese nombre. Probá con otra palabra o con la frecuencia, por ejemplo 95.9.</p>
+    </section>
+
+    <footer class="footer">
+      <p class="footer-note">Sin publicidad. Solo Buena musica.</p>
+      <p class="kbd-hints">
+        <span><kbd>Espacio</kbd>play o pausa</span>
+        <span><kbd>←</kbd><kbd>→</kbd>cambiar de emisora</span>
+        <span><kbd>/</kbd>buscar</span>
+      </p>
+      <button class="shortcut-btn" id="shortcutBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Acceso directo</button>
+    </footer>
+  </div>
+
+  <dialog class="sheet" id="shortcutDialog" aria-labelledby="shortcutTitle">
+    <div class="sheet-head">
+      <div>
+        <h2 id="shortcutTitle">Acceso directo</h2>
+        <p>Abrí Radio AR con un toque, sin buscar la página.</p>
+      </div>
+      <button class="sheet-close" id="shortcutClose" type="button" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-note" id="shortcutNote" hidden></div>
+      <section class="way" id="wayPc">
+        <h3>En la PC <span class="tag" hidden>Tu equipo</span></h3>
+        <p>Descargá el acceso directo y arrastralo al escritorio. Se guarda en la carpeta Descargas.</p>
+        <button class="btn-main" id="dlShortcut" type="button">Descargar acceso directo</button>
+        <button class="btn-soft" id="installPc" type="button" hidden>Instalar como app, con ícono propio</button>
+        <p class="alt-links">Otro sistema: <button type="button" data-os="windows">Windows</button><button type="button" data-os="mac">Mac</button><button type="button" data-os="linux">Linux</button></p>
+      </section>
+      <section class="way" id="wayPhone">
+        <h3>En el celular <span class="tag" hidden>Tu equipo</span></h3>
+        <button class="btn-main" id="installPhone" type="button" hidden>Instalar en este celular</button>
+        <ul>
+          <li data-for="android"><b>Android (Chrome):</b> tocá el menú ⋮ y elegí «Instalar app» o «Agregar a la pantalla principal».</li>
+          <li data-for="ios"><b>iPhone (Safari):</b> tocá Compartir y elegí «Agregar a inicio».</li>
+        </ul>
+      </section>
+    </div>
+    <p class="sheet-msg" id="shortcutMsg" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <audio id="player" preload="none"></audio>
+  <script src="pc.js?v=19"></script>
+</body>
+</html>

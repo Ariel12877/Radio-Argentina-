@@ -1,0 +1,1403 @@
+/* ==========================================================
+   Radio Argentina — Estilo radio antigua de madera
+   Textura de madera, dial ámbar y acentos de latón.
+   Celular: reproductor con lista. PC: equipo completo.
+   ========================================================== */
+
+/* Tipografías (fallback si no cargan) */
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal; font-weight: 500; font-display: swap;
+  src: url("fonts/barlow-condensed-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal; font-weight: 600; font-display: swap;
+  src: url("fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal; font-weight: 700; font-display: swap;
+  src: url("fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Share Tech Mono";
+  font-style: normal; font-weight: 400; font-display: swap;
+  src: url("fonts/share-tech-mono-latin-400-normal.woff2") format("woff2");
+}
+
+:root {
+  --bg: #1a100a;
+  --lcd-bg: #0e0804;
+  --line: #4a3220;
+  --ivory: #f3e6cf;
+  --muted: #b8a07a;
+  --amber: #e8a030;
+  --amber-hi: #ffc45e;
+  --brass: #c9a04a;
+  --brass-dark: #8a6a2a;
+  --led: #6fdc8c;
+  --red: #e5594d;
+  --wood-dark: #2c1a0e;
+  --wood-mid: #5c3a22;
+  --font: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "Share Tech Mono", "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace;
+  --wood: url("wood-texture.jpg");
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.3;
+  background-color: #0d0704;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(60,40,20,0.4) 0%, transparent 70%),
+    var(--wood);
+  background-size: auto, 360px 360px;
+  background-repeat: no-repeat, repeat;
+  color: var(--ivory);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; -webkit-user-select: none; user-select: none; }
+
+:focus-visible { outline: 2px solid var(--amber-hi); outline-offset: 2px; }
+
+/* ===== Celular (base) ===== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 560px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background:
+    linear-gradient(180deg, rgba(40,25,15,0.85) 0%, rgba(20,12,8,0.92) 100%),
+    var(--wood);
+  background-size: auto, 280px 280px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: inset 0 0 0 1px rgba(80,55,30,0.5);
+}
+
+.radio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 8px;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-logo {
+  flex: none;
+  display: block;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  box-shadow: 0 0 0 2px var(--brass-dark), 0 3px 10px rgba(0,0,0,0.55);
+}
+.brand-text {
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: var(--amber-hi);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.status::before {
+  content: "";
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #4a3a2c;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.5);
+}
+.status.on { color: var(--ivory); }
+.status.on::before { background: var(--led); box-shadow: 0 0 8px var(--led); }
+.status.wait { color: var(--ivory); }
+.status.wait::before { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+.status.error { color: var(--red); }
+.status.error::before { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+/* Dial: ventanita con escala FM y AM */
+.dial { display: block; margin: 8px 14px 0; }
+
+.dial-glass {
+  position: relative;
+  padding: 8px 10px 10px;
+  border-radius: 12px;
+  color: #2b1a08;
+  background:
+    linear-gradient(180deg, #f8d07a 0%, #e8a840 45%, #d09028 100%);
+  box-shadow:
+    inset 0 0 0 3px #3a2818,
+    inset 0 0 0 5px var(--brass),
+    inset 0 10px 18px rgba(255,255,255,0.25),
+    inset 0 -12px 20px rgba(100,50,0,0.35),
+    0 0 0 1px #1a1008,
+    0 4px 16px rgba(0,0,0,0.4),
+    0 0 30px rgba(232,160,48,0.18);
+  transition: filter 0.5s ease, box-shadow 0.5s ease;
+}
+.dial-glass.off {
+  filter: brightness(0.38) saturate(0.5);
+  box-shadow:
+    inset 0 0 0 3px #2a1a0c,
+    inset 0 0 0 5px #5a4020,
+    inset 0 -10px 18px rgba(0,0,0,0.45),
+    0 0 0 1px #1a1008;
+}
+
+.dial-band {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  padding: 4px 0;
+  transition: opacity 0.35s ease;
+}
+.dial-band + .dial-band { border-top: 1px solid rgba(43,26,8,0.4); }
+.dial-band.dim { opacity: 0.45; }
+
+.dial-tag {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.dial-tag small {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.dial-scale { position: relative; height: 34px; margin: 0 10px 0 12px; }
+.dial-scale .tick {
+  position: absolute;
+  top: 0;
+  width: 1px; height: 7px;
+  background: #2b1a08;
+  opacity: 0.8;
+}
+.dial-scale .tick.major { height: 12px; opacity: 1; }
+.dial-scale .tick.st { width: 1.5px; height: 18px; background: #6b2010; opacity: 1; }
+.dial-scale .lbl {
+  position: absolute;
+  top: 20px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  line-height: 1;
+}
+.dial-scale .needle {
+  position: absolute;
+  top: -3px; bottom: -3px;
+  left: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: #c1281c;
+  box-shadow: 0 0 6px rgba(193,40,28,0.7);
+  opacity: 0;
+  transition: left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+}
+.dial-scale .needle.on { opacity: 1; }
+
+.dial-online {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 8px 6px 0;
+  border-top: 1px solid rgba(43,26,8,0.35);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+.dial-online::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #2b1a08; }
+.dial-online.on { opacity: 1; }
+.dial-online.on::before { background: #c1281c; box-shadow: 0 0 6px rgba(193,40,28,0.8); }
+
+/* Display tipo LCD vintage */
+.display {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  margin: 8px 14px 0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #3a2818;
+  background:
+    linear-gradient(180deg, #1a1208 0%, var(--lcd-bg) 100%);
+  box-shadow:
+    inset 0 0 28px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,196,94,0.08),
+    0 0 0 1px #1a1008,
+    0 2px 8px rgba(0,0,0,0.4);
+}
+
+.freq {
+  font-family: var(--mono);
+  font-size: 2.45rem;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  color: var(--amber-hi);
+  text-shadow: 0 0 16px rgba(242,169,59,0.55);
+}
+
+.station-name {
+  min-height: 1.2em;
+  font-weight: 600;
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.now-playing {
+  min-height: 1.3em;
+  font-size: 1rem;
+  color: #c9a062;
+  overflow-wrap: anywhere;
+}
+.now-playing.has-meta { color: var(--amber-hi); }
+
+.vu-meter {
+  height: 8px;
+  margin-top: auto;
+  padding-top: 0;
+  background: #1b1209;
+  border-radius: 2px;
+  overflow: hidden;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 7px, transparent 7px 10px);
+          mask-image: repeating-linear-gradient(90deg, #000 0 7px, transparent 7px 10px);
+}
+.vu-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--amber), var(--amber-hi));
+  transition: width 0.14s ease;
+}
+
+/* Controles — perillas tipo radio antigua */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px 12px;
+}
+
+.btn-power, .btn-play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.btn-power {
+  width: 48px; height: 48px;
+  color: #8c7a62;
+  background:
+    radial-gradient(circle at 35% 30%, #4a3828 0%, #2a1d14 70%);
+  box-shadow:
+    inset 0 0 0 2px #5a4030,
+    inset 0 2px 4px rgba(255,255,255,0.08),
+    0 3px 0 #0b0604,
+    0 4px 10px rgba(0,0,0,0.4);
+}
+.btn-power .power-svg { width: 22px; height: 22px; }
+.btn-power.active {
+  color: var(--led);
+  box-shadow:
+    inset 0 0 0 2px #3d5a43,
+    inset 0 2px 4px rgba(255,255,255,0.1),
+    0 0 16px rgba(111,220,140,0.35),
+    0 3px 0 #0b0604;
+}
+
+.btn-play {
+  width: 68px; height: 68px;
+  color: #2b1a08;
+  background: linear-gradient(160deg, #ffc45e 0%, #e8962a 50%, #c87818 100%);
+  box-shadow:
+    0 4px 0 #7a4f12,
+    0 8px 20px rgba(0,0,0,0.45),
+    inset 0 2px 4px rgba(255,255,255,0.35),
+    inset 0 -2px 4px rgba(0,0,0,0.15);
+}
+.play-icon { display: grid; place-items: center; }
+.btn-play svg { width: 28px; height: 28px; }
+.btn-play .ico-pause { display: none; }
+.btn-play.is-playing .ico-play { display: none; }
+.btn-play.is-playing .ico-pause { display: block; }
+
+.btn-power:active, .btn-play:active { transform: translateY(2px); }
+
+.volume-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.volume-wrap label { font-size: 0.95rem; color: var(--muted); }
+
+#volume {
+  --vol: 80%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--amber) var(--vol), #2a1c12 var(--vol));
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+#volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f3e6cf, #c4a878);
+  border: 2px solid #5a4632;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.4);
+}
+#volume::-moz-range-track { background: transparent; height: 8px; }
+#volume::-moz-range-thumb {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f3e6cf, #c4a878);
+  border: 2px solid #5a4632;
+}
+
+/* Lista de emisoras */
+.presets {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 6px;
+}
+
+.presets-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 10px;
+}
+
+.station-search {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(18,11,7,0.85);
+  font-size: 1.05rem;
+  outline: none;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+.station-search::placeholder { color: #8a7a64; }
+.station-search:focus {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(201,160,74,0.2), inset 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.station-count {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.preset-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border-top: 1px solid var(--line);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #5a4030 transparent;
+}
+
+.preset-btn {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(38,25,17,0.8);
+  background: transparent;
+  transition: background 0.15s ease;
+}
+.preset-btn .p-name { font-weight: 600; font-size: 1.2rem; line-height: 1.15; }
+.preset-btn .p-freq { flex: none; font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
+
+.preset-btn.active {
+  background: linear-gradient(90deg, rgba(232,160,48,0.18), rgba(232,160,48,0.06));
+}
+.preset-btn.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--amber-hi), var(--amber));
+  box-shadow: 0 0 8px rgba(242,169,59,0.4);
+}
+.preset-btn.active .p-name { color: var(--amber-hi); }
+.preset-btn.active .p-freq { color: var(--amber); }
+.preset-btn.hidden { display: none; }
+
+.empty { padding: 28px 24px; color: var(--muted); text-align: center; }
+
+/* Pie */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 8px 18px 10px;
+  border-top: 1px solid var(--line);
+  background: rgba(12,8,5,0.7);
+}
+.footer-note { font-size: 0.9rem; color: var(--muted); }
+.kbd-hints { display: none; }
+.shortcut-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 1px solid var(--brass);
+  color: var(--amber-hi);
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(40,28,16,0.6);
+}
+.shortcut-btn svg { width: 16px; height: 16px; }
+
+/* Tablet vertical */
+@media (min-width: 600px) {
+  body { background-color: #0a0503; }
+  .app {
+    border-inline: 1px solid var(--line);
+    border-radius: 0;
+  }
+}
+
+@media (hover: hover) {
+  .preset-btn:not(.active):hover { background: rgba(243,230,207,0.06); }
+  .shortcut-btn:hover { background: rgba(201,160,74,0.18); }
+  .btn-power:not(.active):hover { color: var(--ivory); }
+}
+
+/* Celular angosto */
+@media (max-width: 430px) {
+  .footer-note { display: none; }
+  .footer { justify-content: center; }
+  .footer:has(.shortcut-btn[hidden]) { display: none; }
+}
+
+/* Celular bajo — compactar un poco, el dial se mantiene */
+@media (max-width: 899px) and (max-height: 700px) and (orientation: portrait) {
+  .footer-note { display: none; }
+  .footer { justify-content: center; }
+  .footer:has(.shortcut-btn[hidden]) { display: none; }
+}
+
+/* Celular landscape — se redefine más abajo en el bloque móvil moderno */
+
+/* ===== PC: radio antigua de madera completa ===== */
+@media (min-width: 900px) {
+  body {
+    display: grid;
+    place-items: center;
+    padding: 32px;
+    background-color: #080402;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 50% 40%, rgba(50,32,18,0.5) 0%, transparent 65%),
+      var(--wood);
+    background-size: auto, 420px 420px;
+    background-repeat: no-repeat, repeat;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 1240px;
+    height: min(820px, calc(100vh - 64px));
+    height: min(820px, calc(100dvh - 64px));
+    margin: 0;
+    padding: 22px 24px 20px;
+    display: grid;
+    grid-template-columns: minmax(440px, 480px) minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-areas:
+      "header   presets"
+      "dial     presets"
+      "display  presets"
+      "controls presets"
+      "footer   presets";
+    column-gap: 22px;
+    row-gap: 14px;
+    border: 3px solid #4a3220;
+    border-radius: 28px 28px 22px 22px;
+    background:
+      linear-gradient(165deg, rgba(70,45,25,0.55) 0%, rgba(30,18,10,0.75) 40%, rgba(18,10,6,0.88) 100%),
+      var(--wood);
+    background-size: auto, 320px 320px;
+    background-repeat: no-repeat, repeat;
+    box-shadow:
+      0 0 0 1px #6b4c28,
+      0 0 0 6px #2a1a10,
+      0 0 0 8px #5a3c20,
+      0 28px 70px rgba(0,0,0,0.75),
+      inset 0 1px 0 rgba(255,220,150,0.12),
+      inset 0 -2px 12px rgba(0,0,0,0.35);
+  }
+
+  /* Logo + placa de latón */
+  .radio-header { grid-area: header; padding: 0; }
+  .brand { gap: 14px; }
+  .brand-logo {
+    width: 54px; height: 54px;
+    box-shadow: 0 0 0 2px var(--brass), 0 0 0 4px #2a1a10, 0 4px 14px rgba(0,0,0,0.5);
+  }
+  .brand-text {
+    padding: 6px 18px;
+    border-radius: 4px;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: #2b1a08;
+    background: linear-gradient(180deg, #e8c878 0%, #c9a04a 45%, #a07830 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.45),
+      inset 0 -1px 2px rgba(0,0,0,0.2),
+      0 1px 0 #1a0f08,
+      0 0 0 1px #6b4c1c;
+    text-shadow: none;
+  }
+
+  /* Dial grande tipo radio vintage */
+  .dial { grid-area: dial; margin: 0; }
+  .dial-glass {
+    padding: 12px 12px 14px;
+    border-radius: 14px;
+  }
+  .dial-band { padding: 7px 0; }
+  .dial-tag { padding-left: 6px; font-size: 1.08rem; }
+  .dial-tag small { font-size: 0.66rem; }
+  .dial-scale { height: 48px; margin: 0 16px; }
+  .dial-scale .tick { height: 10px; }
+  .dial-scale .tick.major { height: 16px; }
+  .dial-scale .tick.st { width: 2px; height: 26px; margin-left: -1px; }
+  .dial-scale .lbl { top: 28px; font-size: 0.8rem; }
+  .dial-scale .needle { top: -5px; bottom: -5px; }
+  .dial-online { display: flex; }
+
+  /* Display y controles */
+  .display {
+    grid-area: display;
+    margin: 0;
+    min-height: 168px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 2px solid #3a2818;
+  }
+  .freq { font-size: 3.2rem; }
+  .station-name { font-size: 1.8rem; }
+  .now-playing { font-size: 1.05rem; }
+
+  .controls { grid-area: controls; gap: 22px; padding: 4px 6px; }
+  .btn-power { width: 54px; height: 54px; }
+  .btn-play { width: 76px; height: 76px; }
+  .btn-play svg { width: 32px; height: 32px; }
+
+  .footer {
+    grid-area: footer;
+    align-self: end;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .footer-note { color: #c4b08a; }
+  .kbd-hints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .kbd-hints kbd {
+    margin-right: 5px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid #5a4030;
+    background: #1a100a;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--ivory);
+  }
+  .kbd-hints kbd + kbd { margin-left: -2px; }
+
+  /* Panel de emisoras a la derecha, estilo botonera de madera */
+  .presets {
+    grid-area: presets;
+    padding: 16px;
+    border-radius: 16px;
+    background:
+      linear-gradient(180deg, rgba(30,18,10,0.92) 0%, rgba(18,10,6,0.95) 100%),
+      var(--wood);
+    background-size: auto, 280px 280px;
+    background-repeat: no-repeat, repeat;
+    box-shadow:
+      inset 0 2px 16px rgba(0,0,0,0.65),
+      0 0 0 1px #4a3220,
+      0 0 0 3px #2a1a10;
+  }
+  .presets-header { padding: 0 0 14px; }
+  .station-search {
+    height: 46px;
+    font-size: 1.1rem;
+    background: rgba(12,8,5,0.9);
+  }
+
+  .preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 10px;
+    align-content: start;
+    padding: 2px 4px 4px 2px;
+    border-top: 0;
+  }
+
+  .preset-btn {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    min-height: 70px;
+    padding: 12px 14px;
+    border: 1px solid #4a3220;
+    border-radius: 10px;
+    background:
+      linear-gradient(180deg, rgba(55,38,24,0.95) 0%, rgba(35,22,14,0.98) 100%);
+    box-shadow:
+      0 2px 0 #0c0704,
+      inset 0 1px 0 rgba(255,220,150,0.08);
+    transition: transform 0.12s ease, border-color 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .preset-btn .p-name { font-size: 1.22rem; }
+  .preset-btn:active { transform: translateY(1px); }
+
+  .preset-btn.active {
+    border-color: #ffd88a;
+    background: linear-gradient(180deg, #ffc45e 0%, #e8962a 55%, #d08020 100%);
+    box-shadow:
+      0 0 24px rgba(242,169,59,0.4),
+      0 3px 0 #7a4f12,
+      inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .preset-btn.active::before { display: none; }
+  .preset-btn.active .p-name { color: #2b1a08; }
+  .preset-btn.active .p-freq { color: #4a2d08; }
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .preset-btn:not(.active):hover {
+    border-color: var(--brass);
+    transform: translateY(-1px);
+    box-shadow:
+      0 3px 0 #0c0704,
+      0 6px 14px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,220,150,0.12);
+  }
+}
+
+/* Notebooks con poca altura */
+@media (min-width: 900px) and (max-height: 700px) {
+  .app { row-gap: 10px; padding: 16px 18px; }
+  .brand-logo { width: 44px; height: 44px; }
+  .dial-scale { height: 42px; }
+  .display { min-height: 140px; padding: 12px 16px; }
+  .freq { font-size: 2.7rem; }
+  .station-name { font-size: 1.5rem; }
+  .kbd-hints { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ===== Ventana "Acceso directo" ===== */
+.sheet {
+  width: min(440px, calc(100% - 24px));
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  margin: auto;
+  padding: 0;
+  color: var(--ivory);
+  border: 2px solid #5a4028;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(50,32,20,0.97) 0%, rgba(26,16,10,0.98) 100%),
+    var(--wood);
+  background-size: auto, 280px 280px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.8), 0 0 0 1px #2a1a10;
+}
+.sheet::backdrop { background: rgba(8,4,2,0.75); backdrop-filter: blur(4px); }
+.sheet[open] { animation: sheet-in 0.22s ease-out; }
+@keyframes sheet-in { from { transform: translateY(14px); opacity: 0; } }
+.sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 18px 18px 6px; }
+.sheet-head h2 { font-size: 1.35rem; font-weight: 700; color: var(--amber-hi); }
+.sheet-head p { margin-top: 2px; font-size: 1rem; line-height: 1.35; color: var(--muted); }
+.sheet-close {
+  flex: none;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid #5a4028;
+  background: #1d130d;
+  color: var(--muted);
+  font-size: 1rem;
+}
+.sheet-body { display: grid; gap: 10px; padding: 8px 14px 6px; }
+.way {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(20,12,8,0.85);
+}
+.way.is-here {
+  order: -1;
+  border-color: #8a6a2a;
+  background: linear-gradient(180deg, rgba(50,35,18,0.95), rgba(28,18,10,0.95));
+}
+.way h3 { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 700; }
+.way .tag {
+  padding: 0 8px;
+  border: 1px solid #8a6a2a;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--amber-hi);
+}
+.way p, .way li { font-size: 1rem; line-height: 1.4; color: #cdbda3; }
+.way p { margin-top: 6px; }
+.way ul { display: grid; gap: 8px; margin-top: 8px; list-style: none; }
+.btn-main, .btn-soft {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.btn-main {
+  color: #2b1a08;
+  background: linear-gradient(160deg, #ffc45e, #e8962a);
+  box-shadow: 0 3px 0 #7a4f12;
+}
+.btn-main:active { transform: translateY(2px); box-shadow: 0 1px 0 #7a4f12; }
+.btn-soft {
+  border: 1px solid #8a6a2a;
+  color: var(--amber-hi);
+  background: transparent;
+}
+.alt-links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.alt-links button { padding: 2px 4px; color: var(--amber-hi); text-decoration: underline; }
+.sheet-note {
+  padding: 9px 11px;
+  border: 1px solid #6a4c1c;
+  border-radius: 10px;
+  background: #2a1d0c;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #e0b878;
+}
+.sheet-msg {
+  min-height: 1.2em;
+  padding: 6px 14px 14px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--led);
+}
+
+/* ==========================================================
+   MÓVIL moderno (estilo Electronics Radio)
+   Solo aplica por debajo de 900px. PC no cambia.
+   ========================================================== */
+
+/* Elementos solo móvil: ocultos en PC */
+.mobile-art,
+.mobile-progress,
+.mobile-now,
+.btn-prev,
+.btn-next,
+.btn-fav {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  :root {
+    --m-bg: #061018;
+    --m-card: #0c1a28;
+    --m-accent: #00d4ff;
+    --m-accent2: #ff6b2c;
+    --m-text: #e8f4fc;
+    --m-muted: #7a9bb0;
+    --m-line: rgba(0, 180, 220, 0.18);
+  }
+
+  body {
+    background-color: var(--m-bg);
+    background-image:
+      radial-gradient(ellipse 120% 80% at 50% -20%, rgba(0, 140, 180, 0.35) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 50% at 80% 100%, rgba(0, 80, 120, 0.25) 0%, transparent 50%);
+    background-size: auto;
+    background-repeat: no-repeat;
+    color: var(--m-text);
+  }
+
+  .app {
+    max-width: 480px;
+    background:
+      linear-gradient(180deg, rgba(8, 24, 40, 0.95) 0%, rgba(4, 12, 22, 0.98) 100%);
+    background-image: none;
+    /* Línea fina color madera alrededor de todo el reproductor */
+    border: 1.5px solid #c9a04a;
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 1px rgba(42, 26, 16, 0.9),
+      inset 0 0 0 1px rgba(201, 160, 74, 0.25),
+      0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Header compacto */
+  .radio-header {
+    padding: 10px 16px 4px;
+  }
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+    box-shadow: 0 0 0 2px rgba(0, 200, 255, 0.35), 0 3px 8px rgba(0, 0, 0, 0.4);
+  }
+  .brand-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--m-text);
+    text-shadow: none;
+  }
+  .status {
+    font-size: 0.7rem;
+    color: var(--m-muted);
+  }
+  .status::before {
+    width: 7px; height: 7px;
+    background: #2a4050;
+    box-shadow: none;
+  }
+  .status.on::before {
+    background: #2ee6a0;
+    box-shadow: 0 0 8px #2ee6a0;
+  }
+  .status.wait::before {
+    background: var(--m-accent);
+    box-shadow: 0 0 8px var(--m-accent);
+  }
+  .status.error::before {
+    background: #ff5a5a;
+    box-shadow: 0 0 8px #ff5a5a;
+  }
+
+  /* Dial visible y compacto */
+  .dial {
+    display: block !important;
+    margin: 4px 12px 0;
+  }
+  .dial-glass {
+    padding: 5px 8px 6px;
+    border-radius: 10px;
+  }
+  .dial-band {
+    padding: 2px 0;
+  }
+  .dial-tag {
+    font-size: 0.8rem;
+    padding-left: 2px;
+  }
+  .dial-tag small {
+    font-size: 0.5rem;
+    margin-top: 1px;
+  }
+  .dial-scale {
+    height: 26px;
+    margin: 0 8px 0 8px;
+  }
+  .dial-scale .tick { height: 5px; }
+  .dial-scale .tick.major { height: 9px; }
+  .dial-scale .tick.st { height: 14px; }
+  .dial-scale .lbl {
+    top: 15px;
+    font-size: 0.55rem;
+  }
+  .dial-scale .needle {
+    top: -2px;
+    bottom: -2px;
+  }
+  .dial-online {
+    display: none;
+  }
+
+  /* Artwork: una sola línea de waveform */
+  .mobile-art {
+    display: flex;
+    justify-content: center;
+    padding: 6px 20px 2px;
+  }
+  .art-card {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: auto;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(0, 40, 60, 0.5);
+    border: 1px solid var(--m-line);
+    box-shadow: none;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .art-card::before {
+    display: none;
+  }
+  .waveform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 18px;
+    width: 90%;
+  }
+  .waveform span {
+    display: block;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--m-accent), #0088bb);
+    height: 30%;
+    transition: height 0.12s ease;
+  }
+  .waveform.is-playing span {
+    animation: wave 0.85s ease-in-out infinite;
+  }
+  .waveform span:nth-child(1) { animation-delay: 0.05s; }
+  .waveform span:nth-child(2) { animation-delay: 0.15s; }
+  .waveform span:nth-child(3) { animation-delay: 0.25s; }
+  .waveform span:nth-child(4) { animation-delay: 0.1s; }
+  .waveform span:nth-child(5) { animation-delay: 0.3s; }
+  .waveform span:nth-child(6) { animation-delay: 0.2s; }
+  .waveform span:nth-child(7) { animation-delay: 0.35s; }
+  .waveform span:nth-child(8) { animation-delay: 0.12s; }
+  .waveform span:nth-child(9) { animation-delay: 0.28s; }
+
+  @keyframes wave {
+    0%, 100% { height: 25%; }
+    50% { height: 100%; }
+  }
+
+  /* Display compacto */
+  .display {
+    margin: 2px 16px 0;
+    padding: 4px 6px 2px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: center;
+    align-items: center;
+    gap: 1px;
+    min-height: 0;
+  }
+  .freq {
+    font-size: 0.78rem;
+    font-family: var(--font);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--m-muted);
+    text-shadow: none;
+    order: 2;
+  }
+  .station-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--m-text);
+    order: 1;
+    min-height: 0;
+  }
+  .now-playing {
+    font-size: 0.8rem;
+    color: var(--m-muted);
+    order: 3;
+    min-height: 0;
+  }
+  .now-playing.has-meta {
+    color: var(--m-accent);
+  }
+  .vu-meter {
+    display: none;
+  }
+
+  /* Progress bar compacta */
+  .mobile-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 18px 2px;
+  }
+  .prog-time {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--m-muted);
+    min-width: 2.4em;
+  }
+  #progEnd {
+    text-align: right;
+  }
+  #progressBar {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--m-accent) var(--prog, 0%), rgba(0, 180, 220, 0.2) var(--prog, 0%));
+    outline: none;
+  }
+  #progressBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(0, 212, 255, 0.6);
+    cursor: pointer;
+  }
+  #progressBar::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(0, 212, 255, 0.6);
+  }
+
+  /* Controles compactos */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 6px 16px 4px;
+  }
+  .btn-power {
+    display: none;
+  }
+  .volume-wrap {
+    display: none;
+  }
+
+  .btn-prev,
+  .btn-next,
+  .btn-fav {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--m-text);
+    background: transparent;
+    transition: color 0.15s ease, transform 0.12s ease;
+  }
+  .btn-prev svg,
+  .btn-next svg {
+    width: 22px;
+    height: 22px;
+  }
+  .btn-fav svg {
+    width: 20px;
+    height: 20px;
+  }
+  .btn-fav[aria-pressed="true"] {
+    color: #ff4d6a;
+  }
+  .btn-prev:active,
+  .btn-next:active,
+  .btn-fav:active {
+    transform: scale(0.9);
+  }
+
+  .btn-play {
+    width: 54px;
+    height: 54px;
+    color: #fff;
+    background: linear-gradient(145deg, #ff8a3d 0%, #ff5a1a 55%, #e84800 100%);
+    box-shadow:
+      0 4px 14px rgba(255, 90, 30, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  .btn-play svg {
+    width: 24px;
+    height: 24px;
+  }
+  .btn-play:active {
+    transform: scale(0.94);
+  }
+
+  /* Fecha y hora — siempre visible en móvil */
+  .mobile-now {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 14px 6px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(0, 40, 60, 0.5);
+    border: 1px solid rgba(201, 160, 74, 0.35);
+  }
+  .mn-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .mn-name,
+  #mnDate {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #f0d9a8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mn-meta,
+  #mnTime {
+    font-family: var(--mono);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffc45e;
+    margin-top: 2px;
+    letter-spacing: 0.08em;
+  }
+  .btn-fav-mini {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    color: var(--m-muted);
+    border-radius: 50%;
+  }
+  .btn-fav-mini svg {
+    width: 18px;
+    height: 18px;
+  }
+  .btn-fav-mini[aria-pressed="true"] {
+    color: #ff4d6a;
+  }
+
+  /* Listado vertical que ocupa el resto de la pantalla */
+  .presets {
+    flex: 1;
+    min-height: 0;
+    padding-top: 2px;
+    border-top: 1px solid var(--m-line);
+    display: flex;
+    flex-direction: column;
+  }
+  .presets-header {
+    padding: 6px 12px 6px;
+    flex: none;
+  }
+  .station-search {
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--m-line);
+    background: rgba(0, 30, 50, 0.6);
+    color: var(--m-text);
+    box-shadow: none;
+    font-size: 0.95rem;
+  }
+  .station-search::placeholder {
+    color: var(--m-muted);
+  }
+  .station-search:focus {
+    border-color: var(--m-accent);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+  }
+  .station-count {
+    color: var(--m-muted);
+    font-size: 0.7rem;
+  }
+
+  .preset-grid {
+    flex: 1;
+    min-height: 0;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    border-top: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 180, 220, 0.35) transparent;
+  }
+
+  .preset-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 16px;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 80, 110, 0.25);
+    background: transparent;
+    box-shadow: none;
+    gap: 10px;
+  }
+  .preset-btn .p-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--m-text);
+  }
+  .preset-btn .p-freq {
+    flex: none;
+    font-size: 0.78rem;
+    color: var(--m-muted);
+    margin-top: 0;
+  }
+  .preset-btn.active {
+    border-color: transparent;
+    border-bottom-color: rgba(0, 80, 110, 0.25);
+    background: linear-gradient(90deg, rgba(0, 180, 220, 0.2), rgba(0, 100, 140, 0.08));
+    box-shadow: none;
+  }
+  .preset-btn.active::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--m-accent);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+    display: block;
+  }
+  .preset-btn.active .p-name {
+    color: #fff;
+  }
+  .preset-btn.active .p-freq {
+    color: var(--m-accent);
+  }
+  .preset-btn:active {
+    transform: none;
+    background: rgba(0, 120, 160, 0.15);
+  }
+
+  .empty {
+    color: var(--m-muted);
+    padding: 20px 16px;
+  }
+
+  /* Footer minimal */
+  .footer {
+    flex: none;
+    padding: 4px 14px 8px;
+    border-top: 1px solid var(--m-line);
+    background: transparent;
+    justify-content: center;
+  }
+  .footer-note {
+    display: none;
+  }
+  .shortcut-btn {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 16px;
+    border: 1px solid var(--m-line);
+    color: var(--m-accent);
+    background: rgba(0, 40, 60, 0.5);
+    font-size: 0.85rem;
+  }
+
+  /* Landscape: aún más compacto */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .mobile-art { display: none; }
+    .mobile-now { display: none; }
+    .mobile-progress { padding: 2px 16px; }
+    .dial { margin: 2px 10px 0; }
+    .controls { padding: 4px 12px; }
+    .btn-play { width: 48px; height: 48px; }
+  }
+}
+
+/* Desktop: asegurar que los nuevos controles móviles no aparezcan */
+@media (min-width: 900px) {
+  .mobile-art,
+  .mobile-progress,
+  .mobile-now,
+  .btn-prev,
+  .btn-next,
+  .btn-fav,
+  .btn-fav-mini {
+    display: none !important;
+  }
+}
+
+
+/* Títulos de grupo en la lista de emisoras */
+.preset-sep {
+  grid-column: 1 / -1;
+  padding: 10px 4px 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  border-bottom: 1px solid rgba(201,160,74,0.3);
+}
+.preset-sep:first-child { padding-top: 2px; }

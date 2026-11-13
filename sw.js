@@ -1,14 +1,24 @@
-const CACHE = "radio-ar-v31";
+const CACHE = "radio-ar-v33";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./pc.html",
+  "./pc.css",
+  "./pc.js",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
+  "./icon-maskable-512.png",
   "./logo.webp",
   "./wood-texture.jpg",
+  "./fonts/exo-2-latin-700-italic.woff2",
+  "./fonts/exo-2-latin-800-italic.woff2",
+  "./fonts/open-sans-latin-400-normal.woff2",
+  "./fonts/open-sans-latin-600-normal.woff2",
+  "./fonts/open-sans-latin-700-normal.woff2",
+  "./fonts/open-sans-latin-800-normal.woff2",
   "./fonts/barlow-condensed-latin-500-normal.woff2",
   "./fonts/barlow-condensed-latin-600-normal.woff2",
   "./fonts/barlow-condensed-latin-700-normal.woff2",
@@ -17,7 +27,12 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+  // Si un archivo falla, el service worker se instala igual (antes un solo 404 lo rompía y la app no se podía instalar)
+  event.waitUntil(
+    caches.open(CACHE).then((cache) =>
+      Promise.allSettled(ASSETS.map((url) => cache.add(url)))
+    )
+  );
 });
 
 self.addEventListener("activate", (event) => {
@@ -30,9 +45,10 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+  if (event.request.method !== "GET") return;
   if (url.origin !== self.location.origin) return;
 
-  // JS/CSS/HTML: always try network first (so updates appear)
+  // JS/CSS/HTML: primero la red (para que se vean las actualizaciones)
   const isShell = /\.(js|css|html)(\?|$)/i.test(url.pathname) || url.pathname.endsWith("/") || url.pathname.endsWith("/index.html");
 
   if (isShell) {
