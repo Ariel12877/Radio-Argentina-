@@ -404,6 +404,12 @@ const STATIONS = [
     freq: "FM 98.3",
     url: "https://mega.stweb.tv/mega983/live/playlist.m3u8"
   },
+   {
+    id: "FM Sentir",
+    name: "FM Sentir latinos",
+    freq: "Online",
+    url: "https://streaming.radiosenlinea.com.ar/8174/;"
+  },
   {
     id: "nacionalfolklorica",
     name: "Nacional Folklorica",
@@ -427,7 +433,7 @@ const STATIONS = [
     name: "D Sports",
     freq: "FM 103.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/DSPORTSRADIOAAC_SC"
-    // en dÃ­as de partido a veces la bloquean por derechos
+    // en dias de partido a veces la bloquean por derechos
   },
   {
     id: "sonido",
@@ -460,7 +466,7 @@ const STATIONS = [
     url: "https://unlimited5-us.dps.live/berlin/aac/icecast.audio"
   },
 
-  /* ===== CÃ³rdoba ===== */
+  /* ===== Cordoba ===== */
   {
     id: "cadena3am",
     name: "Cadena 3",
@@ -605,12 +611,6 @@ const STATIONS = [
     freq: "FM 104.3",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
     url: "https://ssl.veemesoft.com.ar/d03cdf788d245e8e4a35"
-  },
-   {
-    id: "FM Sentir",
-    name: "FM Sentir latinos.",
-    freq: "Online",
-    url: "https://streaming.radiosenlinea.com.ar/8174/;"
   },
   {
     id: "eldesta",
