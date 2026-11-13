@@ -405,8 +405,8 @@ const STATIONS = [
     url: "https://mega.stweb.tv/mega983/live/playlist.m3u8"
   },
    {
-    id: "FM Sentir",
-    name: "FM Sentir latinos",
+    id: "FM latino",
+    name: "Sentimientos latinos",
     freq: "Online",
     url: "https://streaming.radiosenlinea.com.ar/8174/;"
   },
