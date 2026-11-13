@@ -79,10 +79,10 @@ const STATIONS = [
     url: "https://stream.zeno.fm/tvsx850x1f8uv"
   },
   {
-    id: "Fortaleza FM 98.1",
-    name: "Fortaleza FM 98.1",
-    freq: "FM 98.1",
-    url: "https://streaming01.shockmedia.com.ar:10252/stream"
+    id: "Retro FM",
+    name: "Retro FM",
+    freq: "Online",
+    url: "https://argentina.shockmedia.com.ar:8018/stream"
   }, 
 {
     id: "Radio Mocovl AM 800",
