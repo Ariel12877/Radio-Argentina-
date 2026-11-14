@@ -630,15 +630,14 @@ const STATIONS = [
 /* ---- Orden de la lista: primero las de Chaco / Machagai, después por categoría ---- */
 const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machagai",
                  "VIP FM", "Master FM", "Cristalfm", "laradio1047", "facundoquiroga"];
-const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes", "religiosas"];
+const CAT_ORDER = ["chaco", "religiosas", "musica", "noticias", "folklore", "deportes"];
 const CAT_LABEL = {
   chaco: "Chaco y Machagai",
   religiosas: "Religiosas",
   musica: "Música",
   noticias: "Noticias",
   folklore: "Folklore",
-  deportes: "Deportes",
-  
+  deportes: "Deportes"
 };
 const CAT_BY_ID = {
   religiosas: ["radiomaria"],
