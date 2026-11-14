@@ -42,6 +42,12 @@ const STATIONS = [
     freq: "102.5",
     url: "https://ssl2.veemesoft.com.ar/a5ded807684d25c964b2"
   },
+   {
+    id: "Cristalfm",
+    name: "FM Cristal Machagai",
+    freq: "FM 91.5",
+    url: "https://srv3.deradios.stream:7039/;"
+  },
   {
     id: "laradio1047",
     name: "La Radio 104.7",
@@ -623,18 +629,24 @@ const STATIONS = [
 
 /* ---- Orden de la lista: primero las de Chaco / Machagai, después por categoría ---- */
 const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machagai",
-                 "VIP FM", "Master FM", "laradio1047", "facundoquiroga"];
-const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes"];
-const CAT_LABEL = { chaco: "Chaco y Machagai", musica: "Música", noticias: "Noticias", folklore: "Folklore", deportes: "Deportes" };
+                 "VIP FM", "Master FM", "Cristalfm", "laradio1047", "facundoquiroga"];
+const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes", "religiosas"];
+const CAT_LABEL = {
+  chaco: "Chaco y Machagai",
+  musica: "Música",
+  noticias: "Noticias",
+  folklore: "Folklore",
+  deportes: "Deportes",
+  religiosas: "Religiosas"
+};
 const CAT_BY_ID = {
-   religiosas:["Radiomedia","radiomaria"],
+  religiosas: ["radiomaria"],
   noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
              "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
-  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "doradofm","nacionalfolklorica"],
-  deportes:  ["dsports", "fmlaredonda"],
- 
+  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
+  deportes:  ["dsports", "fmlaredonda"]
 };
 (function sortStations() {
   const catOf = {};
