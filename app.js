@@ -90,6 +90,12 @@ const STATIONS = [
     freq: "AM 800",
     url: "https://live-ar1.cdnrad.com/hls/radio-1930/live.m3u8"
   },
+   {
+    id: "radiomaria.org",
+    name: "Radio Maria.org",
+    freq: "FM 88.9",
+    url: "https://dreamsiteradiocp2.com/proxy/rmargentina2?mp=/stream"
+  },
   {
     id: "Futuro",
     name: "Radio Futuro",
