@@ -633,11 +633,12 @@ const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machag
 const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes", "religiosas"];
 const CAT_LABEL = {
   chaco: "Chaco y Machagai",
+  religiosas: "Religiosas",
   musica: "Música",
   noticias: "Noticias",
   folklore: "Folklore",
   deportes: "Deportes",
-  religiosas: "Religiosas"
+  
 };
 const CAT_BY_ID = {
   religiosas: ["radiomaria"],
