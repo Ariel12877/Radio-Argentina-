@@ -1,9 +1,12 @@
-const CACHE = "radio-ar-v36";
+// Cada vez que subas cambios a GitHub, subí también este número (v37 → v38, etc.).
+// Si no cambia, el botón rojo de "Nueva actualización" no aparece.
+const CACHE = "radio-ar-v45";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./update.js",
   "./pc.html",
   "./pc.css",
   "./pc.js",
@@ -26,13 +29,23 @@ const ASSETS = [
 ];
 
 self.addEventListener("install", (event) => {
-  self.skipWaiting();
+  // Ya no se llama a skipWaiting() acá: la versión nueva queda "esperando"
+  // hasta que la persona toque el botón "Nueva actualización".
   // Si un archivo falla, el service worker se instala igual (antes un solo 404 lo rompía y la app no se podía instalar)
   event.waitUntil(
     caches.open(CACHE).then((cache) =>
-      Promise.allSettled(ASSETS.map((url) => cache.add(url)))
+      Promise.allSettled(ASSETS.map((url) => cache.add(new Request(url, { cache: "reload" }))))
     )
   );
+});
+
+// Mensajes desde la página: activar la versión nueva / decir qué versión es
+self.addEventListener("message", (event) => {
+  const data = event.data || {};
+  if (data.type === "SKIP_WAITING") self.skipWaiting();
+  if (data.type === "GET_VERSION" && event.source) {
+    event.source.postMessage({ type: "VERSION", version: CACHE });
+  }
 });
 
 self.addEventListener("activate", (event) => {

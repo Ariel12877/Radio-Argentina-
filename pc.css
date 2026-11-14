@@ -1401,3 +1401,53 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   border-bottom: 1px solid rgba(201,160,74,0.3);
 }
 .preset-sep:first-child { padding-top: 2px; }
+
+
+/* ========== ACTUALIZACIÓN (botón del pie) ========== */
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+}
+.update-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 1px solid var(--brass);
+  color: var(--amber-hi);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(40, 28, 16, 0.6);
+  cursor: pointer;
+}
+.update-btn svg { width: 16px; height: 16px; flex: none; }
+.update-btn.is-busy svg { animation: updSpin 1s linear infinite; }
+.update-btn.has-update {
+  border-color: #ff7a6e;
+  color: #fff;
+  background: linear-gradient(180deg, #e5453a, #b3261b);
+  animation: updPulse 1.8s ease-out infinite;
+}
+@keyframes updPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(229, 69, 58, 0.65); }
+  70%  { box-shadow: 0 0 0 10px rgba(229, 69, 58, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(229, 69, 58, 0); }
+}
+@keyframes updSpin { to { transform: rotate(360deg); } }
+@media (hover: hover) {
+  .update-btn:not(.has-update):hover { background: rgba(201, 160, 74, 0.18); }
+  .update-btn.has-update:hover { background: linear-gradient(180deg, #f05a4f, #c62419); }
+}
+@media (min-width: 900px) {
+  .footer-actions { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .update-btn.has-update, .update-btn.is-busy svg { animation: none; }
+}

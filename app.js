@@ -627,12 +627,14 @@ const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machag
 const CAT_ORDER = ["chaco", "musica", "noticias", "folklore", "deportes"];
 const CAT_LABEL = { chaco: "Chaco y Machagai", musica: "Música", noticias: "Noticias", folklore: "Folklore", deportes: "Deportes" };
 const CAT_BY_ID = {
+   religiosas:["Radiomedia","radiomaria"],
   noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
              "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
-  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "nacionalfolklorica"],
-  deportes:  ["dsports", "fmlaredonda"]
+  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "doradofm","nacionalfolklorica"],
+  deportes:  ["dsports", "fmlaredonda"],
+ 
 };
 (function sortStations() {
   const catOf = {};
@@ -729,6 +731,57 @@ function saveEq() {
   try { localStorage.setItem("radio-eq", JSON.stringify({ gains: eqGains, preset: eqPreset })); } catch (e) {}
 }
 
+/* ---- Volumen y estéreo (balance izquierda / derecha) ---- */
+let mixVol = 100;          // 0 a 100, como lo marca el deslizador
+let mixBal = 0;            // -100 (todo a la izquierda) a 100 (todo a la derecha)
+let volBeforeMute = 100;   // a qué volumen vuelve al sacar el silencio
+let masterGain = null, gainL = null, gainR = null;
+
+const clampNum = (v, lo, hi, def) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : def;
+};
+
+try {
+  const savedMix = JSON.parse(localStorage.getItem("radio-mix") || "null");
+  if (savedMix) {
+    mixVol = clampNum(savedMix.vol, 0, 100, 100);
+    mixBal = clampNum(savedMix.bal, -100, 100, 0);
+    volBeforeMute = clampNum(savedMix.last, 1, 100, 100);
+    // si quedó en silencio, la radio arranca con el último volumen para que no parezca rota
+    if (mixVol < 1) mixVol = volBeforeMute;
+  }
+} catch (e) { /* si falla, queda al máximo y centrado */ }
+
+function saveMix() {
+  try { localStorage.setItem("radio-mix", JSON.stringify({ vol: mixVol, bal: mixBal, last: volBeforeMute })); } catch (e) {}
+}
+
+// Curva al cuadrado: el deslizador se siente más parejo (el oído no es lineal)
+const volLevel = (pct) => Math.pow(pct / 100, 2);
+
+function setParam(param, value, instant) {
+  if (instant) param.value = value;
+  else param.setTargetAtTime(value, audioCtx.currentTime, 0.02);   // suave, sin "clicks"
+}
+
+function applyVolume(instant) {
+  const level = volLevel(mixVol);
+  if (masterGain) {
+    setParam(masterGain.gain, level, instant);
+    playerEQ.volume = 1;            // si no, se aplicaría dos veces
+  } else {
+    playerEQ.volume = level;        // todavía no se armó el ecualizador
+  }
+  playerDirect.volume = level;      // emisoras que suenan sin pasar por el ecualizador
+}
+
+function applyBalance(instant) {
+  if (!gainL || !gainR) return;
+  setParam(gainL.gain, mixBal > 0 ? 1 - mixBal / 100 : 1, instant);
+  setParam(gainR.gain, mixBal < 0 ? 1 + mixBal / 100 : 1, instant);
+}
+
 function initAudioGraph() {
   if (audioCtx) return;
   const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -754,8 +807,32 @@ function initAudioGraph() {
     prev.connect(f);
     prev = f;
   });
-  prev.connect(analyser);
-  analyser.connect(audioCtx.destination);
+
+  // Estéreo: se fuerza a 2 canales (una radio en mono suena igual por los dos lados),
+  // se separa izquierda / derecha y cada lado tiene su propio volumen (balance)
+  const upmix = audioCtx.createGain();
+  upmix.channelCount = 2;
+  upmix.channelCountMode = "explicit";
+  upmix.channelInterpretation = "speakers";
+  const splitter = audioCtx.createChannelSplitter(2);
+  const merger = audioCtx.createChannelMerger(2);
+  gainL = audioCtx.createGain();
+  gainR = audioCtx.createGain();
+  masterGain = audioCtx.createGain();
+
+  prev.connect(upmix);
+  upmix.connect(splitter);
+  splitter.connect(gainL, 0);
+  splitter.connect(gainR, 1);
+  gainL.connect(merger, 0, 0);
+  gainR.connect(merger, 0, 1);
+  // el visualizador va antes del volumen: se mueve igual aunque bajes el volumen
+  merger.connect(analyser);
+  analyser.connect(masterGain);
+  masterGain.connect(audioCtx.destination);
+
+  applyVolume(true);
+  applyBalance(true);
 }
 
 function applyEqGains() {
@@ -826,6 +903,52 @@ function buildEqUI() {
   });
   markPreset();
 }
+
+/* Volumen y estéreo: deslizadores del panel */
+const volSlider = document.getElementById("volSlider");
+const volVal = document.getElementById("volVal");
+const volMute = document.getElementById("volMute");
+const eqVol = document.getElementById("eqVol");
+const balSlider = document.getElementById("balSlider");
+const balVal = document.getElementById("balVal");
+
+function paintMix() {
+  volSlider.value = mixVol;
+  volSlider.style.setProperty("--p1", "-1");               // el relleno arranca desde el borde izquierdo
+  volSlider.style.setProperty("--p2", String(mixVol / 100));
+  volVal.textContent = Math.round(mixVol) + "%";
+  eqVol.classList.toggle("is-muted", mixVol < 1);
+  volMute.setAttribute("aria-label", mixVol < 1 ? "Activar el sonido" : "Silenciar");
+
+  balSlider.value = mixBal;
+  const pos = 0.5 + mixBal / 200;                      // 0 a 1; 0,5 es el centro
+  balSlider.style.setProperty("--p1", String(Math.min(0.5, pos)));
+  balSlider.style.setProperty("--p2", String(Math.max(0.5, pos)));
+  const b = Math.round(Math.abs(mixBal));
+  balVal.textContent = mixBal === 0 ? "Centro" : (mixBal < 0 ? "L " : "R ") + b;
+}
+
+function setVolume(v) {
+  mixVol = clampNum(v, 0, 100, 100);
+  if (mixVol >= 1) volBeforeMute = mixVol;
+  applyVolume();
+  paintMix();
+  saveMix();
+}
+
+function setBalance(v) {
+  let n = clampNum(v, -100, 100, 0);
+  if (Math.abs(n) <= 4) n = 0;                         // se "pega" al centro
+  mixBal = n;
+  applyBalance();
+  paintMix();
+  saveMix();
+}
+
+volSlider.addEventListener("input", () => setVolume(volSlider.value));
+volMute.addEventListener("click", () => setVolume(mixVol >= 1 ? 0 : volBeforeMute));
+balSlider.addEventListener("input", () => setBalance(balSlider.value));
+balVal.addEventListener("click", () => setBalance(0));
 
 function setEqPreset(name) {
   const vals = EQ_PRESETS[name] || EQ_PRESETS.flat;
@@ -1265,7 +1388,7 @@ function showOpciones() {
     <p>Agregá Radio Argentina a la pantalla de inicio del celular o al escritorio de la PC.</p>
     <button class="timer-btn" id="btnOpenInstall" style="margin-top:8px;width:100%;background:linear-gradient(135deg,#1e90ff,#0a6ad4);border:none;color:#fff">⬇ Instalar / Acceso directo</button>
     <h3>Volumen del sistema</h3>
-    <p>Usa los botones de volumen de tu teléfono o PC para ajustar el volumen general.</p>
+    <p>Usá los botones de volumen de tu teléfono o PC para el volumen general. El volumen de la radio y el estéreo (izquierda / derecha) se ajustan en el Ecualizador.</p>
     <h3>Calidad</h3>
     <p>La mayoría de los streams se reproducen en la mejor calidad disponible (128–192 kbps).</p>
     <h3>Datos móviles</h3>
@@ -1329,8 +1452,15 @@ function showAcerca() {
     <h3>Radio Argentina</h3>
     <p>Reproductor de radios argentinas en vivo. Sin publicidad.</p>
     <p>Diseño inspirado en una interfaz clásica de radio con dial y ecualizador integrado.</p>
+    <h3>Actualizaciones</h3>
+    <button class="upd-check" type="button" data-update-btn data-update-normal="Buscar actualización">
+      <span class="upd-ico" aria-hidden="true">↻</span>
+      <span data-update-text>Buscar actualización</span>
+    </button>
+    <p class="upd-version" data-update-version></p>
     <p style="margin-top:16px;font-size:0.85rem;opacity:0.7">v2.0 · 2026</p>
   `);
+  if (window.RadioUpdate) window.RadioUpdate.render();
 }
 
 /* ---- Event listeners ---- */
@@ -1340,7 +1470,7 @@ btnNext.addEventListener("click", () => stepStation(1));
 btnFav.addEventListener("click", toggleFav);
 btnEq.addEventListener("click", openEq);
 eqClose.addEventListener("click", closeEq);
-eqReset.addEventListener("click", () => setEqPreset("flat"));
+eqReset.addEventListener("click", () => { setEqPreset("flat"); setBalance(0); });
 
 document.querySelectorAll(".eq-preset").forEach(btn => {
   btn.addEventListener("click", () => setEqPreset(btn.dataset.preset));
@@ -1359,6 +1489,8 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 
 document.querySelectorAll(".nav-btn").forEach(btn => {
   btn.addEventListener("click", () => {
+    // "Nueva actualización" no abre ningún panel: lo maneja update.js
+    if (btn.dataset.panel === "actualizacion") return;
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     const panel = btn.dataset.panel;
@@ -1406,6 +1538,8 @@ if (window.matchMedia("(max-width: 899px)").matches) {
   }
 }
 buildEqUI();
+applyVolume(true);
+paintMix();
 renderList();
 updateDial(null);
 console.log("Radio Argentina ready, stations:", STATIONS.length);
@@ -1565,12 +1699,7 @@ window.addEventListener("appinstalled", () => {
   refreshShortcutUi();
 });
 
-/* Service Worker */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch((err) => {
-    console.warn("SW registration failed:", err);
-  });
-}
+/* Service Worker: el registro y el botón de "Nueva actualización" están en update.js */
 
 /* Also expose openShortcutDialog for Opciones panel */
 window.openShortcutDialog = openShortcutDialog;

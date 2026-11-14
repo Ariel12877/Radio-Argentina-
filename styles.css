@@ -1879,3 +1879,226 @@ body {
   .station-item { min-height: 56px; }
   .station-logo { width: 44px; height: 44px; }
 }
+
+
+/* ========== ACTUALIZACIÓN (botón rojo en la barra de abajo) ========== */
+.nav-btn[hidden] { display: none !important; }
+
+@keyframes updGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 70, 60, 0); }
+  50%      { box-shadow: 0 0 14px 1px rgba(255, 70, 60, 0.55); }
+}
+@keyframes updSpin { to { transform: rotate(360deg); } }
+
+/* Botón "Buscar actualización" dentro de Acerca de */
+.upd-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.upd-check .upd-ico { display: inline-block; font-size: 1.1rem; line-height: 1; }
+.upd-check.is-busy .upd-ico { animation: updSpin 1s linear infinite; }
+.upd-check.has-update {
+  border-color: transparent;
+  background: linear-gradient(135deg, #ff5a4f, #c62419);
+  box-shadow: 0 0 16px rgba(255, 70, 60, 0.5);
+}
+.upd-version { margin-top: 8px; font-size: 0.85rem; opacity: 0.75; }
+.upd-version:empty { display: none; }
+
+.nav-update { color: #ff8a80; }
+.nav-update .nav-icon { color: #ff5a4f; }
+
+@media (max-width: 899px) {
+  :root {
+    --i-update: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M17.65%206.35C16.2%204.9%2014.21%204%2012%204c-4.42%200-7.99%203.58-7.99%208s3.57%208%207.99%208c3.73%200%206.84-2.55%207.73-6h-2.08c-.82%202.33-3.04%204-5.65%204-3.31%200-6-2.69-6-6s2.69-6%206-6c1.66%200%203.14.69%204.22%201.78L13%2011h7V4l-2.35%202.35z'/%3E%3C/svg%3E");
+  }
+  #navUpdate .nav-icon { --ico: var(--i-update); color: #ff5a4f; }
+  .nav-update {
+    min-width: 0;
+    border-radius: 16px;
+    color: #ffb0a8;
+    background: radial-gradient(ellipse at 50% 42%, rgba(255, 70, 60, 0.30), rgba(255, 70, 60, 0) 74%);
+    animation: updGlow 1.8s ease-in-out infinite;
+  }
+  .nav-update .nav-label {
+    font-size: 0.56rem;
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    text-align: center;
+  }
+  .nav-update.is-busy .nav-icon { animation: updSpin 1s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-update, .nav-update.is-busy .nav-icon, .upd-check.is-busy .upd-ico { animation: none; }
+  }
+}
+
+
+/* ========== VOLUMEN Y ESTÉREO (dentro del ecualizador) ========== */
+.eq-mix {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 165, 255, 0.32);
+  background: rgba(2, 16, 36, 0.75);
+}
+.eq-vol { margin-top: 2px; }
+.eq-bal { margin: 2px 0 12px; }
+
+/* Botón del parlante (silenciar / activar) */
+.mix-ico {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(25, 227, 255, 0.4);
+  background: rgba(25, 227, 255, 0.08);
+  color: var(--cyan);
+  cursor: pointer;
+}
+.mix-ico svg {
+  width: 21px;
+  height: 21px;
+  fill: currentColor;
+  filter: drop-shadow(0 0 4px rgba(25, 227, 255, 0.75));
+}
+.mix-ico .ico-off { display: none; }
+.eq-vol.is-muted .mix-ico { color: #ff8a80; border-color: rgba(255, 120, 110, 0.5); background: rgba(255, 90, 80, 0.1); }
+.eq-vol.is-muted .mix-ico svg { filter: drop-shadow(0 0 4px rgba(255, 110, 100, 0.7)); }
+.eq-vol.is-muted .ico-on { display: none; }
+.eq-vol.is-muted .ico-off { display: inline; }
+
+/* Letras L / R */
+.mix-side {
+  flex: none;
+  width: 18px;
+  text-align: center;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(25, 227, 255, 0.75);
+}
+
+/* Porcentaje / "Centro" */
+.mix-val {
+  flex: none;
+  min-width: 54px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: right;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #cfe9ff;
+}
+button.mix-val { cursor: pointer; }
+.eq-bal.is-centered .mix-val, .eq-bal .mix-val { color: #cfe9ff; }
+
+/* Deslizadores horizontales: la parte iluminada va de --p1 a --p2 (0 a 1) */
+.bal-wrap { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; }
+.bal-wrap::after {                       /* marquita del centro */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 18px;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+  background: rgba(190, 225, 255, 0.6);
+  pointer-events: none;
+  z-index: 0;
+}
+.eq-mix input[type="range"] {
+  --p1: 0;
+  --p2: 1;
+  --track: linear-gradient(90deg,
+    rgba(120, 170, 230, 0.22) calc(13px + (100% - 26px) * var(--p1)),
+    #1fd6ff calc(13px + (100% - 26px) * var(--p1)),
+    #1fd6ff calc(13px + (100% - 26px) * var(--p2)),
+    rgba(120, 170, 230, 0.22) calc(13px + (100% - 26px) * var(--p2)));
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;                   /* el dedo mueve el deslizador, no la pantalla */
+}
+.eq-mix input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 6px;
+  background: var(--track);
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+.eq-mix input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -9px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  background: radial-gradient(circle at 35% 30%, #fff, #cfeaff);
+  box-shadow: 0 0 14px rgba(25, 227, 255, 0.85), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.eq-mix input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 6px;
+  background: var(--track);
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+.eq-mix input[type="range"]::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  background: radial-gradient(circle at 35% 30%, #fff, #cfeaff);
+  box-shadow: 0 0 14px rgba(25, 227, 255, 0.85), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.eq-mix input[type="range"]:focus-visible { outline: none; }
+.eq-mix input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(25, 227, 255, 0.45), 0 0 14px rgba(25, 227, 255, 0.85); }
+
+/* Emisora sin permiso de ecualizador: el estéreo tampoco se puede mover (el volumen sí) */
+.eq-panel.eq-off .eq-bal { opacity: 0.38; pointer-events: none; }
+
+/* El panel nunca se corta en pantallas bajitas: si falta lugar, se desliza */
+@media (max-width: 899px) {
+  .eq-panel { overflow-y: auto; }
+  .eq-panel > * { flex-shrink: 0; }
+  .eq-panel .eq-sliders { flex: 1 0 auto; }
+}
+/* Celulares bajitos: se achican la curva y los deslizadores para que entre todo, con Restablecer incluido */
+@media (max-width: 899px) and (max-height: 700px) {
+  .eq-curve-wrap { height: 58px; }
+  .eq-band { gap: 8px; }
+  .eq-band input[type="range"] { height: min(220px, 22vh); }
+  .eq-sliders { padding: 2px 0 6px; }
+}
