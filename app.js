@@ -79,6 +79,12 @@ const STATIONS = [
     url: "https://devnec.com:8001/radio62"
   },
    {
+    id: "fmuniversochamame",
+    name: "Fm Universo Chamame",
+    freq: "online",
+    url: "https://streaming01.radiosenlinea.com.ar/9392/stream"
+  },
+   {
    id: "Polca Paraguaya",
     name: "Polca Paraguaya",
     freq: "Online",
@@ -645,7 +651,7 @@ const CAT_BY_ID = {
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
              "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
-  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
+  folklore:  ["Radio Chamame", "Polca Paraguaya","fmuniversochamame" ,"Ñande Reko Radio", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
   deportes:  ["dsports", "fmlaredonda"]
 };
 (function sortStations() {
