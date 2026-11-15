@@ -1,0 +1,83 @@
+﻿LOGOS DE MIS RADIOS
+
+Logos seguros: 63 (carpeta principal)
+Logos probables: 3 (carpeta probables_a_confirmar)
+
+== RADIO -> ARCHIVO DE LOGO ==
+
+17. Radio Maria (online) -> radio-maria-argentina_play_512.jpg
+19. Radio Con Vos (FM 89.9) -> radio-con-vos_play_512.jpg
+20. Nacional Resistencia (AM 620) -> radio-nacional_play_512.jpg [usa el logo general de Nacional]
+22. Nacional (AM 870) -> radio-nacional_play_512.jpg
+24. FM Milenium (106.7) -> milenium-106-7-fm_play_512.jpg
+25. Vale 97.5 (FM 95.5) -> radio-vale_play_512.jpg
+26. Mitre (AM 790) -> radio-mitre_play_512.jpg
+27. Rock & Pop (FM 95.9) -> fm-rock-pop-95-9_play_512.jpg
+28. Aspen (FM 102.3) -> aspen-102-3_play_512.jpg
+29. Metro (FM 95.1) -> metro-95-1_play_512.png
+30. La Red (AM 910) -> radio-la-red_play_512.jpg
+31. Urbana Play (FM 104.3) -> urbana-play-104-3_play_512.jpg
+32. AM 750 (AM 750) -> am-750_play_512.jpg
+38. Nacional Las Lomitas Formosa (AM 1270) -> radio-nacional_play_512.jpg [usa el logo general de Nacional]
+40. Heat FM (FM 91.9) -> fm-cordoba-cadena-heat_play_512.jpg
+41. Radio Madre (AM 530) -> am-530-somos-radio_play_512.jpg [PROBABLE - confirmar]
+43. Continental (AM 590) -> radio-continental_play_512.jpg
+44. Rivadavia (AM 630) -> radio-rivadavia_play_512.jpg
+48. CNN Radio (AM 950) -> origen-am-950_play_512.jpg
+50. La 990 (AM 990) -> la-990_play_300.jpg
+52. Del Plata (AM 1030) -> radio-del-plata-am-1030_play_300.png
+53. Güemes (AM 1050) -> radio-guemes_play_512.jpg
+61. Delta (FM 90.3) -> delta-90-3_play_512.jpg
+63. Nacional Rock (FM 93.7) -> radio-nacional_play_512.jpg [usa el logo general de Nacional]
+64. Radio Disney (FM 94.3) -> radio-disney_play_512.jpg
+66. Nacional Clasica (FM 96.7) -> radio-nacional_play_512.jpg [usa el logo general de Nacional]
+68. La Mega (FM 98.3) -> mega-98-3_list_100.jpg
+69. Nacional Folklorica (FM 98.7) -> radio-nacional-folklorica-98-7_play_512.jpg
+70. La 100 (FM 99.9) -> la-100_play_512.jpg
+71. Blue FM (FM 100.7) -> blue-fm-100-7_play_512.jpg
+72. D Sports (FM 103.1) -> d-sports-radio_play_512.jpg
+74. LN+ Musica (FM 104.9) -> la-nacion-104-9_play_512.jpg [PROBABLE - confirmar]
+75. Los 40 (FM 105.5) -> los40-argentina_play_512.jpg
+77. Radio Berlin (FM 107.9) -> 107-9-radio-berlin_play_512.jpg
+78. Cadena 3 (AM 700) -> cadena-3_play_512.jpg
+79. Cadena 3 FM (FM 100.5) -> cadena-3_play_512.jpg
+80. FM Cordoba (FM 91.9) -> fm-cordoba-cadena-heat_play_512.jpg
+81. Radio Suquía (FM 96.5) -> radio-suquia-96-5_play_512.jpg
+82. Radio Mía (FM 104.1) -> mia-fm_play_512.jpg
+84. LT3 Rosario (AM 680) -> lt3-am680_play_512.jpg
+85. LT10 Radio UNL (FM 97.3) -> lt10_play_512.jpg
+86. Estacion del Sol (FM 96.7) -> 100-9-estacion-del-sol_play_512.jpg [PROBABLE - confirmar]
+89. LU19 Cipolletti (AM 690) -> lu19_play_300.jpg
+92. Radio 3 Trelew (ONLINE) -> radio-3-cadena-patagonia_play_512.jpg [PROBABLE - confirmar]
+93. FM Del Mar (ONLINE) -> radio-del-mar_play_512.jpg [PROBABLE - confirmar]
+97. Radio 10 (ONLINE) -> radio-10_play_512.jpg
+98. Radio Latina 101.1 (ONLINE) -> radio-latina-101-1_play_512.jpg
+100. El Destape Radio (ONLINE) -> el-destape-radio_play_512.jpg
+101. Radio Del Sur (FM 90.5) -> radio-del-sur_play_512.jpg
+102. FM Vida (FM 97.9) -> fm-vida_play_512.jpg
+103. Mía FM (FM 104.1) -> mia-fm_play_512.jpg
+104. Mucha Radio (FM 103.7) -> mucha-radio_play_512.jpg
+105. AM 530 Somos Radio (AM 530) -> am-530-somos-radio_play_512.jpg
+106. Radio Colonia (AM 550) -> radio-colonia_play_512.jpg
+107. 96.5 La Plata (FM 96.5) -> fm-96-5-la-plata_play_512.jpg
+108. Radio Valle Viejo (FM 105.5) -> radio-valle-viejo_play_300.jpg
+109. Radio Nihuil (AM 680) -> radio-nihuil_play_512.jpg
+110. LT9 (AM 690) -> lt9_play_512.jpg
+111. Mujer FM (FM 95.5) -> mujer-fm_list_100.jpg
+112. La Estación FM (FM 101.3) -> la-estacion-fm_play_512.jpg [PROBABLE - confirmar]
+113. Radio Boing (FM 97.3) -> radio-boing_play_512.jpg
+114. Belgrano Radio (AM 950) -> belgrano-radio_play_512.jpg
+115. El Observador (Online) -> el-observador_play_512.png
+116. Futuröck (Online) -> futurock-fm_play_512.jpg
+117. La 2x4 (FM 92.7) -> la-2x4_play_512.jpg
+118. Impacto 94.7 (FM 94.7) -> impacto-94-7-fm_play_512.jpg
+119. Classique (FM 96.5) -> classique_play_512.jpg
+120. FM Trance 103.3 (FM 103.3) -> fm-trance-103-3_play_512.jpg
+121. Fisherton Classic (Online) -> fisherton-classic_play_512.jpg
+122. LU5 (AM 1550) -> lu5_play_512.jpg
+123. Orfeo FM (FM 90.1) -> orfeo-fm_play_300.jpg
+124. Mood Radio (Online) -> mood-radio_play_512.jpg
+125. 100.9 Estación del Sol (FM 100.9) -> 100-9-estacion-del-sol_play_512.jpg
+126. La Nación 104.9 (FM 104.9) -> la-nacion-104-9_play_512.jpg
+127. Radio One 103.7 (FM 103.7) -> radio-one-103-7_play_512.jpg
+128. Radio Popular (AM 900) -> radio-popular_play_512.jpg
