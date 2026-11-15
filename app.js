@@ -303,8 +303,8 @@ const STATIONS = [
   {
     id: "genesis",
     name: "Genesis",
-    freq: "AM 970",
-    url: "https://01.solumedia.com.ar:8216/"
+    freq: "Fm 101.5",
+    url: "https://streaming1.locucionar.com/proxy/fmgenesis1015?mp=/stream"
   },
   {
     id: "la990",
