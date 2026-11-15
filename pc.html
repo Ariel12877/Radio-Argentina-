@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
-  <meta name="theme-color" content="#0a1628" />
+  <meta name="theme-color" content="#1b0f08" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -14,8 +14,9 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="preload" href="fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/share-tech-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="pc-skin.webp" as="image" type="image/webp" />
+  <link rel="preload" href="fonts/roboto-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/roboto-condensed-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
   <script>
     // Ventana angosta (celular): se usa la versión móvil, que es index.html
     (function () {
@@ -25,156 +26,145 @@
       if (mq.addEventListener) mq.addEventListener("change", go);
     })();
   </script>
-  <title>Radio Argentina · Cassette</title>
-  <link rel="stylesheet" href="pc.css?v=21" />
+  <title>Radio Argentina</title>
+  <link rel="stylesheet" href="pc.css?v=24" />
 </head>
 <body>
-  <div class="app">
+  <div class="backdrop" aria-hidden="true"></div>
 
-    <header class="radio-header">
-      <div class="brand">
-        <img class="brand-logo" src="logo.webp" width="54" height="54" alt="Logo de Ariel Walter" decoding="async" />
-        <span class="brand-text">Radio Argentina</span>
-      </div>
-      <div class="status" id="status" role="status" aria-live="polite">LISTO</div>
-    </header>
+  <!--
+    Escenario de 1536 × 1024, igual que la imagen de referencia.
+    Todo lo que se ve en pantalla (aguja, display, lista, volumen) se dibuja
+    encima de la imagen en las mismas coordenadas. pc.js lo escala a la ventana.
+  -->
+  <main class="stage" id="stage">
+    <h1 class="sr-only">Radio Argentina</h1>
 
-    <!-- Dial: solo se ve en pantallas grandes -->
-    <section class="dial" aria-hidden="true">
-      <div class="dial-glass off" id="dialGlass">
-        <div class="dial-band" data-band="fm">
-          <span class="dial-tag">FM<small>MHz</small></span>
-          <div class="dial-scale" id="scaleFm"><i class="needle" id="needleFm"></i></div>
-        </div>
-        <div class="dial-band" data-band="am">
-          <span class="dial-tag">AM<small>kHz</small></span>
-          <div class="dial-scale" id="scaleAm"><i class="needle" id="needleAm"></i></div>
-        </div>
-        <div class="dial-online" id="dialOnline">Solo online</div>
+    <!-- ===== Dial: la aguja se mueve según la frecuencia ===== -->
+    <i class="needle" id="needle" aria-hidden="true"></i>
+
+    <!-- ===== Display ===== -->
+    <section class="lcd" aria-label="Display">
+      <div class="lcd-name" id="lcdName"><span id="lcdNameText"></span></div>
+      <div class="lcd-freq" id="lcdFreq"></div>
+      <div class="lcd-status" id="lcdStatus" role="status" aria-live="polite">
+        <div class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <span id="statusText"></span>
       </div>
     </section>
 
-    <!-- Artwork grande solo móvil -->
-    <section class="mobile-art" id="mobileArt" aria-hidden="true">
-      <div class="art-card">
-        <div class="waveform" id="waveform">
-          <span></span><span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-    </section>
+    <!-- ===== Perilla de volumen ===== -->
+    <div class="hit knob" id="knob" role="slider" tabindex="0" aria-label="Volumen" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" data-i18n-aria="volume"></div>
+    <span class="cap cap-volume" id="capVolume" data-i18n="volume">Volumen</span>
 
-    <section class="display">
-      <div class="freq" id="freq">—</div>
-      <div class="station-name" id="stationName">Elegí una emisora</div>
-      <div class="now-playing" id="nowPlaying"></div>
-      <div class="vu-meter" aria-hidden="true">
-        <div class="vu-bar" id="vu"></div>
-      </div>
-    </section>
+    <!-- ===== Anterior / Pausa / Siguiente ===== -->
+    <button class="hit" id="btnPrev" type="button" style="left:369px;top:501px;width:123px;height:94px;--r:22px" data-i18n-title="prev" title="Anterior" aria-label="Anterior"></button>
+    <button class="hit" id="btnPlay" type="button" style="left:502px;top:494px;width:125px;height:105px;--r:52px" title="Reproducir / pausar" aria-label="Reproducir / pausar">
+      <svg viewBox="502 494 125 105" aria-hidden="true">
+        <defs>
+          <linearGradient id="goldIco" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f9e6bd" />
+            <stop offset="1" stop-color="#e2b46c" />
+          </linearGradient>
+        </defs>
+        <g class="ico-pause">
+          <rect x="544" y="523" width="13.4" height="46.6" rx="2" fill="url(#goldIco)" />
+          <rect x="568.4" y="523" width="13.6" height="46.6" rx="2" fill="url(#goldIco)" />
+        </g>
+        <path class="ico-play" d="M555 526 L555 567 L586 546.5 Z" fill="url(#goldIco)" stroke="url(#goldIco)" stroke-width="7" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <button class="hit" id="btnNext" type="button" style="left:639px;top:501px;width:125px;height:94px;--r:22px" data-i18n-title="next" title="Siguiente" aria-label="Siguiente"></button>
 
-    <!-- Barra de progreso visual (móvil) -->
-    <div class="mobile-progress" id="mobileProgress" aria-hidden="true">
-      <span class="prog-time" id="progStart">00:00</span>
-      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" aria-label="Progreso" />
-      <span class="prog-time" id="progEnd">LIVE</span>
+    <!-- ===== Slider de volumen ===== -->
+    <div class="vol" id="vol" role="slider" tabindex="0" aria-label="Volumen" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" data-i18n-aria="volume">
+      <i class="vslot"></i>
+      <i class="vfill" id="vFill"></i>
+      <i class="vthumb" id="vThumb"></i>
     </div>
 
-    <section class="controls">
-      <button class="btn-power" id="btnPower" title="Encender / apagar" aria-label="Encender o apagar">
-        <svg class="power-svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1zm5.657 2.343a1 1 0 0 1 0 1.414 7 7 0 1 0-9.9 9.9 1 1 0 1 1-1.414 1.414 9 9 0 1 1 12.728-12.728 1 1 0 0 1-1.414 0z"/>
-        </svg>
-      </button>
-      <button class="btn-prev" id="btnPrev" title="Anterior" aria-label="Emisora anterior">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-      </button>
-      <button class="btn-play" id="btnPlay" title="Reproducir / pausar" aria-label="Reproducir">
-        <span id="playIcon" class="play-icon">
-          <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.2v13.6a1 1 0 0 0 1.5.86l11-6.8a1 1 0 0 0 0-1.72l-11-6.8A1 1 0 0 0 8 5.2z"/></svg>
-          <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5h3.6v15H7zM13.4 4.5H17v15h-3.4z"/></svg>
-        </span>
-      </button>
-      <button class="btn-next" id="btnNext" title="Siguiente" aria-label="Emisora siguiente">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 18h2V6h-2zm-11-6 8.5-6v12z"/></svg>
-      </button>
-      <button class="btn-fav" id="btnFav" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
-        <svg class="ico-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-      </button>
-      <div class="volume-wrap">
-        <label for="volume">Volumen</label>
-        <input type="range" id="volume" min="0" max="100" value="80" />
+    <!-- ===== Actualizar y Config ===== -->
+    <button class="hit btn-update" id="updateBtn" type="button" data-update-btn data-update-manual style="left:1080px;top:501px;width:140px;height:99px;--r:20px">
+      <i class="glow" aria-hidden="true"></i>
+      <span class="lbl" style="left:72px;top:61.5px" data-update-text data-i18n="update">Actualizar</span>
+    </button>
+    <button class="hit" id="btnConfig" type="button" style="left:1244px;top:501px;width:150px;height:99px;--r:20px">
+      <span class="lbl" style="left:74px;top:61.5px" data-i18n="config">Config</span>
+    </button>
+
+    <!-- ===== Lista de emisoras ===== -->
+    <section class="list" id="list" aria-label="Emisoras">
+      <div class="searchbar" id="searchBar">
+        <input type="search" id="stationSearch" autocomplete="off" spellcheck="false" data-i18n-ph="searchPh" placeholder="Buscar emisora o frecuencia…" aria-label="Buscar emisora" />
+        <span class="s-count" id="stationCount" aria-live="polite"></span>
+        <button type="button" class="s-close" id="searchClose" aria-label="Cerrar búsqueda">✕</button>
       </div>
+      <div class="rows" id="rows" role="listbox" aria-label="Emisoras"></div>
+      <p class="empty" id="emptyMsg" hidden></p>
     </section>
 
-    <!-- Fecha y hora (móvil) -->
-    <div class="mobile-now" id="mobileNow">
-      <div class="mn-info">
-        <div class="mn-name" id="mnDate">Cargando fecha…</div>
-        <div class="mn-meta" id="mnTime">--:--:--</div>
-      </div>
-      <button class="btn-fav-mini" id="btnFavMini" title="Favorito" aria-label="Marcar favorito" aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-      </button>
-    </div>
+    <!-- ===== Barra de desplazamiento ===== -->
+    <button class="hit sb-btn" id="sbUp" type="button" style="left:1332px;top:640px;width:42px;height:38px;--r:10px" aria-label="Subir"></button>
+    <button class="hit sb-btn" id="sbDown" type="button" style="left:1332px;top:803px;width:42px;height:40px;--r:10px" aria-label="Bajar"></button>
+    <div class="sb-track" id="sbTrack"><i class="sb-thumb" id="sbThumb"></i></div>
 
-    <section class="presets">
-      <div class="presets-header">
-        <input type="search" id="stationSearch" class="station-search" placeholder="Buscar emisora…" aria-label="Buscar emisora" autocomplete="off" />
-        <span class="station-count" id="stationCount" aria-live="polite"></span>
-      </div>
-      <div class="preset-grid" id="presetGrid">
-        <!-- se llenan por JS -->
-      </div>
-      <p class="empty" id="emptyMsg" hidden>No hay emisoras con ese nombre. Probá con otra palabra o con la frecuencia, por ejemplo 95.9.</p>
-    </section>
+    <!-- ===== Botonera inferior ===== -->
+    <button class="hit bot" id="btnSearch" type="button" style="left:216px;top:875px;width:196px;height:60px">
+      <span class="lbl" style="left:93px;top:18.5px" data-i18n="search">Buscar</span>
+    </button>
+    <button class="hit bot" id="btnMem" type="button" style="left:440px;top:875px;width:188px;height:60px">
+      <span class="lbl" style="left:73px;top:18.5px" data-i18n="memories">Memorias</span>
+    </button>
+    <button class="hit bot" id="btnLang" type="button" style="left:657px;top:875px;width:193px;height:60px">
+      <span class="lbl" style="left:88px;top:18.5px" data-i18n="language">Idioma</span>
+    </button>
+    <button class="hit bot" id="btnPlaySel" type="button" style="left:876px;top:875px;width:220px;height:60px">
+      <span class="lbl" style="left:83px;top:18.5px" data-i18n="play">Reproducir</span>
+    </button>
+    <button class="hit bot" id="btnBand" type="button" style="left:1125px;top:875px;width:204px;height:60px">
+      <span class="lbl" style="left:90px;top:18.5px" data-i18n="change">Cambiar</span>
+    </button>
+  </main>
 
-    <footer class="footer">
-      <p class="footer-note">Sin publicidad. Solo Buena musica.</p>
-      <p class="kbd-hints">
-        <span><kbd>Espacio</kbd>play o pausa</span>
-        <span><kbd>←</kbd><kbd>→</kbd>cambiar de emisora</span>
-        <span><kbd>/</kbd>buscar</span>
-      </p>
-      <div class="footer-actions">
-        <button class="shortcut-btn" id="shortcutBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Acceso directo</button>
-        <!-- Se pone rojo y dice "Nueva actualización" cuando hay una versión nueva -->
-        <button class="update-btn" id="updateBtn" type="button" data-update-btn><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg><span data-update-text>Actualización</span></button>
-      </div>
-    </footer>
-  </div>
-
-  <dialog class="sheet" id="shortcutDialog" aria-labelledby="shortcutTitle">
+  <!-- ===== Config ===== -->
+  <dialog class="sheet" id="configDialog" aria-labelledby="cfgTitle">
     <div class="sheet-head">
       <div>
-        <h2 id="shortcutTitle">Acceso directo</h2>
-        <p>Abrí Radio AR con un toque, sin buscar la página.</p>
+        <h2 id="cfgTitle" data-i18n="cfgTitle">Configuración</h2>
+        <p data-i18n="cfgNote">Sin publicidad. Solo buena música.</p>
       </div>
-      <button class="sheet-close" id="shortcutClose" type="button" aria-label="Cerrar">✕</button>
+      <button class="sheet-close" id="configClose" type="button" data-i18n-aria="close" aria-label="Cerrar">✕</button>
     </div>
     <div class="sheet-body">
-      <div class="sheet-note" id="shortcutNote" hidden></div>
-      <section class="way" id="wayPc">
-        <h3>En la PC <span class="tag" hidden>Tu equipo</span></h3>
-        <p>Descargá el acceso directo y arrastralo al escritorio. Se guarda en la carpeta Descargas.</p>
-        <button class="btn-main" id="dlShortcut" type="button">Descargar acceso directo</button>
-        <button class="btn-soft" id="installPc" type="button" hidden>Instalar como app, con ícono propio</button>
-        <p class="alt-links">Otro sistema: <button type="button" data-os="windows">Windows</button><button type="button" data-os="mac">Mac</button><button type="button" data-os="linux">Linux</button></p>
-      </section>
-      <section class="way" id="wayPhone">
-        <h3>En el celular <span class="tag" hidden>Tu equipo</span></h3>
-        <button class="btn-main" id="installPhone" type="button" hidden>Instalar en este celular</button>
-        <ul>
-          <li data-for="android"><b>Android (Chrome):</b> tocá el menú ⋮ y elegí «Instalar app» o «Agregar a la pantalla principal».</li>
-          <li data-for="ios"><b>iPhone (Safari):</b> tocá Compartir y elegí «Agregar a inicio».</li>
+      <section class="way">
+        <h3 data-i18n="cfgKeys">Atajos de teclado</h3>
+        <ul class="keys">
+          <li><span><kbd>Espacio</kbd></span><b data-i18n="kPlay">Reproducir o pausar</b></li>
+          <li><span><kbd>←</kbd><kbd>→</kbd></span><b data-i18n="kTune">Cambiar de emisora</b></li>
+          <li><span><kbd>/</kbd></span><b data-i18n="kSearch">Buscar</b></li>
+          <li><span><kbd>M</kbd></span><b data-i18n="kMem">Guardar en Memorias</b></li>
         </ul>
       </section>
+      <section class="way" id="wayShortcut">
+        <h3 data-i18n="cfgShortcut">Acceso directo</h3>
+        <p data-i18n="cfgShortcutText">Abrí Radio Argentina con un clic, sin buscar la página.</p>
+        <div class="sheet-note" id="shortcutNote" hidden></div>
+        <button class="btn-main" id="dlShortcut" type="button"></button>
+        <button class="btn-soft" id="installPc" type="button" hidden data-i18n="installApp">Instalar como app, con ícono propio</button>
+        <p class="alt-links"><span data-i18n="otherOs">Otro sistema:</span>
+          <button type="button" data-os="windows">Windows</button><button type="button" data-os="mac">Mac</button><button type="button" data-os="linux">Linux</button></p>
+      </section>
+      <section class="way">
+        <h3 data-i18n="cfgPhone">En el celular</h3>
+        <p data-i18n="cfgPhoneText">Abrí esta dirección en el celular y elegí «Instalar app» o «Agregar a inicio».</p>
+      </section>
+      <p class="version" data-update-version></p>
     </div>
     <p class="sheet-msg" id="shortcutMsg" role="status" aria-live="polite"></p>
   </dialog>
 
   <audio id="player" preload="none"></audio>
-  <script src="pc.js?v=21"></script>
-  <script src="update.js?v=1"></script>
+  <script src="pc.js?v=24"></script>
+  <script src="update.js?v=2"></script>
 </body>
 </html>

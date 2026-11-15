@@ -34,6 +34,8 @@
   var applying = false;   // aplicando la versión nueva
   var reloaded = false;
   var flash = "";         // mensaje corto ("Estás al día")
+  var flashKind = "";     // tipo del mensaje corto: "uptodate" o "error"
+  var lastState = "";     // último estado avisado a la página
   var flashTimer = 0;
   var version = "";
   var lastCheck = 0;
@@ -41,6 +43,7 @@
   /* ---------- Pintar los botones ---------- */
   function render() {
     var pending = !!waiting;
+    var state = applying ? "applying" : pending ? "pending" : busy ? "busy" : (flash ? flashKind : "") || "idle";
     var all = document.querySelectorAll("[data-update-btn]");
     for (var i = 0; i < all.length; i++) {
       var b = all[i];
@@ -49,17 +52,26 @@
         : pending ? TXT_NUEVA
         : busy ? TXT_BUSCANDO
         : flash || normal;
-      b.classList.toggle("has-update", pending);
-      b.classList.toggle("is-busy", busy || applying);
-      b.setAttribute("aria-label", pending ? "Nueva actualización disponible. Tocá para actualizar." : label);
-      var t = b.querySelector("[data-update-text]");
-      if (t && t.textContent !== label) t.textContent = label;
+      // Los botones con data-update-manual escuchan el evento "radio-update" y se rotulan solos
+      // (así pueden cambiar de idioma y usar textos cortos).
+      var manual = b.hasAttribute("data-update-manual");
+      if (!manual) {
+        b.classList.toggle("has-update", pending);
+        b.classList.toggle("is-busy", busy || applying);
+        b.setAttribute("aria-label", pending ? "Nueva actualización disponible. Tocá para actualizar." : label);
+        var t = b.querySelector("[data-update-text]");
+        if (t && t.textContent !== label) t.textContent = label;
+      }
     }
     each("[data-update-show]", function (el) { el.hidden = !pending; });
     each("[data-update-hide]", function (el) { el.hidden = pending; });
     each("[data-update-version]", function (el) {
       el.textContent = version ? "Versión instalada: " + version.replace(/^v/i, "") : "";
     });
+    if (state !== lastState) {
+      lastState = state;
+      try { window.dispatchEvent(new CustomEvent("radio-update", { detail: { state: state } })); } catch (_) {}
+    }
   }
 
   function each(sel, fn) {
@@ -67,11 +79,12 @@
     for (var i = 0; i < list.length; i++) fn(list[i]);
   }
 
-  function say(msg) {
+  function say(msg, kind) {
     flash = msg;
+    flashKind = kind || "";
     render();
     clearTimeout(flashTimer);
-    flashTimer = setTimeout(function () { flash = ""; render(); }, 2800);
+    flashTimer = setTimeout(function () { flash = ""; flashKind = ""; render(); }, 2800);
   }
 
   /* ---------- Versión nueva lista ---------- */
@@ -132,11 +145,11 @@
       .then(function () {
         if (reg.waiting && hasController()) setWaiting(reg.waiting);
         busy = false;
-        if (manual && !waiting) say(TXT_AL_DIA); else render();
+        if (manual && !waiting) say(TXT_AL_DIA, "uptodate"); else render();
       })
       .catch(function () {
         busy = false;
-        if (manual) say(TXT_ERROR); else render();
+        if (manual) say(TXT_ERROR, "error"); else render();
       });
   }
 

@@ -7,7 +7,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#030d1a",
   "theme_color": "#071525",
   "categories": ["music", "entertainment"],

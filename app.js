@@ -1,7 +1,7 @@
-/* Radios argentinas ” streams pÃºblicos (lista ampliada, noviembre 2026)
+/* Radios argentinas ” streams públicos (lista ampliada, noviembre 2026)
    Solo streams https directos (sin .m3u8 / HLS), para que funcionen con <audio>
-   en Chrome, Edge y Firefox, y tambiÃ©n si la pÃ¡gina estÃ¡ en https.
-   Las marcadas con âš  estÃ¡n armadas por analogÃ­a y hay que probarlas. */
+   en Chrome, Edge y Firefox, y también si la página está en https.
+   Las marcadas con ⚠  están armadas por analogía y hay que probarlas. */
 const STATIONS = [
   {
     id: "radiotop",
@@ -255,7 +255,7 @@ const STATIONS = [
     id: "madre",
     name: "Radio Madre",
     freq: "AM 530",
-    url: "https://cdn.instream.audio:9288/stream" // âš  la lista original estaba en http; la pasÃ© a https
+    url: "https://cdn.instream.audio:9288/stream" // ⚠  la lista original estaba en http; la pasé a https
   },
   {
     id: "radioargentina",
@@ -390,13 +390,13 @@ const STATIONS = [
     id: "nacionalrock",
     name: "Nacional Rock",
     freq: "FM 93.7",
-    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39" // âš  mismo patrÃ³n que tu Nacional AM 870
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39" // ⚠  mismo patrón que tu Nacional AM 870
   },
   {
     id: "disney",
     name: "Radio Disney",
     freq: "FM 94.3",
-    url: "https://27353.live.streamtheworld.com/DISNEY_ARG_BA_ADP/HLS/playlist.m3u8?dist=web-radiodisney" // âš  link viejo, puede estar caÃ­do
+    url: "https://27353.live.streamtheworld.com/DISNEY_ARG_BA_ADP/HLS/playlist.m3u8?dist=web-radiodisney" // ⚠  link viejo, puede estar caído
   },
   {
     id: "concepto",
@@ -445,7 +445,7 @@ const STATIONS = [
     name: "D Sports",
     freq: "FM 103.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/DSPORTSRADIOAAC_SC"
-    // en dÃ­as de partido a veces la bloquean por derechos
+    // en días de partido a veces la bloquean por derechos
   },
   {
     id: "sonido",
@@ -478,7 +478,7 @@ const STATIONS = [
     url: "https://unlimited5-us.dps.live/berlin/aac/icecast.audio"
   },
 
-  /* ===== CÃ³rdoba ===== */
+  /* ===== Córdoba ===== */
   {
     id: "cadena3am",
     name: "Cadena 3",
@@ -499,13 +499,13 @@ const STATIONS = [
   },
   {
     id: "suquia",
-    name: "Radio Suqui­a",
+    name: "Radio Suquía",
     freq: "FM 96.5",
     url: "https://streaming01.shockmedia.com.ar:10945/"
   },
   {
     id: "mia",
-    name: "Radio Mi­a",
+    name: "Radio Mía",
     freq: "FM 104.1",
     url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FM1041_56AAC.aac"
   },
@@ -589,7 +589,7 @@ const STATIONS = [
     id: "radiolight",
     name: "Radio Light",
     freq: "FM 88.9",
-    url: "https://streamall.alsolnet.com/radiolightfm" // âš  el link original estaba en http; lo pasÃ© a https
+    url: "https://streamall.alsolnet.com/radiolightfm" // ⚠  el link original estaba en http; lo pasé a https
   },
 
   /* ===== Solo online ===== */
@@ -629,6 +629,176 @@ const STATIONS = [
     name: "El Destape Radio",
     freq: "ONLINE",
     url: "https://live-ar1.cdnrad.com/hls/radio-2123/live.m3u8"
+  },
+
+  /* ===== Agregadas desde MyRadioEnVivo (APK) ===== */
+  {
+    id: "delsur",
+    name: "Radio Del Sur",
+    freq: "FM 90.5",
+    url: "https://cdn1.tvlin.net/icecast/radiodelsuraudio/icecast.audio"
+  },
+  {
+    id: "fmvida",
+    name: "FM Vida",
+    freq: "FM 97.9",
+    url: "https://streaming450tb.locucionar.com/proxy/fmvida979?mp=/stream"
+  },
+  {
+    id: "miafm",
+    name: "Mía FM",
+    freq: "FM 104.1",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FM1041_56AAC.aac"
+  },
+  {
+    id: "mucha",
+    name: "Mucha Radio",
+    freq: "FM 103.7",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/MUCHA_RADIO.mp3"
+  },
+  {
+    id: "am530",
+    name: "AM 530 Somos Radio",
+    freq: "AM 530",
+    url: "https://ipanel.instream.audio:7000/stream"
+  },
+  {
+    id: "colonia",
+    name: "Radio Colonia",
+    freq: "AM 550",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/COLONIA_SC"
+  },
+  {
+    id: "laplata965",
+    name: "96.5 La Plata",
+    freq: "FM 96.5",
+    url: "https://radios.solumedia.com/6466/stream"
+  },
+  {
+    id: "valleviejo",
+    name: "Radio Valle Viejo",
+    freq: "FM 105.5",
+    url: "https://stm2.livecastradio.com:9379/stream"
+  },
+  {
+    id: "nihuil",
+    name: "Radio Nihuil",
+    freq: "AM 680",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/NIHUIL_SC"
+  },
+  {
+    id: "lt9",
+    name: "LT9",
+    freq: "AM 690",
+    url: "https://streaming1.locucionar.com/proxy/lt9?mp=/stream"
+  },
+  {
+    id: "mujerfm",
+    name: "Mujer FM",
+    freq: "FM 95.5",
+    url: "https://frontend.radiohdvivo.com/mujerfm/live"
+  },
+  {
+    id: "laestacion",
+    name: "La Estación FM",
+    freq: "FM 101.3",
+    url: "https://01.solumedia.com.ar:8462/stream"
+  },
+  {
+    id: "radioboing",
+    name: "Radio Boing",
+    freq: "FM 97.3",
+    url: "https://streaming.redboing.com/radio/8000/radio.aac"
+  },
+  {
+    id: "belgrano",
+    name: "Belgrano Radio",
+    freq: "AM 950",
+    url: "https://server.laradio.online:15223/live.mp3"
+  },
+  {
+    id: "elobservador",
+    name: "El Observador",
+    freq: "Online",
+    url: "https://unlimited5-us.dps.live/observador/aac/icecast.audio"
+  },
+  {
+    id: "futurock",
+    name: "Futuröck",
+    freq: "Online",
+    url: "https://mdstrm.com/audio/5d9d019112cbbb45d6a50960/icecast.audio"
+  },
+  {
+    id: "la2x4",
+    name: "La 2x4",
+    freq: "FM 92.7",
+    url: "https://media.radios.ar:9270/"
+  },
+  {
+    id: "impacto947",
+    name: "Impacto 94.7",
+    freq: "FM 94.7",
+    url: "https://radiosar.com:8008/stream"
+  },
+  {
+    id: "classique",
+    name: "Classique",
+    freq: "FM 96.5",
+    url: "https://01.solumedia.com.ar:8562/stream"
+  },
+  {
+    id: "fmtrance",
+    name: "FM Trance 103.3",
+    freq: "FM 103.3",
+    url: "https://streaming01.shockmedia.com.ar:10262/stream"
+  },
+  {
+    id: "fisherton",
+    name: "Fisherton Classic",
+    freq: "Online",
+    url: "https://media425.digitar.net:8081/fishertonclassic.mp3"
+  },
+  {
+    id: "lu5",
+    name: "LU5",
+    freq: "AM 1550",
+    url: "https://live.lu5am.com:8443/LU5"
+  },
+  {
+    id: "orfeofm",
+    name: "Orfeo FM",
+    freq: "FM 90.1",
+    url: "https://streaming.gostreaming.com.ar:10970/;"
+  },
+  {
+    id: "moodradio",
+    name: "Mood Radio",
+    freq: "Online",
+    url: "https://radios.solumedia.com:6710/stream"
+  },
+  {
+    id: "estacion1009",
+    name: "100.9 Estación del Sol",
+    freq: "FM 100.9",
+    url: "https://st1-mpanel-icy.masterhost.com.ar:8100/radio.mp3"
+  },
+  {
+    id: "lanacion1049",
+    name: "La Nación 104.9",
+    freq: "FM 104.9",
+    url: "https://stream.radio.co/s2ed3bec0a/listen"
+  },
+  {
+    id: "radioone",
+    name: "Radio One 103.7",
+    freq: "FM 103.7",
+    url: "https://one.stweb.tv/one/live/playlist.m3u8"
+  },
+  {
+    id: "popular",
+    name: "Radio Popular",
+    freq: "AM 900",
+    url: "https://c3ny1.mediainbox.net/popular.mp3"
   }
 ];
 
@@ -636,7 +806,7 @@ const STATIONS = [
 /* ---- Orden de la lista: primero las de Chaco / Machagai, después por categoría ---- */
 const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machagai",
                  "VIP FM", "Master FM", "Cristalfm", "laradio1047", "facundoquiroga"];
-const CAT_ORDER = ["chaco", "religiosas", "musica", "noticias", "folklore", "deportes"];
+const CAT_ORDER = ["chaco", "religiosas", "noticias", "musica", "folklore", "deportes"];
 const CAT_LABEL = {
   chaco: "Chaco y Machagai",
   musica: "Música",
@@ -646,13 +816,17 @@ const CAT_LABEL = {
   religiosas: "Religiosas"
 };
 const CAT_BY_ID = {
-  religiosas: ["radiomaria"],
+  religiosas: ["radiomaria", "radiomaria_apk"],
   noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
-             "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
+             "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800",
+             "delsur", "am530", "colonia", "nihuil", "lt9", "belgrano", "elobservador", "lu5", "lanacion1049"],
   folklore:  ["Radio Chamame", "Polca Paraguaya","fmuniversochamame" ,"Ñande Reko Radio", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
-  deportes:  ["dsports", "fmlaredonda"]
+  deportes:  ["dsports", "fmlaredonda"],
+  musica: ["fmvida", "miafm", "mucha", "laplata965", "valleviejo", "mujerfm", "laestacion", "radioboing",
+           "futurock", "la2x4", "impacto947", "classique", "fmtrance", "fisherton", "orfeofm", "moodradio",
+           "estacion1009", "radioone", "popular"]
 };
 (function sortStations() {
   const catOf = {};
@@ -1268,26 +1442,79 @@ function getVisibleStations() {
   return list;
 }
 
+const STATION_LOGOS = {
+  "nacional": "radio_logos/radio-nacional_list_100.jpg",
+  "nacionalrock": "radio_logos/radio-nacional_list_100.jpg",
+  "nacionalclasica": "radio_logos/radio-nacional_list_100.jpg",
+  "nacionalfolklorica": "radio_logos/radio-nacional-folklorica-98-7_list_100.jpg",
+  "mitre": "radio_logos/radio-mitre_list_100.jpg",
+  "rockpop": "radio_logos/fm-rock-pop-95-9_list_100.jpg",
+  "aspen": "radio_logos/aspen-102-3_list_100.jpg",
+  "lared": "radio_logos/radio-la-red_list_100.jpg",
+  "urbana": "radio_logos/urbana-play-104-3_list_100.jpg",
+  "am750": "radio_logos/am-750_list_100.jpg",
+  "continental": "radio_logos/radio-continental_list_100.jpg",
+  "rivadavia": "radio_logos/radio-rivadavia_list_100.jpg",
+  "guemes": "radio_logos/radio-guemes_list_100.jpg",
+  "radiosur": "radio_logos/radio-del-sur_list_100.jpg",
+  "delta": "radio_logos/delta-90-3_list_100.jpg",
+  "disney": "radio_logos/radio-disney_list_100.jpg",
+  "la100": "radio_logos/la-100_list_100.jpg",
+  "blue": "radio_logos/blue-fm-100-7_list_100.jpg",
+  "dsports": "radio_logos/d-sports-radio_list_100.jpg",
+  "cadena3am": "radio_logos/cadena-3_list_100.jpg",
+  "cadena3fm": "radio_logos/cadena-3_list_100.jpg",
+  "suquia": "radio_logos/radio-suquia-96-5_list_100.jpg",
+  "estaciondelsol": "radio_logos/100-9-estacion-del-sol_list_100.jpg",
+  "fmdelmar": "radio_logos/radio-del-mar_list_100.jpg",
+  "Radio 10": "radio_logos/radio-10_list_100.jpg",
+  "Radio Latina 101.1": "radio_logos/radio-latina-101-1_list_100.jpg",
+  "eldesta": "radio_logos/el-destape-radio_list_100.jpg",
+  "delsur": "radio_logos/radio-del-sur_list_100.jpg",
+  "fmvida": "radio_logos/fm-vida_list_100.jpg",
+  "miafm": "radio_logos/mia-fm_list_100.jpg",
+  "mucha": "radio_logos/mucha-radio_list_100.jpg",
+  "am530": "radio_logos/am-530-somos-radio_list_100.jpg",
+  "colonia": "radio_logos/radio-colonia_list_100.jpg",
+  "laplata965": "radio_logos/fm-96-5-la-plata_list_100.jpg",
+  "valleviejo": "radio_logos/radio-valle-viejo_list_100.jpg",
+  "nihuil": "radio_logos/radio-nihuil_list_100.jpg",
+  "lt9": "radio_logos/lt9_list_100.jpg",
+  "mujerfm": "radio_logos/mujer-fm_list_100.jpg",
+  "laestacion": "radio_logos/la-estacion-fm_list_100.jpg",
+  "radioboing": "radio_logos/radio-boing_list_100.jpg",
+  "belgrano": "radio_logos/belgrano-radio_list_100.jpg",
+  "elobservador": "radio_logos/el-observador_list_100.png",
+  "futurock": "radio_logos/futurock-fm_list_100.jpg",
+  "la2x4": "radio_logos/la-2x4_list_100.jpg",
+  "impacto947": "radio_logos/impacto-94-7-fm_list_100.jpg",
+  "classique": "radio_logos/classique_list_100.jpg",
+  "fmtrance": "radio_logos/fm-trance-103-3_list_100.jpg",
+  "fisherton": "radio_logos/fisherton-classic_list_100.jpg",
+  "lu5": "radio_logos/lu5_list_100.jpg",
+  "orfeofm": "radio_logos/orfeo-fm_list_100.jpg",
+  "moodradio": "radio_logos/mood-radio_list_100.jpg",
+  "estacion1009": "radio_logos/100-9-estacion-del-sol_list_100.jpg",
+  "lanacion1049": "radio_logos/la-nacion-104-9_list_100.jpg",
+  "radioone": "radio_logos/radio-one-103-7_list_100.jpg",
+  "popular": "radio_logos/radio-popular_list_100.jpg",
+  "Radio Con Vos": "radio_logos/radio-con-vos_list_100.jpg",
+  "Vale 97.5": "radio_logos/radio-vale_list_100.jpg",
+  "lt10": "radio_logos/lt10_list_100.jpg",
+  "lt3": "radio_logos/lt3-am680_list_100.jpg",
+  "lu19": "radio_logos/lu19_list_100.jpg",
+  "berlin": "radio_logos/107-9-radio-berlin_list_100.jpg"
+};
+
 function getStationLogo(st) {
-  const id = (st.id || "").toLowerCase();
-  const name = (st.name || "").toLowerCase();
-  if (id.includes("radiotop") || name.includes("radio top")) {
-    return { cls: "logo-radiotop", html: "Radio<br><span>Top</span>" };
-  }
-  if (id.includes("pobre") || name.includes("pobre johnny")) {
-    return { cls: "logo-pobre", html: "Pobre<br>Johnny" };
-  }
-  if (id.includes("mañanero") || id.includes("mananero") || name.includes("mañanero")) {
-    return { cls: "logo-mananero", html: "📊" };
-  }
-  if (id.includes("libertad") || name.includes("libertad")) {
-    return { cls: "logo-libertad", html: "FM<br>Libertad" };
-  }
-  if (id.includes("vip") || name.includes("vip radio")) {
-    return { cls: "logo-vip", html: "Vip<br>Radio" };
-  }
-  const initials = st.name.split(" ").slice(0, 2).map(w => (w[0] || "")).join("").toUpperCase().slice(0, 3);
-  return { cls: "logo-default", html: initials };
+  const id = String(st.id || "");
+  const name = String(st.name || "");
+  const initials = name.split(" ").slice(0, 2).map(w => (w[0] || "")).join("").toUpperCase().slice(0, 3);
+  return {
+    cls: "logo-default",
+    html: initials || "FM",
+    src: STATION_LOGOS[id] || ""
+  };
 }
 
 function getStationLoc(st) {
@@ -1363,7 +1590,10 @@ function renderList() {
     const playIcon = isActive && isPlaying ? "⏸" : "▶";
 
     item.innerHTML = `
-      <div class="station-logo ${logo.cls}" style="--h:${stationHue(st)}">${logo.html}</div>
+      <div class="station-logo ${logo.cls}${logo.src ? " has-station-image" : ""}" style="--h:${stationHue(st)};position:relative;overflow:hidden">
+        <span class="station-logo-fallback">${logo.html}</span>
+        ${logo.src ? `<img src="${logo.src}" alt="Logo de ${st.name}" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:inherit;background:#fff;padding:2px" onerror="this.remove()">` : ""}
+      </div>
       <div class="station-meta">
         <div class="s-name">${st.name}</div>
         <div class="s-loc">${dual(loc, getStationLocMobile(st))}</div>

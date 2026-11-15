@@ -1,6 +1,6 @@
 // Cada vez que subas cambios a GitHub, subí también este número (v37 → v38, etc.).
 // Si no cambia, el botón rojo de "Nueva actualización" no aparece.
-const CACHE = "radio-ar-v50";
+const CACHE = "radio-ar-v55";
 const ASSETS = [
   "./",
   "./index.html",
@@ -16,6 +16,7 @@ const ASSETS = [
   "./icon-maskable-512.png",
   "./logo.webp",
   "./wood-texture.jpg",
+  "./pc-skin.webp",
   "./fonts/exo-2-latin-700-italic.woff2",
   "./fonts/exo-2-latin-800-italic.woff2",
   "./fonts/open-sans-latin-400-normal.woff2",
@@ -25,7 +26,45 @@ const ASSETS = [
   "./fonts/barlow-condensed-latin-500-normal.woff2",
   "./fonts/barlow-condensed-latin-600-normal.woff2",
   "./fonts/barlow-condensed-latin-700-normal.woff2",
-  "./fonts/share-tech-mono-latin-400-normal.woff2"
+  "./fonts/share-tech-mono-latin-400-normal.woff2",
+  "./fonts/roboto-latin-400-normal.woff2",
+  "./fonts/roboto-latin-500-normal.woff2",
+  "./fonts/roboto-latin-700-normal.woff2",
+  "./fonts/roboto-condensed-latin-400-normal.woff2",
+  "./fonts/roboto-condensed-latin-500-normal.woff2",
+  "./fonts/roboto-condensed-latin-700-normal.woff2",
+  "./logos/am750.webp",
+  "./logos/aspen.webp",
+  "./logos/berlin.webp",
+  "./logos/blue.webp",
+  "./logos/cadena3.webp",
+  "./logos/continental.webp",
+  "./logos/convos.webp",
+  "./logos/delplata.webp",
+  "./logos/delta.webp",
+  "./logos/disney.webp",
+  "./logos/eldesta.webp",
+  "./logos/estaciondelsol.webp",
+  "./logos/facundoquiroga.webp",
+  "./logos/heat.webp",
+  "./logos/la100.webp",
+  "./logos/la990.webp",
+  "./logos/lared.webp",
+  "./logos/latina.webp",
+  "./logos/los40.webp",
+  "./logos/lt10.webp",
+  "./logos/lu19.webp",
+  "./logos/mega.webp",
+  "./logos/mia.webp",
+  "./logos/mitre.webp",
+  "./logos/nacional.webp",
+  "./logos/nacionalfolklorica.webp",
+  "./logos/radio10.webp",
+  "./logos/rivadavia.webp",
+  "./logos/rockpop.webp",
+  "./logos/suquia.webp",
+  "./logos/urbana.webp",
+  "./logos/vale.webp"
 ];
 
 self.addEventListener("install", (event) => {
