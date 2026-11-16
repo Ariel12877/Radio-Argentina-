@@ -67,6 +67,12 @@ const STATIONS = [
     url: "https://01.solumedia.com.ar:9038/stream"
   },
   {
+    id: "despechofm",
+    name: "Despecho Fm",
+    freq: "FM 96.9",
+    url: "https://sonic.portalstreaming.com/8148/stream?nocache=1794842881455"
+  },
+   {
     id: "radiofan",
     name: "Radio Fan",
     freq: "FM 96.9",
