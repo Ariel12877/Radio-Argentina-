@@ -80,7 +80,7 @@ const STATIONS = [
   },
    {
    id: "sentirlatinos",
-    name: "Sentir latinos.",
+    name: "Sentir latinos",
     freq: "Online",
     url: "https://streaming.radiosenlinea.com.ar/8174/;"
   },
