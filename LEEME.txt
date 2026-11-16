@@ -1,0 +1,31 @@
+RADIO ARGENTINA - ARCHIVOS CORREGIDOS
+======================================
+
+QUÉ CAMBIÓ
+- stations.js (NUEVO): lista única de radios para móvil y PC. Tiene las 128 radios
+  (la PC tenía 100) y el Genesis nuevo (FM 101.5). Para agregar o cambiar una radio,
+  se toca solo este archivo.
+- logos.js (NUEVO): asocia cada radio con su logo. Prueba webp -> list_100 -> play_300
+  -> play_512 y, si ninguno carga, muestra las iniciales.
+- app.js, pc.js, index.html, pc.html: ahora leen stations.js y logos.js.
+- sw.js: version v60. Ya no usa copias viejas del navegador y no pide archivos que no existen.
+- logos/ (32 webp), radio_logos/ (66 logos + radio_logos/local con las de Chaco), fonts/ (16 fuentes).
+
+CÓMO SUBIRLO A GITHUB (respetando las carpetas)
+GitHub por web acepta unos 100 archivos por vez, así que va en 3 tandas:
+  1) Los 7 archivos sueltos (app.js, pc.js, stations.js, logos.js, sw.js, index.html, pc.html)
+  2) Las carpetas logos/ y fonts/
+  3) La carpeta radio_logos/ (con su subcarpeta local/)
+Después, en Actions/Pages esperá a que termine de publicar y tocá "Actualización" en la radio.
+
+DESDE AHORA
+- Radio nueva: una entrada en stations.js.  Logo nuevo: copiar la imagen a radio_logos/ y una línea en logos.js.
+- Cada vez que subas cambios: subí el número de CACHE en sw.js (v60 -> v61).
+  Ya NO hace falta cambiar los "?v=" de index.html y pc.html.
+
+PARA REVISAR
+- Metro: en pc.js tenía el logo de La 100. Ahora usa el de Metro 95.1.
+- Probables (los marcaste "confirmar" en listado_logos.txt): Radio Madre, LN+ Música, Radio 3 Trelew.
+- radio_logos/Radio Futuro - FM 99.9.jpg tiene el logo de Futuröck, no el de Radio Futuro: no lo usé.
+- La imagen de Master FM dice "104.7" y en la lista figura 102.5.
+- 43 radios no tienen logo en tus carpetas y muestran iniciales.
