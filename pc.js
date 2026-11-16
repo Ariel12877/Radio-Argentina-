@@ -5,7 +5,7 @@
    ============================================================ */
 'use strict';
 const STATIONS = [
-  {
+   {
     id: "radiotop",
     name: "Radio Top",
     freq: "FM 105.9",
@@ -81,16 +81,16 @@ const STATIONS = [
     url: "https://devnec.com:8001/radio62"
   },
    {
-   id: "Polca Paraguaya",
-    name: "Polca Paraguaya",
-    freq: "Online",
-    url: "https://stream.zeno.fm/tvsx850x1f8uv"
-  },
-   {
     id: "fmuniversochamame",
     name: "Fm Universo Chamame",
     freq: "online",
     url: "https://streaming01.radiosenlinea.com.ar/9392/stream"
+  },
+   {
+   id: "Polca Paraguaya",
+    name: "Polca Paraguaya",
+    freq: "Online",
+    url: "https://stream.zeno.fm/tvsx850x1f8uv"
   },
   {
     id: "Retro FM",
@@ -257,7 +257,7 @@ const STATIONS = [
     id: "madre",
     name: "Radio Madre",
     freq: "AM 530",
-    url: "https://cdn.instream.audio:9288/stream"
+    url: "https://cdn.instream.audio:9288/stream" // ⚠  la lista original estaba en http; la pasé a https
   },
   {
     id: "radioargentina",
@@ -305,8 +305,8 @@ const STATIONS = [
   {
     id: "genesis",
     name: "Genesis",
-    freq: "AM 970",
-    url: "https://01.solumedia.com.ar:8216/"
+    freq: "Fm 101.5",
+    url: "https://streaming1.locucionar.com/proxy/fmgenesis1015?mp=/stream"
   },
   {
     id: "la990",
@@ -392,13 +392,13 @@ const STATIONS = [
     id: "nacionalrock",
     name: "Nacional Rock",
     freq: "FM 93.7",
-    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39"
+    url: "https://sa.mp3.icecast.magma.edge-access.net/sc_rad39" // ⚠  mismo patrón que tu Nacional AM 870
   },
   {
     id: "disney",
     name: "Radio Disney",
     freq: "FM 94.3",
-    url: "https://27353.live.streamtheworld.com/DISNEY_ARG_BA_ADP/HLS/playlist.m3u8?dist=web-radiodisney"
+    url: "https://27353.live.streamtheworld.com/DISNEY_ARG_BA_ADP/HLS/playlist.m3u8?dist=web-radiodisney" // ⚠  link viejo, puede estar caído
   },
   {
     id: "concepto",
@@ -591,7 +591,7 @@ const STATIONS = [
     id: "radiolight",
     name: "Radio Light",
     freq: "FM 88.9",
-    url: "https://streamall.alsolnet.com/radiolightfm"
+    url: "https://streamall.alsolnet.com/radiolightfm" // ⚠  el link original estaba en http; lo pasé a https
   },
 
   /* ===== Solo online ===== */
@@ -631,6 +631,176 @@ const STATIONS = [
     name: "El Destape Radio",
     freq: "ONLINE",
     url: "https://live-ar1.cdnrad.com/hls/radio-2123/live.m3u8"
+  },
+
+  /* ===== Agregadas desde MyRadioEnVivo (APK) ===== */
+  {
+    id: "delsur",
+    name: "Radio Del Sur",
+    freq: "FM 90.5",
+    url: "https://cdn1.tvlin.net/icecast/radiodelsuraudio/icecast.audio"
+  },
+  {
+    id: "fmvida",
+    name: "FM Vida",
+    freq: "FM 97.9",
+    url: "https://streaming450tb.locucionar.com/proxy/fmvida979?mp=/stream"
+  },
+  {
+    id: "miafm",
+    name: "Mía FM",
+    freq: "FM 104.1",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FM1041_56AAC.aac"
+  },
+  {
+    id: "mucha",
+    name: "Mucha Radio",
+    freq: "FM 103.7",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/MUCHA_RADIO.mp3"
+  },
+  {
+    id: "am530",
+    name: "AM 530 Somos Radio",
+    freq: "AM 530",
+    url: "https://ipanel.instream.audio:7000/stream"
+  },
+  {
+    id: "colonia",
+    name: "Radio Colonia",
+    freq: "AM 550",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/COLONIA_SC"
+  },
+  {
+    id: "laplata965",
+    name: "96.5 La Plata",
+    freq: "FM 96.5",
+    url: "https://radios.solumedia.com/6466/stream"
+  },
+  {
+    id: "valleviejo",
+    name: "Radio Valle Viejo",
+    freq: "FM 105.5",
+    url: "https://stm2.livecastradio.com:9379/stream"
+  },
+  {
+    id: "nihuil",
+    name: "Radio Nihuil",
+    freq: "AM 680",
+    url: "https://playerservices.streamtheworld.com/api/livestream-redirect/NIHUIL_SC"
+  },
+  {
+    id: "lt9",
+    name: "LT9",
+    freq: "AM 690",
+    url: "https://streaming1.locucionar.com/proxy/lt9?mp=/stream"
+  },
+  {
+    id: "mujerfm",
+    name: "Mujer FM",
+    freq: "FM 95.5",
+    url: "https://frontend.radiohdvivo.com/mujerfm/live"
+  },
+  {
+    id: "laestacion",
+    name: "La Estación FM",
+    freq: "FM 101.3",
+    url: "https://01.solumedia.com.ar:8462/stream"
+  },
+  {
+    id: "radioboing",
+    name: "Radio Boing",
+    freq: "FM 97.3",
+    url: "https://streaming.redboing.com/radio/8000/radio.aac"
+  },
+  {
+    id: "belgrano",
+    name: "Belgrano Radio",
+    freq: "AM 950",
+    url: "https://server.laradio.online:15223/live.mp3"
+  },
+  {
+    id: "elobservador",
+    name: "El Observador",
+    freq: "Online",
+    url: "https://unlimited5-us.dps.live/observador/aac/icecast.audio"
+  },
+  {
+    id: "futurock",
+    name: "Futuröck",
+    freq: "Online",
+    url: "https://mdstrm.com/audio/5d9d019112cbbb45d6a50960/icecast.audio"
+  },
+  {
+    id: "la2x4",
+    name: "La 2x4",
+    freq: "FM 92.7",
+    url: "https://media.radios.ar:9270/"
+  },
+  {
+    id: "impacto947",
+    name: "Impacto 94.7",
+    freq: "FM 94.7",
+    url: "https://radiosar.com:8008/stream"
+  },
+  {
+    id: "classique",
+    name: "Classique",
+    freq: "FM 96.5",
+    url: "https://01.solumedia.com.ar:8562/stream"
+  },
+  {
+    id: "fmtrance",
+    name: "FM Trance 103.3",
+    freq: "FM 103.3",
+    url: "https://streaming01.shockmedia.com.ar:10262/stream"
+  },
+  {
+    id: "fisherton",
+    name: "Fisherton Classic",
+    freq: "Online",
+    url: "https://media425.digitar.net:8081/fishertonclassic.mp3"
+  },
+  {
+    id: "lu5",
+    name: "LU5",
+    freq: "AM 1550",
+    url: "https://live.lu5am.com:8443/LU5"
+  },
+  {
+    id: "orfeofm",
+    name: "Orfeo FM",
+    freq: "FM 90.1",
+    url: "https://streaming.gostreaming.com.ar:10970/;"
+  },
+  {
+    id: "moodradio",
+    name: "Mood Radio",
+    freq: "Online",
+    url: "https://radios.solumedia.com:6710/stream"
+  },
+  {
+    id: "estacion1009",
+    name: "100.9 Estación del Sol",
+    freq: "FM 100.9",
+    url: "https://st1-mpanel-icy.masterhost.com.ar:8100/radio.mp3"
+  },
+  {
+    id: "lanacion1049",
+    name: "La Nación 104.9",
+    freq: "FM 104.9",
+    url: "https://stream.radio.co/s2ed3bec0a/listen"
+  },
+  {
+    id: "radioone",
+    name: "Radio One 103.7",
+    freq: "FM 103.7",
+    url: "https://one.stweb.tv/one/live/playlist.m3u8"
+  },
+  {
+    id: "popular",
+    name: "Radio Popular",
+    freq: "AM 900",
+    url: "https://c3ny1.mediainbox.net/popular.mp3"
   }
 ];
 
@@ -638,7 +808,7 @@ const STATIONS = [
 /* ---- Orden de la lista: primero las de Chaco / Machagai, después por categoría ---- */
 const TOP_IDS = ["radiotop", "Pobre Johnny", "El mañanero", "FM libertad Machagai",
                  "VIP FM", "Master FM", "Cristalfm", "laradio1047", "facundoquiroga"];
-const CAT_ORDER = ["chaco", "religiosas", "musica", "noticias", "folklore", "deportes"];
+const CAT_ORDER = ["chaco", "religiosas", "noticias", "musica", "folklore", "deportes"];
 const CAT_LABEL = {
   chaco: "Chaco y Machagai",
   musica: "Música",
@@ -648,13 +818,17 @@ const CAT_LABEL = {
   religiosas: "Religiosas"
 };
 const CAT_BY_ID = {
-  religiosas: ["radiomaria"],
+  religiosas: ["radiomaria", "radiomaria_apk"],
   noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
-             "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800"],
-  folklore:  ["Radio Chamame", "Polca Paraguaya", "Ñande Reko Radio","fmuniversochamame", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
-  deportes:  ["dsports", "fmlaredonda"]
+             "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800",
+             "delsur", "am530", "colonia", "nihuil", "lt9", "belgrano", "elobservador", "lu5", "lanacion1049"],
+  folklore:  ["Radio Chamame", "Polca Paraguaya","fmuniversochamame" ,"Ñande Reko Radio", "FOLKLORE RADIO", "doradofm", "nacionalfolklorica"],
+  deportes:  ["dsports", "fmlaredonda"],
+  musica: ["fmvida", "miafm", "mucha", "laplata965", "valleviejo", "mujerfm", "laestacion", "radioboing",
+           "futurock", "la2x4", "impacto947", "classique", "fmtrance", "fisherton", "orfeofm", "moodradio",
+           "estacion1009", "radioone", "popular"]
 };
 (function sortStations() {
   const catOf = {};
