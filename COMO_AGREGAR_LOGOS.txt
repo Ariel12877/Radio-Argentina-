@@ -1,0 +1,31 @@
+CÓMO AGREGAR UN LOGO NUEVO A UNA RADIO
+=======================================
+Soltar la imagen en la carpeta NO alcanza. logos.js es la "libreta de direcciones":
+cada radio necesita UNA línea que diga cuál es su imagen.
+
+PASO A PASO
+1) Preparar la imagen
+   - Chica: hasta 512 px de lado y menos de 100 KB (la de WALTER pesaba 1,7 MB).
+   - Nombre en minúsculas, con guiones, sin espacios ni tildes ni puntos dobles:
+         retro-fm.jpg      (bien)
+         Retro FM - Online.jpg   (mal)
+2) Subirla a la carpeta  radio_logos/local/
+3) Abrir logos.js y agregar una línea dentro de  var MAP = { ... }:
+         "Retro FM": { f: "radio_logos/local/retro-fm.jpg" },
+   - Lo de la izquierda es el id de la radio, IGUAL que el  id:  de stations.js
+     (mayúsculas, espacios y hasta un espacio al final cuentan).
+   - Cada línea termina en coma, menos la última.
+4) Subir logos.js y subir el número de CACHE en sw.js (v64 -> v65).
+5) Abrir la radio, tocar el botón rojo y listo.
+
+RADIO NUEVA: primero se agrega en stations.js; después se le agrega su línea en logos.js.
+
+SI NO APARECE EL LOGO
+- Las iniciales de la radio significan que no encontró ningún archivo.
+- F12 > pestaña Network: si la imagen sale en rojo (404), el nombre no coincide.
+  GitHub distingue mayúsculas: .JPG no es lo mismo que .jpg.
+- Si ni siquiera hay línea en logos.js, nunca se va a asociar.
+
+SUBIDA A GITHUB
+- Por la web entran unos 100 archivos por vez. Subí carpeta por carpeta
+  y revisá después que estén todos (la carpeta logos/ había quedado con 17 de 32).
