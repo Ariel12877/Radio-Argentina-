@@ -78,6 +78,12 @@ const STATIONS = [
     freq: "Online",
     url: "https://stream.zeno.fm/qoxmfycvaftvv"
   },
+   {
+   id: "sentirlatinos",
+    name: "Sentir latinos.",
+    freq: "Online",
+    url: "https://stream.zeno.fm/qoxmfycvaftvv"
+  },
   {
     id: "Ñande Reko Radio",
     name: "Ñande Reko Radio",
