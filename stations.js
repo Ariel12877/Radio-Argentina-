@@ -519,7 +519,7 @@ const STATIONS = [
     id: "suquia",
     name: "Radio Suquía",
     freq: "FM 96.5",
-    url: "https://streaming01.shockmedia.com.ar:10945/"
+    url: "https://streaming01.shockmedia.com.ar:10945/;"
   },
   {
     id: "mia",
