@@ -759,6 +759,25 @@ function showOpciones() {
     <p>La mayoría de los streams se reproducen en la mejor calidad disponible (128–192 kbps).</p>
     <h3>Datos móviles</h3>
     <p>El streaming consume aproximadamente 60–90 MB por hora.</p>
+    <h3>Mis redes</h3>
+    <p>Escribime o seguime, me encanta saber de vos.</p>
+    <div class="social-links">
+      <a class="social-btn" href="https://w.app/akmjao" target="_blank" rel="noopener noreferrer">
+        <span class="social-ico wa"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/><path fill="#25d366" d="M16.6 14.3c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.5.1-.6.7-.7.9-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4a.8.8 0 0 0-.6.3 2.5 2.5 0 0 0-.8 1.9c0 1.1.8 2.2.9 2.3s1.6 2.5 4 3.5c1.5.6 2 .7 2.8.6.5-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1l-.4-.3z"/></svg></span>
+        <span class="social-txt">WhatsApp<small>Escribime un mensaje</small></span>
+        <span class="social-go" aria-hidden="true">›</span>
+      </a>
+      <a class="social-btn" href="https://www.instagram.com/walter7938/" target="_blank" rel="noopener noreferrer">
+        <span class="social-ico ig"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor"/></svg></span>
+        <span class="social-txt">Instagram<small>@Walter7938</small></span>
+        <span class="social-go" aria-hidden="true">›</span>
+      </a>
+      <a class="social-btn" href="https://www.facebook.com/share/1Da8brMtB8/" target="_blank" rel="noopener noreferrer">
+        <span class="social-ico fb"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.8c0-.9.3-1.5 1.6-1.5h1.7V3.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.3H7.6V13h2.7v8h3.2z"/></svg></span>
+        <span class="social-txt">Facebook<small>Seguime en Facebook</small></span>
+        <span class="social-go" aria-hidden="true">›</span>
+      </a>
+    </div>
   `);
   const btn = document.getElementById("btnOpenInstall");
   if (btn) btn.addEventListener("click", () => {

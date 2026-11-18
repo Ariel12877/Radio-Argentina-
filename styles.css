@@ -2102,3 +2102,27 @@ button.mix-val { cursor: pointer; }
   .eq-band input[type="range"] { height: min(220px, 22vh); }
   .eq-sliders { padding: 2px 0 6px; }
 }
+
+/* ---- Mis redes (panel Opciones) ---- */
+.side-body .social-links { display: grid; gap: 10px; margin: 10px 0 18px; }
+.side-body .social-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text); text-decoration: none; font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+}
+.side-body .social-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.09); }
+.side-body .social-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.side-body .social-ico {
+  flex: none; width: 38px; height: 38px; border-radius: 11px;
+  display: grid; place-items: center; color: #fff;
+}
+.side-body .social-ico svg { width: 22px; height: 22px; display: block; }
+.side-body .social-ico.wa { background: #25d366; }
+.side-body .social-ico.ig { background: linear-gradient(45deg, #f9ce34, #ee2a7b 55%, #6228d7); }
+.side-body .social-ico.fb { background: #1877f2; }
+.side-body .social-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.side-body .social-txt small { font-weight: 400; font-size: 0.82rem; color: var(--muted); }
+.side-body .social-go { margin-left: auto; font-size: 1.5rem; line-height: 1; color: var(--muted); }
