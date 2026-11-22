@@ -48,7 +48,7 @@ const I18N = {
   es: {
     search: "Buscar", memories: "Memorias", language: "Idioma", play: "Reproducir", change: "Cambiar",
     update: "Actualizar", config: "Config", volume: "Volumen", prev: "Anterior", next: "Siguiente",
-    playing: "Reproduciendo", connecting: "Conectando…", paused: "Pausado", nosignal: "Sin señal",
+    playing: "Reproduciendo...", connecting: "Conectando…", paused: "Pausado", nosignal: "Sin señal",
     buffering: "Cargando…", ready: "Listo",
     pick: "Elegí una emisora", online: "Online",
     searchPh: "Buscar emisora o frecuencia…", count: "{n} de {t}",
@@ -160,6 +160,7 @@ const eqBars = Array.from(eqEl.children);
 const btnPlay = $("btnPlay");
 const btnPrev = $("btnPrev");
 const btnNext = $("btnNext");
+const btnStop = $("btnStop");
 const btnSearch = $("btnSearch");
 const btnMem = $("btnMem");
 const btnLang = $("btnLang");
@@ -168,6 +169,7 @@ const btnBand = $("btnBand");
 const btnConfig = $("btnConfig");
 const updateBtn = $("updateBtn");
 const knob = $("knob");
+const tuneKnob = $("tuneKnob");
 const volEl = $("vol");
 const vFill = $("vFill");
 const vThumb = $("vThumb");
@@ -229,13 +231,13 @@ function freqRow(st) {
 function freqLcd(st) {
   const f = st._f;
   if (!f) return t("online");
-  return f.band === "fm" ? f.value.toFixed(1) + " MHz" : Math.round(f.value) + " kHz";
+  return f.band === "fm" ? "FM " + f.value.toFixed(1) + " MHz" : "AM " + Math.round(f.value) + " kHz";
 }
 
 /* Posición de cada número en la imagen del dial (en píxeles de la imagen).
    La escala de la imagen no es lineal, por eso se interpola entre estas marcas. */
-const DIAL_FM = [[88, 329], [90, 369], [92, 406], [94, 441], [96, 476], [98, 514], [100, 555], [102, 597], [104, 639], [106, 683], [108, 729], [110, 772]];
-const DIAL_AM = [[530, 329], [700, 419], [900, 514], [1200, 627], [1600, 729], [1800, 780]];
+const DIAL_FM = [[87, 321], [88, 436], [92, 579], [95, 707], [99, 840], [103, 974], [107, 1097], [108, 1194]];
+const DIAL_AM = [[522, 321], [594, 436], [765, 579], [980, 707], [1198, 840], [1360, 974], [1558, 1097], [1620, 1194]];
 function dialX(band, v) {
   const pts = band === "fm" ? DIAL_FM : DIAL_AM;
   let a = pts[0], b = pts[1];
@@ -246,7 +248,7 @@ function dialX(band, v) {
     }
   }
   const x = a[1] + ((v - a[0]) / (b[0] - a[0])) * (b[1] - a[1]);
-  return Math.min(775, Math.max(300, x));
+  return Math.min(1194, Math.max(321, x));
 }
 function updateDial() {
   const f = currentStation && currentStation._f;
@@ -264,26 +266,23 @@ function fitName() {
   const box = lcdName, span = lcdNameText;
   box.classList.remove("marquee");
   span.style.fontSize = "";
-  let size = 51;
-  span.style.fontSize = size + "px";
-  const max = box.clientWidth;
-  while (span.offsetWidth > max && size > 27) { size -= 1; span.style.fontSize = size + "px"; }
+  span.style.removeProperty("--shift");
+  const max = box.clientWidth || 280;
   if (span.offsetWidth > max) {
     span.style.setProperty("--shift", (max - span.offsetWidth - 4) + "px");
     box.classList.add("marquee");
   }
 }
 
-/* El texto del display se achica si es más largo que el espacio disponible */
 function fitStatus() {
-  statusText.style.fontSize = "";
-  let size = 27.4;
-  while (statusText.offsetWidth > 246 && size > 16) { size -= 0.8; statusText.style.fontSize = size + "px"; }
+  /* El texto vive dentro de la pastilla; el CSS ya recorta con ellipsis */
 }
 function renderStatus() {
   if (toastTimer) return;
   statusText.textContent = t(statusKey);
   statusText.className = STATUS_CLS[statusKey] || "";
+  const playIco = document.querySelector(".lcd-play-ico");
+  if (playIco) playIco.style.display = statusKey === "playing" ? "" : "none";
   fitStatus();
 }
 function setStatus(key) {
@@ -299,16 +298,19 @@ function toast(msg, ms = 1800) {
   toastTimer = setTimeout(() => { toastTimer = null; renderStatus(); }, ms);
 }
 
-/* Barras verdes del display */
-const EQ_IDLE = [5, 5, 5, 5, 5];
-const EQ_WAIT = [8, 12, 8, 12, 8];
+/* Barras de señal (4 segmentos, como en la imagen de referencia) */
+const EQ_IDLE = [8, 14, 20, 26];
+const EQ_WAIT = [10, 16, 12, 22];
 function setEq(mode) {
   clearInterval(eqTimer); eqTimer = null;
   eqEl.classList.toggle("live", mode === "live");
-  const paint = (hs) => eqBars.forEach((b, i) => { b.style.height = hs[i] + "px"; });
+  const paint = (hs) => eqBars.forEach((b, i) => { b.style.height = (hs[i] || 8) + "px"; });
   if (mode === "live") {
-    const tick = () => paint(eqBars.map((_, i) => (i === 2 ? 18 : 8) + Math.random() * (i === 2 ? 15 : 22)));
-    tick(); eqTimer = setInterval(tick, 150);
+    const tick = () => paint(eqBars.map((_, i) => {
+      const base = [8, 14, 20, 26][i] || 12;
+      return Math.max(6, base * (0.55 + Math.random() * 0.55));
+    }));
+    tick(); eqTimer = setInterval(tick, 160);
   } else paint(mode === "wait" ? EQ_WAIT : EQ_IDLE);
 }
 
@@ -671,6 +673,22 @@ function toggleMute() {
   knob.addEventListener("pointercancel", () => { down = false; });
 })();
 
+// La perilla derecha funciona como sintonizador: arrastrar o usar la rueda cambia de emisora.
+(function tuningKnobControls() {
+  if (!tuneKnob) return;
+  let down = false, lastY = 0, carry = 0;
+  tuneKnob.addEventListener("pointerdown", (e) => { down = true; lastY = e.clientY; carry = 0; tuneKnob.setPointerCapture(e.pointerId); e.preventDefault(); });
+  tuneKnob.addEventListener("pointermove", (e) => {
+    if (!down) return;
+    carry += (lastY - e.clientY) / scale; lastY = e.clientY;
+    while (Math.abs(carry) >= 18) { const dir = carry > 0 ? 1 : -1; stepStation(dir); carry -= dir * 18; }
+  });
+  const stop = () => { down = false; };
+  tuneKnob.addEventListener("pointerup", stop); tuneKnob.addEventListener("pointercancel", stop);
+  tuneKnob.addEventListener("wheel", (e) => { e.preventDefault(); stepStation(e.deltaY < 0 ? 1 : -1); }, { passive: false });
+  tuneKnob.addEventListener("keydown", (e) => { if (e.key === "ArrowUp" || e.key === "ArrowRight") { e.preventDefault(); stepStation(1); } else if (e.key === "ArrowDown" || e.key === "ArrowLeft") { e.preventDefault(); stepStation(-1); } });
+})();
+
 function wheelVolume(e) {
   e.preventDefault();
   setVolume(volume + (e.deltaY < 0 ? 0.05 : -0.05), true);
@@ -691,7 +709,8 @@ volEl.addEventListener("keydown", keyVolume);
    ============================================================ */
 function openSearch() {
   searchOpen = true;
-  listEl.classList.add("searching");
+  listEl.classList.add("searching", "open");
+  stage.classList.add("list-open");
   btnSearch.classList.add("on");
   stationSearch.focus();
   stationSearch.select();
@@ -699,7 +718,8 @@ function openSearch() {
 }
 function closeSearch() {
   searchOpen = false;
-  listEl.classList.remove("searching");
+  listEl.classList.remove("searching", "open");
+  stage.classList.remove("list-open");
   stationSearch.value = "";
   stationSearch.blur();
   applyFilter();
@@ -754,6 +774,7 @@ btnPlay.addEventListener("click", togglePlay);
 btnPlaySel.addEventListener("click", playSelected);
 btnPrev.addEventListener("click", () => stepStation(-1));
 btnNext.addEventListener("click", () => stepStation(1));
+if (btnStop) btnStop.addEventListener("click", pause);
 
 /* ---- Textos según el idioma ---- */
 function applyLang() {
@@ -769,6 +790,7 @@ function applyLang() {
   document.querySelectorAll("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.getAttribute("data-i18n-ph")); });
   btnPlay.title = btnPlaySel.title = "";
   btnConfig.title = t("config");
+  btnMem.title = "Favoritos / emisoras guardadas";
   btnLang.title = LANG_NAME[lang];
   searchClose.setAttribute("aria-label", t("close"));
   $("configClose").setAttribute("aria-label", t("close"));
@@ -823,7 +845,7 @@ const OS_LABEL = { windows: "Windows", mac: "Mac", linux: "Linux" };
 const isStandalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
 
 const SHORTCUTS = {
-  windows: { ext: "url", mime: "application/internet-shortcut", build: (u) => "[InternetShortcut]\r\nURL=" + u + "\r\nIconIndex=0\r\n" },
+  windows: { ext: "url", mime: "application/internet-shortcut", build: (u) => "[InternetShortcut]\r\nURL=" + u + "\r\nIconFile=" + new URL("favicon.ico?v=93", u).href + "\r\nIconIndex=0\r\n" },
   mac: {
     ext: "webloc", mime: "application/xml",
     build: (u) => '<?xml version="1.0" encoding="UTF-8"?>\n' +

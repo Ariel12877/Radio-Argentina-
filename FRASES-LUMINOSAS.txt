@@ -1,0 +1,19 @@
+FRASES LUMINOSAS AL CAMBIAR DE EMISORA (versión celular)
+
+Qué hace
+- Cada vez que cambiás de emisora aparece una frase al azar, con las palabras encendiéndose de a una y letras con brillo.
+- Queda fija sobre la franja de la mascota hasta que cambies de emisora; ahí se renueva con otra frase.
+- No agrega altura ni mueve nada: el diseño, el espacio y los controles quedan igual.
+- Nunca repite la misma frase dos veces seguidas.
+- Si tocás la emisora que ya está sonando, no sale frase (solo sale cuando cambia la emisora).
+- En pantallas bajas (donde la franja de la mascota ya estaba oculta para ganar espacio) no se muestra.
+
+Archivos tocados
+- index.html: el cuadro de la frase dentro de la franja de la mascota.
+- app.js: la lista STATION_QUOTES y la función showStationQuote().
+- styles.css: el bloque nuevo al final ("Frase luminosa al cambiar de emisora").
+- sw.js: CACHE subió a radio-ar-v105 (para que aparezca el botón de Nueva actualización).
+
+Para cambiar o agregar frases
+- Abrí app.js, buscá STATION_QUOTES y editá las líneas: { e: "🎶", t: "Tu frase" }
+- "e" es el emoji y "t" es el texto (sin las comillas « »; se las pone solo).

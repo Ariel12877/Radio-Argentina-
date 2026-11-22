@@ -1,0 +1,21 @@
+RADIO ARGENTINA — MASCOTA CON EMOJI NATIVO
+
+CAMBIOS
+- Se eliminaron completamente los GIF y PNG del perrito.
+- Se quitó toda referencia HTML, CSS y Service Worker a esos archivos de imagen.
+- La mascota ahora es una carita sonriente 😄 escrita directamente en HTML.
+- La sonrisa tiene una animación CSS suave de rebote.
+- Los emojis musicales, la bailarina, las notas y los destellos también se animan.
+- No requiere descargas de imágenes, formatos GIF/PNG, ni servicios externos.
+- Se mantiene la lista de emisoras, reproducción y controles existentes.
+- Caché PWA renovada: radio-ar-v102.
+
+POR QUÉ ESTA VERSIÓN DEBE VERSE
+El emoji es texto Unicode renderizado por la fuente de emojis del propio Android; no hay un archivo gráfico que pueda faltar, tener una extensión incorrecta o fallar al cargar. Si el teléfono no tiene ese glifo concreto, Android mostrará el emoji alternativo disponible en su fuente.
+
+INSTALACIÓN
+1. Descomprimir el ZIP.
+2. Abrir FM-radio-main.
+3. Subir todo su contenido al repositorio y reemplazar los archivos anteriores.
+4. Esperar a GitHub Pages.
+5. Cerrar y volver a abrir la aplicación para tomar la caché nueva.

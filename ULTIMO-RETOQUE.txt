@@ -1,0 +1,10 @@
+ÚLTIMO RETOQUE VISUAL — RADIO ARGENTINA
+
+1. En el visor de emisora actual se agregó un emoticón 📻 a la izquierda del nombre.
+2. El nombre y la frecuencia quedan alineados a la izquierda dentro de una tarjeta azul con borde cian.
+3. El botón Ecualizador conserva su tamaño y ahora centra el texto horizontal y verticalmente.
+4. Se aplicó una tipografía sans-serif más limpia y gruesa al texto del ecualizador.
+5. Se mantienen el reproductor, la lista de emisoras y los demás controles.
+6. Se renovó la caché PWA a radio-ar-v103.
+
+Para instalar: reemplazar el contenido del repositorio con los archivos de FM-radio-main y esperar la publicación de GitHub Pages.

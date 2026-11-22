@@ -11,9 +11,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Radio AR" />
   <meta name="description" content="Radios de Argentina en vivo, con dial y botonera. Sin publicidad." />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="manifest" href="manifest.json?v=93" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=93" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=93" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=93" />
+  <link rel="shortcut icon" href="favicon.ico?v=93" />
     <script>
     // PC (pantalla ancha): se usa la versión de escritorio, que es pc.html
     // Para ver la versión celular en una PC: agregar ?vista=movil a la dirección
@@ -27,7 +29,8 @@
     })();
   </script>
   <title>Radio Argentina</title>
-  <link rel="stylesheet" href="styles.css?v=27" />
+  <link rel="stylesheet" href="styles.css?v=30" />
+  <link rel="stylesheet" href="pro.css?v=1" />
 </head>
 <body>
   <div class="app" id="app">
@@ -36,7 +39,7 @@
     <header class="radio-header">
       <div class="brand">
         <div class="brand-logo-wrap">
-          <img class="brand-logo" src="logo.webp" width="48" height="48" alt="Logo Ariel" decoding="async" />
+          <img class="brand-logo" src="logo.webp?v=93" width="48" height="48" alt="Logo Ariel" decoding="async" />
         </div>
         <span class="brand-text">Radio Argentina</span>
       </div>
@@ -47,6 +50,24 @@
         <span class="signal-icon">📶</span>
       </div>
     </header>
+
+
+    <!-- MASCOTA MUSICAL: emoji nativo, sin archivos de imagen ni GIF -->
+    <section class="radio-dance-banner" aria-label="Mascota musical de Radio Argentina">
+      <div class="radio-dance-stage" aria-hidden="true">
+        <span class="radio-dance-emoji emoji-a">🎵</span>
+        <span class="radio-dance-emoji emoji-b">💃</span>
+        <span class="radio-dance-emoji emoji-c">🎶</span>
+        <span class="radio-dance-emoji emoji-d">✨</span>
+        <span class="radio-dance-emoji emoji-e">🕺</span>
+        <span class="radio-big-smile" role="img" aria-label="Carita sonriente">😄</span>
+      </div>
+      <!-- Frase luminosa: aparece un rato al cambiar de emisora, encima de la franja (no agrega altura) -->
+      <div class="station-quote" id="stationQuote" aria-hidden="true">
+        <span class="quote-emoji"></span>
+        <span class="quote-text"></span>
+      </div>
+    </section>
 
     <!-- DIAL DORADO -->
     <section class="dial-section">
@@ -85,6 +106,8 @@
       <div class="station-info">
         <h1 class="station-name" id="stationName">Elegí una emisora</h1>
         <div class="station-freq" id="freq">—</div>
+        <!-- Barritas del visor: suben y bajan con la música -->
+        <div class="visor-bars" id="visorBars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="visualizer" id="visualizer">
         <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -249,7 +272,7 @@
   <audio id="player" preload="none" crossorigin="anonymous"></audio>
   <script src="stations.js?v=1"></script>
   <script src="logos.js?v=1"></script>
-  <script src="app.js?v=28"></script>
+  <script src="app.js?v=29"></script>
   <script src="update.js?v=1"></script>
 
   <dialog class="sheet" id="shortcutDialog" aria-labelledby="shortcutTitle">

@@ -1,0 +1,20 @@
+BARRITAS DENTRO DEL VISOR DE LA EMISORA (versión celular)
+
+Qué hace
+- Dentro del cuadro azul de la emisora, a la derecha del nombre y la frecuencia, hay 5 barritas celestes.
+- Cuando suena la radio, suben y bajan con la música: graves a la izquierda, agudos a la derecha.
+- Si la emisora no deja leer el audio (las que no pasan por el ecualizador), se mueven en modo simulado.
+- En pausa quedan quietas y apagadas, con alturas distintas.
+- El visualizador de siempre (el de los costados del botón de play) no se tocó.
+- El cuadro conserva su alto. El nombre de la emisora cede solo el lugar que ocupan las barritas;
+  si el nombre es muy largo, se corta con "…" como antes.
+
+Archivos tocados
+- index.html: las 5 barritas dentro de .station-info (id "visorBars").
+- app.js: startVisualizer() y stopVisualizer() ahora también mueven las barritas del visor.
+- styles.css: bloque nuevo al final ("Barritas del visor de la emisora").
+- sw.js: CACHE subió a radio-ar-v106.
+
+Para ajustar
+- Más altas o más bajas: styles.css, ".visor-bars { height: 36px }" y "@keyframes visorDance".
+- Más o menos nerviosas: app.js, el 0.82 de "vCur[k] * 0.82" (más cerca de 1 = más suaves).

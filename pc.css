@@ -66,6 +66,56 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 .stage.ready { visibility: visible; }
 .stage > * { position: absolute; }
 
+/* ===== Escala numérica del dial y luz cálida tenue ===== */
+.dial-backlight {
+  left: 108px; top: 112px; width: 1320px; height: 360px;
+  pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(ellipse at 50% 8%, rgba(255,207,112,.20), transparent 58%),
+    linear-gradient(180deg, rgba(255,197,93,.12), rgba(255,181,76,.035) 38%, rgba(255,196,100,.09));
+  mix-blend-mode: screen;
+  opacity: .78;
+  filter: blur(8px);
+  animation: dialWarmth 5.5s ease-in-out infinite alternate;
+}
+@keyframes dialWarmth { from { opacity: .58; } to { opacity: .82; } }
+.dial-numbers {
+  position: absolute; left: 0; top: 0; width: 1536px; height: 1024px;
+  z-index: 2; pointer-events: none;
+  color: #f0d8a2;
+  font-family: var(--cond);
+  text-shadow: 0 0 4px rgba(255,198,105,.35), 0 1px 2px rgba(0,0,0,.9);
+}
+.dial-am, .dial-fm {
+  position: absolute; left: 218px; width: 1100px; height: 30px;
+  display: grid; grid-template-columns: 74px repeat(8, 1fr) 76px;
+  align-items: center; text-align: center;
+  font-size: 18px; font-weight: 700; letter-spacing: .3px;
+  color: #39220c;
+  text-shadow: 0 1px 0 rgba(255,232,177,.48);
+}
+.dial-am { top: 130px; }
+.dial-fm { top: 414px; }
+.dial-am b, .dial-fm b { font-size: 17px; letter-spacing: 1px; }
+.dial-sw {
+  position: absolute; left: 213px; width: 1110px; height: 27px;
+  display: grid; grid-template-columns: 100px repeat(8, 1fr) 76px;
+  align-items: center; text-align: center;
+  color: #e8e5dc; font-size: 17px; font-weight: 600;
+  letter-spacing: .1px;
+  text-shadow: 0 0 5px rgba(255,219,150,.36), 0 1px 2px #000;
+}
+.dial-sw b { color: #e2c58d; font-size: 16px; }
+.dial-sw:nth-child(2) { top: 184px; }
+.dial-sw:nth-child(3) { top: 226px; }
+.dial-sw:nth-child(4) { top: 268px; }
+.dial-sw:nth-child(5) { top: 310px; }
+.dial-sw:nth-child(6) { top: 345px; }
+.dial-sw:nth-child(7) { top: 374px; }
+.dial-am span, .dial-fm span { white-space: nowrap; }
+.needle { z-index: 4; }
+
+
 /* ===== Botones transparentes sobre la imagen ===== */
 .hit {
   --r: 14px;
@@ -404,3 +454,357 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* ==========================================================
+   NUEVO FRENTE VINTAGE — inspirado en la radio de referencia
+   Mantiene el escenario 1536 × 1024 y la lógica original.
+   ========================================================== */
+.stage { background-image: url("pc-skin.webp"); }
+/* Aguja sobre el dial de seis bandas */
+.needle { top: 176px; height: 220px; width: 7px; z-index: 4; background: linear-gradient(90deg,#9d1c12,#ff6449 48%,#a5140b); box-shadow:0 0 8px rgba(255,70,35,.85); }
+/* Nombre y frecuencia en el sector superior derecho del dial */
+.lcd-name { left: 1000px; top: 118px; width: 330px; height: 45px; font-size: 35px; line-height: 45px; color:#fff0d4; text-shadow:0 2px 5px #000; }
+.lcd-freq { left: 1010px; top: 365px; width: 300px; height: 34px; font-size: 27px; line-height:34px; color:#ffe2a6; text-shadow:0 2px 4px #000; }
+.lcd-status { left: 1020px; top: 400px; width: 300px; height: 28px; }
+#statusText { left:48px; top:3px; font-size:20px; line-height:24px; }
+.eq { width:38px; height:26px; gap:3px; }
+.eq i { width:5px; }
+/* Perilla izquierda: volumen */
+.hit.knob { left:105px !important; top:500px !important; width:205px !important; height:205px !important; cursor:ns-resize; z-index:5; }
+.cap-volume { left:205px; top:696px; font-size:19px; color:#f5d9a7; }
+/* Perilla derecha: sintonizador */
+.tune-knob { position:absolute; left:1225px; top:500px; width:205px; height:205px; border-radius:50%; z-index:6; cursor:ns-resize; touch-action:none; }
+.tune-knob:focus-visible { outline:3px solid #ffc45e; outline-offset:4px; }
+.tune-knob::after { content:"SINTONÍA"; position:absolute; left:50%; top:190px; transform:translateX(-50%); color:#f3d7a5; font:700 18px var(--cond); letter-spacing:1px; text-shadow:0 2px 3px #000; white-space:nowrap; }
+/* Botonera central */
+#btnPrev { left:520px !important; top:520px !important; width:115px !important; height:95px !important; }
+#btnPlay { left:645px !important; top:520px !important; width:115px !important; height:95px !important; }
+#btnNext { left:770px !important; top:520px !important; width:115px !important; height:95px !important; }
+/* updateBtn grande inferior eliminado */
+#btnConfig { left:1018px !important; top:520px !important; width:115px !important; height:95px !important; }
+/* El control de volumen secundario queda como corredera horizontal */
+.vol { left:520px !important; top:635px !important; width:360px !important; height:45px !important; }
+.vslot { width:340px !important; }
+.vfill { max-width:334px; }
+.vthumb { width:38px; height:38px; }
+/* La lista se integra en el gran panel negro inferior */
+.list { left:88px !important; top:735px !important; width:1358px !important; height:135px !important; border-radius:10px; }
+.row { height:43px; margin-bottom:2px; border-color:rgba(207,164,104,.25); background:linear-gradient(180deg,rgba(34,25,18,.94),rgba(12,10,8,.96)); }
+.row .r-name { font-size:23px; }
+.row .r-freq { font-size:19px; }
+.searchbar { height:38px; }
+.searchbar input { font-size:20px; }
+.list.searching .rows { top:40px; height:calc(100% - 40px); }
+.empty { font-size:20px; }
+/* Cinco teclas inferiores: buscar, memorias, idioma, reproducir y banda */
+#btnSearch { left:360px !important; top:888px !important; width:135px !important; height:55px !important; }
+#btnMem { left:525px !important; top:888px !important; width:135px !important; height:55px !important; }
+#btnLang { left:690px !important; top:888px !important; width:135px !important; height:55px !important; }
+#btnPlaySel { left:855px !important; top:888px !important; width:135px !important; height:55px !important; }
+#btnBand { left:1020px !important; top:888px !important; width:135px !important; height:55px !important; }
+#btnSearch .lbl, #btnMem .lbl, #btnLang .lbl, #btnPlaySel .lbl, #btnBand .lbl { left:50% !important; top:20px !important; transform:translateX(-50%); font-size:18px; }
+/* Desplazamiento de lista, discreto en el borde derecho */
+.sb-track { left:1420px !important; top:744px !important; height:110px !important; width:15px !important; }
+.sb-thumb { width:15px !important; }
+#sbUp { left:1408px !important; top:710px !important; width:36px !important; height:30px !important; }
+#sbDown { left:1408px !important; top:855px !important; width:36px !important; height:25px !important; }
+/* Controles secundarios visibles en la franja central */
+#updateBtn .lbl, #btnConfig .lbl { left:50% !important; top:72px !important; transform:translateX(-50%); font-size:16px; }
+#btnConfig .lbl { color:#ffe0ac; }
+
+/* ===== Ajustes de controles solicitados: posición real sobre las teclas ===== */
+/* Etiquetas al costado de las perillas, como en la radio de referencia */
+.cap-volume {
+  left: 318px !important;
+  top: 585px !important;
+  font-family: var(--cond) !important;
+  font-size: 27px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  letter-spacing: .8px !important;
+  color: #f36a19 !important;
+  text-shadow: 0 2px 3px #160900, 0 0 5px rgba(243,106,25,.2) !important;
+}
+.tune-knob::after {
+  left: -112px !important;
+  top: 88px !important;
+  transform: none !important;
+  font-family: var(--cond) !important;
+  font-size: 27px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  letter-spacing: .8px !important;
+  color: #f36a19 !important;
+  text-shadow: 0 2px 3px #160900, 0 0 5px rgba(243,106,25,.2) !important;
+}
+/* Las cuatro teclas centrales: anterior, reproducir, siguiente y configuración */
+#btnPrev { left:520px !important; top:520px !important; width:115px !important; height:95px !important; z-index:8; }
+#btnPlay { left:645px !important; top:520px !important; width:115px !important; height:95px !important; z-index:8; }
+#btnNext { left:770px !important; top:520px !important; width:115px !important; height:95px !important; z-index:8; }
+#btnConfig {
+  left:895px !important; top:520px !important; width:115px !important; height:95px !important;
+  z-index:12 !important; display:block; cursor:pointer; pointer-events:auto;
+}
+#btnConfig .lbl {
+  left:50% !important; top:50% !important; transform:translate(-50%,-50%) !important;
+  font-family:var(--cond) !important; font-size:17px !important; font-weight:700 !important;
+  letter-spacing:.5px !important; color:#fff0d5 !important; text-shadow:0 2px 3px #160900 !important;
+}
+/* (posición de Actualizar: solo arriba a la derecha — ver bloque final) */
+
+
+/* ==========================================================
+   FRENTE RECONSTRUIDO — coincide con la imagen de referencia
+   El arte del receptor ocupa 1536 x 864 px, centrado verticalmente.
+   Los controles transparentes se ubican sobre las teclas dibujadas.
+   ========================================================== */
+.stage {
+  background-image: url("pc-skin.webp");
+  background-size: 1536px 864px !important;
+  background-position: center 80px !important;
+  background-repeat: no-repeat !important;
+}
+.backdrop { background-image:url("pc-skin.webp"); background-position:center; background-size:cover; }
+/* El dial, las leyendas y los botones ya forman parte de la imagen. */
+.dial-backlight, .dial-numbers, .lcd, .cap-volume, .tune-knob::after { display:none !important; }
+/* Aguja funcional (la única): se mueve; la dibujada en el arte fue borrada. */
+.needle {
+  top: 155px !important;
+  height: 310px !important;
+  width: 5px !important;
+  z-index: 8 !important;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #a80f08, #ff6244 48%, #bd170d) !important;
+  box-shadow: 0 0 5px rgba(255, 55, 28, 0.8), 0 0 11px rgba(255, 70, 35, 0.45) !important;
+  opacity: 0;
+  transition: left 0.45s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease !important;
+  pointer-events: none;
+}
+.needle.on { opacity: 1 !important; }
+/* Perillas: las zonas táctiles coinciden con los mandos dibujados. */
+.hit.knob { left:70px !important; top:603px !important; width:205px !important; height:205px !important; z-index:9 !important; cursor:ns-resize; }
+.tune-knob { left:1260px !important; top:603px !important; width:205px !important; height:205px !important; z-index:9 !important; border-radius:50%; cursor:ns-resize; touch-action:none; }
+/* Botones de transporte: anterior, reproducir, siguiente y detener. */
+#btnPrev { left:500px !important; top:590px !important; width:125px !important; height:82px !important; z-index:10 !important; }
+#btnPlay { left:630px !important; top:590px !important; width:125px !important; height:82px !important; z-index:10 !important; }
+#btnNext { left:770px !important; top:590px !important; width:125px !important; height:82px !important; z-index:10 !important; }
+#btnStop { left:910px !important; top:590px !important; width:125px !important; height:82px !important; z-index:10 !important; }
+/* Teclas Buscar, Configuración y Favoritos. */
+#btnSearch { left:435px !important; top:693px !important; width:195px !important; height:75px !important; z-index:11 !important; }
+#btnConfig { left:635px !important; top:693px !important; width:250px !important; height:75px !important; z-index:12 !important; cursor:pointer; }
+#btnMem { left:890px !important; top:693px !important; width:215px !important; height:75px !important; z-index:11 !important; }
+#btnSearch .lbl, #btnMem .lbl, #btnConfig .lbl, #updateBtn .lbl { display:none !important; }
+/* El botón grande inferior de Actualizar se elimina: solo queda el de arriba a la derecha. */
+#updateBtn.btn-update { /* placeholder — posición final más abajo */ }
+/* La lista se abre como panel lateral al pulsar BUSCAR, sin tapar el frente cuando está cerrada. */
+.list { display:none !important; left:1010px !important; top:155px !important; width:475px !important; height:650px !important; z-index:30 !important; border:2px solid rgba(214,166,103,.9); border-radius:14px !important; background:linear-gradient(180deg,rgba(22,13,8,.98),rgba(7,6,5,.98)); box-shadow:0 14px 40px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,210,140,.12); }
+.list.open { display:block !important; }
+.rows { padding:8px !important; }
+.row { height:48px !important; margin-bottom:4px !important; }
+.row .r-name { font-size:19px !important; }
+.row .r-freq { font-size:16px !important; }
+.searchbar { height:48px !important; padding:5px 8px !important; }
+.searchbar input { font-size:17px !important; }
+.list.searching .rows { top:48px !important; height:calc(100% - 48px) !important; }
+.list.searching .searchbar { display:flex !important; }
+.sb-track { left:1488px !important; top:210px !important; height:520px !important; width:10px !important; z-index:31 !important; }
+.sb-thumb { width:10px !important; }
+#sbUp { left:1478px !important; top:174px !important; width:28px !important; height:30px !important; z-index:31 !important; }
+#sbDown { left:1478px !important; top:735px !important; width:28px !important; height:30px !important; z-index:31 !important; }
+/* Acciones complementarias quedan en una pequeña fila debajo del panel de emisoras. */
+#btnLang, #btnPlaySel, #btnBand { display:none !important; z-index:32 !important; top:820px !important; width:135px !important; height:42px !important; border:1px solid rgba(214,166,103,.65) !important; border-radius:9px !important; background:linear-gradient(180deg,rgba(82,55,34,.96),rgba(27,18,12,.98)) !important; }
+#btnLang { left:1015px !important; }
+#btnPlaySel { left:1160px !important; }
+#btnBand { left:1305px !important; }
+#btnLang .lbl, #btnPlaySel .lbl, #btnBand .lbl { left:50% !important; top:14px !important; transform:translateX(-50%) !important; font-size:15px !important; }
+/* El deslizador secundario queda oculto: la perilla grande controla el volumen. */
+.vol { display:none !important; }
+
+.stage.list-open #btnLang, .stage.list-open #btnPlaySel, .stage.list-open #btnBand { display:block !important; }
+
+
+/* ===== Display de la emisora en reproducción — grande, aprovecha el espacio libre ===== */
+.lcd {
+  display: flex !important;
+  align-items: center !important;
+  left: 300px !important;
+  top: 488px !important;
+  width: 940px !important;
+  height: 92px !important;
+  z-index: 13 !important;
+  overflow: hidden;
+  padding: 0 18px 0 14px;
+  gap: 12px;
+  border: 2.5px solid rgba(218, 166, 91, 0.95);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(12, 10, 8, 0.99), rgba(22, 14, 8, 0.99) 45%, rgba(8, 6, 5, 0.99));
+  box-shadow:
+    inset 0 1px 6px rgba(255, 210, 135, 0.18),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.85),
+    0 0 14px rgba(255, 170, 62, 0.22),
+    0 4px 12px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+.lcd > * { position: relative !important; flex-shrink: 0; }
+
+/* Icono antena a la izquierda */
+.lcd-antenna {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 4px rgba(255, 240, 200, 0.35));
+}
+.lcd-antenna svg { display: block; width: 50px; height: 50px; }
+
+/* Bloque central: frecuencia arriba, nombre abajo */
+.lcd-center {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding-left: 4px;
+}
+.lcd-freq {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  width: auto !important;
+  height: auto !important;
+  font: 700 32px/1.15 var(--cond) !important;
+  letter-spacing: 0.45px !important;
+  color: #ffe066 !important;
+  text-shadow: 0 0 10px rgba(255, 200, 60, 0.45), 0 1px 2px #000 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left !important;
+}
+.lcd-name {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  font: 500 20px/1.25 var(--cond) !important;
+  letter-spacing: 0.25px !important;
+  color: #f0e6d0 !important;
+  text-shadow: 0 1px 2px #000 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lcd-name span {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lcd-name.marquee { justify-content: flex-start !important; }
+
+/* Pastilla "Reproduciendo..." */
+.lcd-playing {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px 7px 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(55, 40, 18, 0.95), rgba(28, 18, 8, 0.98));
+  border: 1.5px solid rgba(220, 170, 70, 0.75);
+  box-shadow: inset 0 1px 2px rgba(255, 220, 140, 0.15), 0 2px 6px rgba(0, 0, 0, 0.4);
+  max-width: 200px;
+}
+.lcd-play-ico {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.lcd-play-ico svg { display: block; }
+#statusText {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  max-width: none !important;
+  font: 600 15px/1.15 var(--cond) !important;
+  letter-spacing: 0.15px !important;
+  color: #ffd24a !important;
+  text-shadow: 0 0 6px rgba(255, 190, 50, 0.35) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#statusText.ok { color: #ffd24a !important; }
+#statusText.wait { color: #f0a030 !important; }
+#statusText.err { color: #ff7a66 !important; }
+#statusText.ready { color: #e9d8a8 !important; }
+
+/* Barras de señal a la derecha (verdes) */
+.lcd-signal,
+.eq {
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 36px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between;
+  gap: 3px !important;
+  padding-bottom: 2px;
+}
+.lcd-signal i,
+.eq i {
+  display: block;
+  width: 6px !important;
+  border-radius: 1.5px;
+  background: linear-gradient(180deg, #7dff9a 0%, #3dcc5c 70%, #2a9e45 100%);
+  box-shadow: 0 0 5px rgba(80, 230, 120, 0.55);
+  opacity: 0.35;
+  transition: height 0.14s ease, opacity 0.2s ease;
+}
+.lcd-signal i:nth-child(1), .eq i:nth-child(1) { height: 8px; }
+.lcd-signal i:nth-child(2), .eq i:nth-child(2) { height: 14px; }
+.lcd-signal i:nth-child(3), .eq i:nth-child(3) { height: 20px; }
+.lcd-signal i:nth-child(4), .eq i:nth-child(4) { height: 26px; }
+.lcd-signal.live i,
+.eq.live i { opacity: 1; }
+
+/* Actualizar: SOLO tecla pequeña arriba a la derecha (como en la imagen).
+   Se anula cualquier posición inferior grande anterior. */
+#updateBtn {
+  left: 1372px !important;
+  top: 92px !important;
+  width: 132px !important;
+  height: 42px !important;
+  z-index: 20 !important;
+  border-radius: 9px !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+#updateBtn::before {
+  inset: 0 !important;
+  border-radius: 9px !important;
+  background: linear-gradient(180deg, rgba(92, 65, 39, 0.98), rgba(28, 18, 11, 0.99)) !important;
+  border: 1px solid rgba(224, 177, 112, 0.9) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 230, 190, 0.2), 0 3px 8px rgba(0, 0, 0, 0.7) !important;
+}
+#updateBtn .glow { display: block !important; border-radius: 9px !important; }
+#updateBtn .lbl {
+  display: block !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  text-align: center !important;
+  font: 700 15px/1 var(--cond) !important;
+  letter-spacing: 0.3px !important;
+  color: #fff0d5 !important;
+  text-shadow: 0 1px 2px #100904 !important;
+}
+#updateBtn.is-busy .lbl { font-size: 12px !important; }

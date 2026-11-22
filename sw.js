@@ -1,17 +1,19 @@
 // Cada vez que subas cambios a GitHub, subí también este número (v60 → v61, etc.).
 // Si no cambia, el botón rojo de "Nueva actualización" no aparece.
 // (Ya no hace falta cambiar los "?v=" de los <script> y los <link>.)
-const CACHE = "radio-ar-v76";
+const CACHE = "radio-ar-v111";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./pro.css",
   "./app.js",
   "./stations.js",
   "./logos.js",
   "./update.js",
   "./pc.html",
   "./pc.css",
+  "./pc-pro.css",
   "./pc.js",
   "./manifest.json",
   "./icon-192.png",
