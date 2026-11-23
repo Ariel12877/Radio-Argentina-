@@ -59,20 +59,25 @@
   background:repeating-radial-gradient(circle at 50% 46%,transparent 0 13vmin,rgba(255,180,84,.12) 13vmin 13.3vmin);
   -webkit-mask-image:radial-gradient(circle at 50% 46%,transparent 22%,#000 48%,transparent 92%);
   mask-image:radial-gradient(circle at 50% 46%,transparent 22%,#000 48%,transparent 92%)}
-.scene .vinyl{position:absolute;border-radius:50%;box-shadow:0 3vmin 6vmin rgba(0,0,0,.6);animation:vinylTurn 90s linear infinite;
+.scene .vinyl{position:absolute;border-radius:50%;box-shadow:0 3vmin 6vmin rgba(0,0,0,.6);animation:vinylTurn 22s linear infinite;
   background:radial-gradient(circle,#e0952f 0 11%,#8a4616 11.5% 13%,transparent 13.5%),
     conic-gradient(from 20deg,rgba(255,255,255,.1),transparent 18%,rgba(255,255,255,.08) 50%,transparent 68%,rgba(255,255,255,.1)),
     repeating-radial-gradient(circle,#140a05 0 3px,#24150a 3px 5px)}
-.scene .v1{width:62vmin;height:62vmin;left:-20vmin;bottom:-24vmin}
-.scene .v2{width:50vmin;height:50vmin;right:-14vmin;top:-18vmin;animation-direction:reverse}
+.scene .v1{width:40vmin;height:40vmin;left:-11vmin;bottom:-13vmin}
+.scene .v2{width:32vmin;height:32vmin;right:-8vmin;top:-9vmin;animation-direction:reverse}
 .scene .note{position:absolute;opacity:.3}
 .scene .n1{width:7vmin;left:12%;top:20%}
 .scene .n2{width:5vmin;right:10%;top:52%}
 .scene .n3{width:6vmin;left:28%;top:7%}
 @keyframes vinylTurn{to{transform:rotate(360deg)}}
 
-/* La radio deja de verse como imagen pegada: esquinas redondeadas, resplandor y sombra */
-.stage{border-radius:50px;overflow:hidden;
+/* La radio deja de verse como imagen pegada: esquinas redondeadas sobre la foto real,
+   no sobre la caja entera (la caja mide 1536x1024, pero la foto ocupa 1536x864 desde
+   los 80px de arriba; redondear la caja completa dejaba un resto crema en las esquinas) */
+.stage{background-image:none}/* la foto ahora la pinta .skin; si no, el mismo cuadro se asomaba
+  sin redondear justo detrás de las esquinas que recortamos abajo */
+.skin{left:0;top:80px;width:1536px;height:864px;border-radius:76px;overflow:hidden;
+  background:url("pc-skin.webp") 0 0/1536px 864px no-repeat;
   box-shadow:0 0 0 2px rgba(255,190,100,.18),0 0 90px rgba(255,150,50,.28),0 40px 70px rgba(0,0,0,.75)}
 
 /* Play: transparente como Anterior y Siguiente. Se ve el dibujo de la radio; al sonar, un aro ámbar */
