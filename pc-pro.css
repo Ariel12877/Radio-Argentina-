@@ -65,24 +65,29 @@
     repeating-radial-gradient(circle,#140a05 0 3px,#24150a 3px 5px)}
 .scene .v1{width:40vmin;height:40vmin;left:-11vmin;bottom:-13vmin}
 .scene .v2{width:32vmin;height:32vmin;right:-8vmin;top:-9vmin;animation-direction:reverse}
-/* Notas sueltas: quietas y casi invisibles si la radio está en pausa.
-   Cuando suena, "salen" desde atrás de la radio (arriba-centro de la pantalla),
-   suben flotando y se apagan solas, en bucle, cada una a su ritmo. */
-.scene .note{position:absolute;opacity:0;will-change:transform,opacity}
-body:has(#btnPlay.is-playing) .scene .note{
-  animation:noteFloat var(--nd,6s) ease-in-out var(--ndl,0s) infinite}
+/* Notas musicales: antes estaban afuera de la radio (en .scene) y la radio,
+   que casi tapa toda la pantalla, las dejaba escondidas detrás sin que se note.
+   Ahora van ADENTRO de .stage, arriba del dial, en las mismas coordenadas (px)
+   que usan los botones, así quedan siempre encima de la foto y se ven seguro.
+   is-playing se espeja en <body> (ver pc.html) y como respaldo también con :has(). */
+.notes-dock{left:0;top:0;width:1536px;height:1024px;pointer-events:none;z-index:6}
+.note{position:absolute;opacity:0;will-change:transform,opacity;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.65))}
+body.is-playing .note,
+body:has(#btnPlay.is-playing) .note{
+  animation:noteFloat var(--nd,3.4s) ease-in-out var(--ndl,0s) infinite}
 @keyframes noteFloat{
   0%{transform:translate(0,0) rotate(-4deg);opacity:0}
-  14%{opacity:.6}
-  55%{transform:translate(var(--nx,10px),-10vmin) rotate(4deg);opacity:.55}
-  90%{opacity:0}
-  100%{transform:translate(calc(var(--nx,10px)*1.6),-17vmin) rotate(-2deg);opacity:0}
+  16%{opacity:.75}
+  55%{transform:translate(var(--nx,16px),-70px) rotate(4deg);opacity:.7}
+  88%{opacity:0}
+  100%{transform:translate(calc(var(--nx,16px)*1.7),-128px) rotate(-2deg);opacity:0}
 }
-.scene .n1{width:6.5vmin;left:40%;top:36%;--nx:14px;--nd:6.2s;--ndl:0s}
-.scene .n2{width:5vmin;right:37%;top:33%;--nx:-12px;--nd:5.4s;--ndl:1.3s}
-.scene .n3{width:5.5vmin;left:46%;top:40%;--nx:9px;--nd:6.8s;--ndl:2.5s}
-.scene .n4{width:4.5vmin;right:43%;top:38%;--nx:-9px;--nd:5.8s;--ndl:.8s}
-.scene .n5{width:4vmin;left:50%;top:35%;--nx:6px;--nd:6.4s;--ndl:3.3s}
+.n1{width:30px;left:700px;top:26px;--nx:16px;--nd:3.2s;--ndl:0s}
+.n2{width:24px;left:855px;top:34px;--nx:-14px;--nd:2.8s;--ndl:.7s}
+.n3{width:27px;left:765px;top:48px;--nx:11px;--nd:3.6s;--ndl:1.3s}
+.n4{width:21px;left:810px;top:20px;--nx:-10px;--nd:3s;--ndl:1.9s}
+.n5{width:19px;left:735px;top:42px;--nx:8px;--nd:3.4s;--ndl:2.5s}
 @keyframes vinylTurn{to{transform:rotate(360deg)}}
 
 /* La radio deja de verse como imagen pegada: esquinas redondeadas sobre la foto real,
