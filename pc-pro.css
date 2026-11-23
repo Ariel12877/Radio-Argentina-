@@ -65,10 +65,24 @@
     repeating-radial-gradient(circle,#140a05 0 3px,#24150a 3px 5px)}
 .scene .v1{width:40vmin;height:40vmin;left:-11vmin;bottom:-13vmin}
 .scene .v2{width:32vmin;height:32vmin;right:-8vmin;top:-9vmin;animation-direction:reverse}
-.scene .note{position:absolute;opacity:.3}
-.scene .n1{width:7vmin;left:12%;top:20%}
-.scene .n2{width:5vmin;right:10%;top:52%}
-.scene .n3{width:6vmin;left:28%;top:7%}
+/* Notas sueltas: quietas y casi invisibles si la radio está en pausa.
+   Cuando suena, "salen" desde atrás de la radio (arriba-centro de la pantalla),
+   suben flotando y se apagan solas, en bucle, cada una a su ritmo. */
+.scene .note{position:absolute;opacity:0;will-change:transform,opacity}
+body:has(#btnPlay.is-playing) .scene .note{
+  animation:noteFloat var(--nd,6s) ease-in-out var(--ndl,0s) infinite}
+@keyframes noteFloat{
+  0%{transform:translate(0,0) rotate(-4deg);opacity:0}
+  14%{opacity:.6}
+  55%{transform:translate(var(--nx,10px),-10vmin) rotate(4deg);opacity:.55}
+  90%{opacity:0}
+  100%{transform:translate(calc(var(--nx,10px)*1.6),-17vmin) rotate(-2deg);opacity:0}
+}
+.scene .n1{width:6.5vmin;left:40%;top:36%;--nx:14px;--nd:6.2s;--ndl:0s}
+.scene .n2{width:5vmin;right:37%;top:33%;--nx:-12px;--nd:5.4s;--ndl:1.3s}
+.scene .n3{width:5.5vmin;left:46%;top:40%;--nx:9px;--nd:6.8s;--ndl:2.5s}
+.scene .n4{width:4.5vmin;right:43%;top:38%;--nx:-9px;--nd:5.8s;--ndl:.8s}
+.scene .n5{width:4vmin;left:50%;top:35%;--nx:6px;--nd:6.4s;--ndl:3.3s}
 @keyframes vinylTurn{to{transform:rotate(360deg)}}
 
 /* La radio deja de verse como imagen pegada: esquinas redondeadas sobre la foto real,
