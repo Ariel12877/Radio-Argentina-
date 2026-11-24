@@ -959,12 +959,14 @@ stage.addEventListener("click", (e) => {
 });
 
 /* ============================================================
-   Escala: el escenario de 1536 × 1024 se ajusta a la ventana
+   Escala: el escenario de 1536 × 1120 se ajusta a la ventana
+   (antes era 1536 × 1024; los 96px de más son para el visor de
+   frases, que va debajo de la radio — ver .phrase-box en pc-pro.css)
    ============================================================ */
 function fit() {
   const vw = window.innerWidth, vh = window.innerHeight;
-  scale = Math.min(vw / 1536, vh / 1024);
-  const x = (vw - 1536 * scale) / 2, y = (vh - 1024 * scale) / 2;
+  scale = Math.min(vw / 1536, vh / 1120);
+  const x = (vw - 1536 * scale) / 2, y = (vh - 1120 * scale) / 2;
   stage.style.transform = "translate(" + x + "px," + y + "px) scale(" + scale + ")";
 }
 window.addEventListener("resize", fit);

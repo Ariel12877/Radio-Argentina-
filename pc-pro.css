@@ -106,3 +106,19 @@ body:has(#btnPlay.is-playing) .note{
   box-shadow:inset 0 0 0 2px rgba(255,200,110,.85),0 0 22px rgba(255,170,50,.6)}
 
 @media (prefers-reduced-motion:reduce){.scene .vinyl{animation:none}}
+
+/* ===== VISOR DE FRASES · debajo de la radio, alimentado por frases.json =====
+   El escenario ahora mide 1536x1120 (antes 1024); ver el cambio en pc.js (fit()). */
+.stage{height:1120px}
+.phrase-box{left:358px;top:966px;width:820px;height:84px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;gap:16px;padding:0 28px;
+  background:linear-gradient(180deg,rgba(22,12,6,.94),rgba(6,3,2,.94));
+  box-shadow:0 0 0 1px rgba(255,190,100,.32) inset,0 0 26px rgba(255,150,50,.22),0 14px 24px rgba(0,0,0,.55);
+  opacity:0;transition:opacity .4s ease}
+.phrase-box.ready{opacity:1}
+.phrase-ic{flex:none;width:26px;height:26px}
+.phrase-text{font:600 23px/1.3 Georgia,serif;color:#ffe3a8;text-align:center;
+  text-shadow:0 0 10px rgba(255,190,100,.6),0 0 20px rgba(255,140,40,.3);letter-spacing:.2px}
+.phrase-box.phrase-in .phrase-text{animation:phraseIn .5s ease both}
+@keyframes phraseIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.phrase-box{transition:none}.phrase-box.phrase-in .phrase-text{animation:none}}
