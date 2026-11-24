@@ -806,6 +806,12 @@ const STATIONS = [
     freq: "FM 104.9",
     url: "https://stream.radio.co/s2ed3bec0a/listen"
   },
+   {
+    id: "DataChaco",
+    name: "Data Chaco",
+    freq: "FM 106.5",
+    url:"https://live-ar1.cdnrad.com/hls/datachaco/master.m3u8"
+  }, 
   {
     id: "radioone",
     name: "Radio One 103.7",
@@ -834,7 +840,7 @@ const CAT_LABEL = {
 };
 const CAT_BY_ID = {
   religiosas: ["radiomaria", "radiomaria_apk"],
-  noticias: ["nacional", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
+  noticias: ["nacional","DataChaco", "lra26", "Las Lomitas", "mitre", "lared", "continental", "rivadavia", "cnnradio",
              "Radio 10", "Radio Con Vos", "infobae", "cadena3am", "madre", "eldesta", "lu9", "lu2", "lu19", "lt3",
              "unicordoba", "cooperativa", "zonica", "delpueblo", "genesis", "la990", "delplata", "guemes",
              "delaciudad", "federal", "radiosur", "ecomedios", "ondalatina", "Radio Mocovl AM 800",
