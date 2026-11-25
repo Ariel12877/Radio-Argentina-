@@ -122,3 +122,30 @@ body:has(#btnPlay.is-playing) .note{
 .phrase-box.phrase-in .phrase-text{animation:phraseIn .5s ease both}
 @keyframes phraseIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){.phrase-box{transition:none}.phrase-box.phrase-in .phrase-text{animation:none}}
+
+/* ===== CLIMA Y FECHA · a los costados del visor de frases =====
+   Izquierda: clima de Machagai. Derecha: fecha y ciudad. Mismo estilo que .phrase-box.
+   El visor de frases ocupa de 358 a 1178 px; estas cajas caben en los 358 px que sobran a cada lado. */
+.info-box{top:966px;width:326px;height:84px;border-radius:20px;padding:0 18px;
+  display:flex;flex-direction:column;justify-content:center;gap:3px;
+  background:linear-gradient(180deg,rgba(22,12,6,.94),rgba(6,3,2,.94));
+  box-shadow:0 0 0 1px rgba(255,190,100,.32) inset,0 0 26px rgba(255,150,50,.22),0 14px 24px rgba(0,0,0,.55);
+  color:#ffe3a8;pointer-events:none;opacity:0;transition:opacity .4s ease,filter .4s ease}
+.info-box.ready{opacity:1}
+.info-box.stale{filter:saturate(.45) brightness(.8)}
+.info-clima{left:16px}
+.info-fecha{left:1194px}
+.info-row{display:flex;align-items:center;gap:9px;min-width:0;height:38px}
+.info-ic{flex:none;width:32px;height:32px;filter:drop-shadow(0 0 6px rgba(255,190,100,.45))}
+.info-big{flex:none;font:700 34px/1 Georgia,serif;color:#ffe3a8;letter-spacing:.2px;
+  text-shadow:0 0 10px rgba(255,190,100,.6),0 0 20px rgba(255,140,40,.3)}
+.info-big small{font:600 17px/1 var(--cond);margin-left:1px;vertical-align:top;position:relative;top:3px}
+.info-desc{min-width:0;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font:600 17px/1.2 var(--cond);color:#f0d9a4;letter-spacing:.2px}
+.info-date{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font:700 23px/1.2 var(--cond);color:#ffe3a8;letter-spacing:.3px;
+  text-shadow:0 0 10px rgba(255,190,100,.6),0 0 20px rgba(255,140,40,.3)}
+.info-sub{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  font:500 15.5px/1.2 var(--cond);color:#cfae72;letter-spacing:.25px}
+.info-pin{flex:none;width:17px;height:17px}
+@media (prefers-reduced-motion:reduce){.info-box{transition:none}}
