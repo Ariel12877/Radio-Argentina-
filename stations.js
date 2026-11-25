@@ -209,7 +209,7 @@ const STATIONS = [
     id: "urbana",
     name: "Urbana Play",
     freq: "FM 104.3",
-    url: "https://cdn.instream.audio:9660/stream"
+    url: "https://live-ar1.cdnrad.com/hls/radio-285/live.m3u8"
   },
   {
     id: "am750",
