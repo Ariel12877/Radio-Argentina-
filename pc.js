@@ -305,13 +305,13 @@ function setEq(mode) {
   clearInterval(eqTimer); eqTimer = null;
   eqEl.classList.toggle("live", mode === "live");
   const paint = (hs) => eqBars.forEach((b, i) => { b.style.height = (hs[i] || 8) + "px"; });
-  if (mode === "live") {
+  if (mode === "live" && window.radioEffectsEnabled !== false) {
     const tick = () => paint(eqBars.map((_, i) => {
       const base = [8, 14, 20, 26][i] || 12;
       return Math.max(6, base * (0.55 + Math.random() * 0.55));
     }));
-    tick(); eqTimer = setInterval(tick, 160);
-  } else paint(mode === "wait" ? EQ_WAIT : EQ_IDLE);
+    tick(); eqTimer = setInterval(tick, 220);
+  } else paint(mode === "wait" && window.radioEffectsEnabled !== false ? EQ_WAIT : EQ_IDLE);
 }
 
 function updateDisplay() {

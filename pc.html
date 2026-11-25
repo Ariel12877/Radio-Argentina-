@@ -29,8 +29,8 @@
     })();
   </script>
   <title>Radio Argentina</title>
-  <link rel="stylesheet" href="pc.css?v=34" />
-  <link rel="stylesheet" href="pc-pro.css?v=6" />
+  <link rel="stylesheet" href="pc.css?v=35" />
+  <link rel="stylesheet" href="pc-pro.css?v=7" />
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -198,6 +198,15 @@
     </button>
   </main>
 
+  <!-- Interruptor discreto de efectos visuales: fuera del escenario, no altera la radio -->
+  <button id="pcEffectsToggle" class="pc-effects-toggle" type="button"
+          aria-pressed="true" aria-label="Efectos visuales activados"
+          title="Efectos visuales: activados">
+    <span class="pc-effects-lamp" aria-hidden="true"></span>
+    <span class="pc-effects-label">FX</span>
+    <span class="pc-effects-state" aria-hidden="true">ON</span>
+  </button>
+
   <!-- ===== Config ===== -->
   <dialog class="sheet" id="configDialog" aria-labelledby="cfgTitle">
     <div class="sheet-head">
@@ -256,8 +265,9 @@
   <audio id="player" preload="none"></audio>
   <script src="stations.js?v=1"></script>
   <script src="logos.js?v=1"></script>
-  <script src="pc.js?v=30"></script>
+  <script src="pc.js?v=31"></script>
   <script src="pc-pro.js?v=1"></script>
+  <script src="pc-effects.js?v=1"></script>
   <script src="pc-clima.js?v=1"></script>
   <script src="update.js?v=2"></script>
   <script>

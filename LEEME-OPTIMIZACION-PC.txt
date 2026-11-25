@@ -1,0 +1,13 @@
+Radio Argentina - optimización visual PC
+=======================================
+
+Archivos modificados:
+- pc.html: añade el interruptor FX discreto y actualiza las versiones de caché.
+- pc-pro.css: reduce animaciones de pintura, deja tres notas visibles y agrega estilos del interruptor.
+- pc.js: baja la frecuencia de actualización del ecualizador visual y permite detenerlo.
+- pc-effects.js: nuevo controlador ON/OFF de efectos; guarda la preferencia en localStorage.
+
+El interruptor FX está fuera del escenario de la radio, por lo que no desplaza ni altera sus controles.
+OFF apaga efectos decorativos y detiene las barras del ecualizador visual. No pausa ni modifica el audio.
+
+No se cambió ninguna URL de emisora ni se desplegó el proyecto.
