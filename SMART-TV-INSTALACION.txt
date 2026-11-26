@@ -1,0 +1,16 @@
+RADIO ARGENTINA - SECCIÓN SMART TV (VERSIÓN PC)
+
+Archivos modificados:
+- pc.html: incorpora el bloque «En Smart TV» dentro de Configuración.
+- pc.js: muestra la URL publicada y agrega el botón para copiarla; incluye textos en español, inglés y portugués.
+- pc.css: estilos de la dirección y controles para mantener la estética de la radio de madera.
+- sw.js: versión de caché actualizada a radio-ar-v126 para que el navegador renueve los archivos.
+
+Cómo probar:
+1. Publicá la carpeta del proyecto en la misma dirección HTTPS que usás actualmente.
+2. Abrí la versión PC y entrá en Config.
+3. En «En Smart TV» verificá que aparezca la dirección correcta y probá «Copiar dirección para el televisor».
+4. En el navegador de la Smart TV ingresá esa dirección. Si el navegador ofrece «Agregar a pantalla de inicio» o «Instalar», usá esa opción; si no, guardá la página en Favoritos.
+
+Nota:
+La sección no instala remotamente una app nativa en el televisor. Los sistemas y navegadores de Smart TV varían: algunos solo permiten abrir la radio desde el navegador y guardar un favorito. No se modificaron ni publicaron archivos en GitHub.

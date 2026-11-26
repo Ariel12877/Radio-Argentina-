@@ -29,7 +29,7 @@
     })();
   </script>
   <title>Radio Argentina</title>
-  <link rel="stylesheet" href="pc.css?v=35" />
+  <link rel="stylesheet" href="pc.css?v=36" />
   <link rel="stylesheet" href="pc-pro.css?v=7" />
 </head>
 <body>
@@ -235,6 +235,15 @@
         <p class="alt-links"><span data-i18n="otherOs">Otro sistema:</span>
           <button type="button" data-os="windows">Windows</button><button type="button" data-os="mac">Mac</button><button type="button" data-os="linux">Linux</button></p>
       </section>
+      <section class="way" id="waySmartTv">
+        <h3 data-i18n="cfgTv">En Smart TV</h3>
+        <p data-i18n="cfgTvText">Abrí el navegador de tu televisor y entrá a esta dirección. Si el navegador permite agregar páginas a la pantalla de inicio, guardá Radio Argentina como acceso directo.</p>
+        <label class="tv-url-label" for="tvUrl" data-i18n="cfgTvAddress">Dirección de Radio Argentina</label>
+        <input class="tv-url" id="tvUrl" type="url" readonly spellcheck="false" aria-describedby="tvUrlHelp" />
+        <button class="btn-soft" id="copyTvUrl" type="button" data-i18n="copyTvUrl">Copiar dirección para el televisor</button>
+        <p class="tv-url-help" id="tvUrlHelp" data-i18n="cfgTvHelp">Samsung Tizen y LG webOS pueden permitir abrir la radio desde el navegador, pero no todos los modelos admiten instalar una aplicación web. Android TV / Google TV también puede variar según el navegador.</p>
+        <p class="sheet-note" data-i18n="cfgTvTip">Si no aparece «Instalar» o «Agregar a inicio», usá el navegador del televisor y guardá la página en Favoritos.</p>
+      </section>
       <section class="way">
         <h3 data-i18n="cfgPhone">En el celular</h3>
         <p data-i18n="cfgPhoneText">Abrí esta dirección en el celular y elegí «Instalar app» o «Agregar a inicio».</p>
@@ -265,7 +274,7 @@
   <audio id="player" preload="none"></audio>
   <script src="stations.js?v=1"></script>
   <script src="logos.js?v=1"></script>
-  <script src="pc.js?v=31"></script>
+  <script src="pc.js?v=32"></script>
   <script src="pc-pro.js?v=1"></script>
   <script src="pc-effects.js?v=1"></script>
   <script src="pc-clima.js?v=1"></script>

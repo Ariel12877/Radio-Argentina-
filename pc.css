@@ -808,3 +808,31 @@ button { cursor: pointer; border: 0; background: none; -webkit-user-select: none
   text-shadow: 0 1px 2px #100904 !important;
 }
 #updateBtn.is-busy .lbl { font-size: 12px !important; }
+
+/* ===== Sección Smart TV en Configuración ===== */
+.tv-url-label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #e7c99b;
+  font-size: .88rem;
+}
+.tv-url {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px 11px;
+  border: 1px solid #6a4b2d;
+  border-radius: 10px;
+  background: #100a06;
+  color: #ffe0ac;
+  font: .88rem/1.4 ui-monospace, Consolas, monospace;
+}
+.tv-url:focus {
+  outline: 2px solid #d99a3b;
+  outline-offset: 2px;
+}
+.tv-url-help {
+  margin-top: 8px;
+  font-size: .88rem !important;
+}

@@ -68,6 +68,14 @@ const I18N = {
     cfgShortcutText: "Abrí Radio Argentina con un clic, sin buscar la página. Se guarda en Descargas: arrastralo al escritorio.",
     dlFor: "Descargar para {os}", installApp: "Instalar como app, con ícono propio", otherOs: "Otro sistema:",
     cfgPhone: "En el celular", cfgPhoneText: "Abrí esta dirección en el celular y elegí «Instalar app» (Android) o «Agregar a inicio» (iPhone).",
+    cfgTv: "En Smart TV",
+    cfgTvText: "Abrí el navegador de tu televisor y entrá a esta dirección. Si el navegador permite agregar páginas a la pantalla de inicio, guardá Radio Argentina como acceso directo.",
+    cfgTvAddress: "Dirección de Radio Argentina",
+    copyTvUrl: "Copiar dirección para el televisor",
+    cfgTvHelp: "Samsung Tizen y LG webOS pueden permitir abrir la radio desde el navegador, pero no todos los modelos admiten instalar una aplicación web. Android TV / Google TV también puede variar según el navegador.",
+    cfgTvTip: "Si no aparece «Instalar» o «Agregar a inicio», usá el navegador del televisor y guardá la página en Favoritos.",
+    tvUrlCopied: "Dirección copiada. Pegala en el navegador del televisor.",
+    tvUrlManual: "Seleccioná y copiá la dirección para escribirla en el televisor.",
     cfgSocial: "Mis redes", cfgSocialText: "Escribime o seguime, me encanta saber de vos.", socWa: "Escribime un mensaje", socFb: "Seguime en Facebook",
     shortcutDone: "Listo: se descargó «{n}». Arrastralo al escritorio.", shortcutInstalling: "Listo, la app se está instalando.",
     insecure: "Estás abriendo la app desde un archivo local o una dirección sin https. El acceso directo funciona, pero para instalarla tiene que estar publicada en una dirección https."
@@ -95,6 +103,14 @@ const I18N = {
     cfgShortcutText: "Open Radio Argentina with one click, no need to look for the page. It is saved in Downloads: drag it to the desktop.",
     dlFor: "Download for {os}", installApp: "Install as an app, with its own icon", otherOs: "Other system:",
     cfgPhone: "On your phone", cfgPhoneText: "Open this address on your phone and choose “Install app” (Android) or “Add to Home Screen” (iPhone).",
+    cfgTv: "On Smart TV",
+    cfgTvText: "Open your TV's browser and visit this address. If the browser lets you add pages to the home screen, save Radio Argentina as a shortcut.",
+    cfgTvAddress: "Radio Argentina address",
+    copyTvUrl: "Copy address for TV",
+    cfgTvHelp: "Samsung Tizen and LG webOS may open the radio in their browsers, but not every model supports installing web apps. Android TV / Google TV support also depends on the browser.",
+    cfgTvTip: "If «Install» or «Add to Home Screen» is unavailable, open the page in the TV browser and save it to Favorites.",
+    tvUrlCopied: "Address copied. Paste it into your TV's browser.",
+    tvUrlManual: "Select and copy the address to enter it on your TV.",
     cfgSocial: "My social media", cfgSocialText: "Write to me or follow me, I would love to hear from you.", socWa: "Send me a message", socFb: "Follow me on Facebook",
     shortcutDone: "Done: “{n}” was downloaded. Drag it to the desktop.", shortcutInstalling: "Done, the app is installing.",
     insecure: "You are opening the app from a local file or an address without https. The shortcut works, but to install it the app has to be published at an https address."
@@ -122,6 +138,14 @@ const I18N = {
     cfgShortcutText: "Abra a Radio Argentina com um clique, sem procurar a página. Fica em Downloads: arraste para a área de trabalho.",
     dlFor: "Baixar para {os}", installApp: "Instalar como app, com ícone próprio", otherOs: "Outro sistema:",
     cfgPhone: "No celular", cfgPhoneText: "Abra este endereço no celular e escolha «Instalar app» (Android) ou «Adicionar à Tela de Início» (iPhone).",
+    cfgTv: "Na Smart TV",
+    cfgTvText: "Abra o navegador da sua TV e acesse este endereço. Se o navegador permitir adicionar páginas à tela inicial, salve a Radio Argentina como atalho.",
+    cfgTvAddress: "Endereço da Radio Argentina",
+    copyTvUrl: "Copiar endereço para a TV",
+    cfgTvHelp: "Samsung Tizen e LG webOS podem abrir a rádio no navegador, mas nem todos os modelos permitem instalar aplicativos web. O suporte do Android TV / Google TV também depende do navegador.",
+    cfgTvTip: "Se «Instalar» ou «Adicionar à tela inicial» não estiver disponível, abra a página no navegador da TV e salve-a nos Favoritos.",
+    tvUrlCopied: "Endereço copiado. Cole-o no navegador da TV.",
+    tvUrlManual: "Selecione e copie o endereço para digitá-lo na TV.",
     cfgSocial: "Minhas redes", cfgSocialText: "Escreva para mim ou me siga, vou adorar saber de você.", socWa: "Envie uma mensagem", socFb: "Siga-me no Facebook",
     shortcutDone: "Pronto: «{n}» foi baixado. Arraste para a área de trabalho.", shortcutInstalling: "Pronto, o app está sendo instalado.",
     insecure: "Você está abrindo o app a partir de um arquivo local ou de um endereço sem https. O atalho funciona, mas para instalar o app ele precisa estar publicado em um endereço https."
@@ -908,6 +932,7 @@ async function installApp() {
 
 function openConfig() {
   showMsg("");
+  refreshTvUrl();
   refreshShortcutUi();
   if (configDialog.showModal) configDialog.showModal(); else configDialog.setAttribute("open", "");
 }
@@ -917,6 +942,33 @@ function closeConfig() {
 btnConfig.addEventListener("click", openConfig);
 $("configClose").addEventListener("click", closeConfig);
 configDialog.addEventListener("click", (e) => { if (e.target === configDialog) closeConfig(); });
+const tvUrlInput = $("tvUrl");
+const copyTvUrlBtn = $("copyTvUrl");
+function refreshTvUrl() {
+  if (tvUrlInput) tvUrlInput.value = appUrl();
+}
+async function copyTvAddress() {
+  refreshTvUrl();
+  const address = tvUrlInput.value;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(address);
+      showMsg(t("tvUrlCopied"));
+      return;
+    }
+  } catch (_) {}
+  // Fallback for browsers that do not expose Clipboard API.
+  try {
+    tvUrlInput.focus();
+    tvUrlInput.select();
+    const copied = document.execCommand && document.execCommand("copy");
+    showMsg(copied ? t("tvUrlCopied") : t("tvUrlManual"));
+  } catch (_) {
+    showMsg(t("tvUrlManual"));
+  }
+}
+if (copyTvUrlBtn) copyTvUrlBtn.addEventListener("click", copyTvAddress);
+
 dlShortcut.addEventListener("click", () => downloadShortcut(dlShortcut.dataset.os || pcOS));
 configDialog.querySelectorAll(".alt-links [data-os]").forEach((b) => b.addEventListener("click", () => downloadShortcut(b.dataset.os)));
 installPc.addEventListener("click", installApp);
