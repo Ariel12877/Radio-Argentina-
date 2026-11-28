@@ -34,7 +34,7 @@ const STATIONS = [
     name: "FM Libertad Machagai",
     freq: "FM 99.5",
     // Stream detectado en la captura. Es HTTP; requiere proxy HTTPS para GitHub Pages.
-    url: "http://streaming01.shockmedia.com.ar/8428/stream"
+    url: "https://streaming01.shockmedia.com.ar:10554/stream?icy=http"
   },
    {
     id: "VIP FM",
